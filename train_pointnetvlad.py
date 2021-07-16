@@ -12,6 +12,8 @@ import config as cfg
 import evaluate
 import loss.pointnetvlad_loss as PNV_loss
 import models.PointNetVlad as PNV
+import generating_queries.generate_training_tuples_baseline as generate_dataset
+
 import torch
 import torch.nn as nn
 from loading_pointclouds import *
@@ -106,6 +108,8 @@ cfg.DATASET_FOLDER = FLAGS.dataset_folder
 # Load dictionary of training queries
 TRAINING_QUERIES = get_queries_dict(cfg.TRAIN_FILE)
 TEST_QUERIES = get_queries_dict(cfg.TEST_FILE)
+TRAINING_QUERIES_init = get_queries_dict(cfg.TRAIN_FILE)
+TEST_QUERIES_init = get_queries_dict(cfg.TEST_FILE)
 
 cfg.BN_INIT_DECAY = 0.5
 cfg.BN_DECAY_DECAY_RATE = 0.5
@@ -142,6 +146,7 @@ def get_learning_rate(epoch):
 
 def train():
     global HARD_NEGATIVES, TOTAL_ITERATIONS
+    global TRAINING_QUERIES, TEST_QUERIES
     bn_decay = get_bn_decay(0)
     #tf.summary.scalar('bn_decay', bn_decay)
 
@@ -192,6 +197,13 @@ def train():
     for epoch in range(starting_epoch, cfg.MAX_EPOCH):
         print(epoch)
         print()
+        generate_dataset.generate()
+        assert(TRAINING_QUERIES ==TRAINING_QUERIES_init)
+        # Load dictionary of training queries
+        TRAINING_QUERIES = get_queries_dict(cfg.TRAIN_FILE)
+        TEST_QUERIES = get_queries_dict(cfg.TEST_FILE)
+        assert(TRAINING_QUERIES !=TRAINING_QUERIES_init)
+
         log_string('**** EPOCH %03d ****' % (epoch))
         sys.stdout.flush()
 
