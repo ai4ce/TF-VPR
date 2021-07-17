@@ -15,7 +15,7 @@ import torch
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 base_path = cfg.DATASET_FOLDER
 
-runs_folder = "dm_data"
+runs_folder = "dm_data/data_unsupervised"
 
 print("cfg.DATASET_FOLDER:"+str(cfg.DATASET_FOLDER))
 
