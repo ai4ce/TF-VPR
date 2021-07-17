@@ -4,7 +4,6 @@ import math
 import os
 import socket
 import sys
-
 import numpy as np
 from sklearn.neighbors import KDTree, NearestNeighbors
 
@@ -12,7 +11,7 @@ import config as cfg
 import evaluate
 import loss.pointnetvlad_loss as PNV_loss
 import models.PointNetVlad as PNV
-import generating_queries.generate_training_tuples_baseline as generate_dataset
+import generating_queries.generate_training_tuples_cc_baseline as generate_dataset
 
 import torch
 import torch.nn as nn
@@ -26,8 +25,6 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
-
-
 
 cudnn.enabled = True
 
@@ -101,10 +98,10 @@ LOG_FOUT = open(os.path.join(cfg.LOG_DIR, 'log_train.txt'), 'w')
 LOG_FOUT.write(str(FLAGS) + '\n')
 
 cfg.RESULTS_FOLDER = FLAGS.results_dir
+
 print("cfg.RESULTS_FOLDER:"+str(cfg.RESULTS_FOLDER))
 
 cfg.DATASET_FOLDER = FLAGS.dataset_folder
-
 # Load dictionary of training queries
 TRAINING_QUERIES = get_queries_dict(cfg.TRAIN_FILE)
 TEST_QUERIES = get_queries_dict(cfg.TEST_FILE)
@@ -197,12 +194,11 @@ def train():
     for epoch in range(starting_epoch, cfg.MAX_EPOCH):
         print(epoch)
         print()
-        generate_dataset.generate()
-        assert(TRAINING_QUERIES ==TRAINING_QUERIES_init)
+        generate_dataset.generate(True)
+        
         # Load dictionary of training queries
         TRAINING_QUERIES = get_queries_dict(cfg.TRAIN_FILE)
         TEST_QUERIES = get_queries_dict(cfg.TEST_FILE)
-        assert(TRAINING_QUERIES !=TRAINING_QUERIES_init)
 
         log_string('**** EPOCH %03d ****' % (epoch))
         sys.stdout.flush()
@@ -366,7 +362,8 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
 
 def get_feature_representation(filename, model):
     model.eval()
-    queries = load_pc_files([filename])
+    print("filename:"+str(filename))
+    queries = load_pc_files(filename)
     queries = np.expand_dims(queries, axis=1)
     # if(BATCH_NUM_QUERIES-1>0):
     #    fake_queries=np.zeros((BATCH_NUM_QUERIES-1,1,NUM_POINTS,3))

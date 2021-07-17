@@ -13,18 +13,6 @@ import scipy.io as sio
 import torch
 
 
-#####For training and test data split#####
-
-def check_in_test_set(northing, easting, points, x_width, y_width):
-    in_test_set = False
-    for point in points:
-        if(point[0]-x_width < northing and northing < point[0]+x_width and point[1]-y_width < easting and easting < point[1]+y_width):
-            in_test_set = True
-            break
-    return in_test_set
-##########################################
-
-
 def construct_query_dict(df_files, df_indice, filename):
     print("df_indice:"+str(df_indice))
     assert(0)
@@ -69,13 +57,12 @@ def construct_dict(df_files, df_indices, filename, folder_size, folder_num,  k_n
             
     #print("queries:"+str(queries[0]))
     #print("queries:"+str(queries[0][0]))
-
     with open(filename, 'wb') as handle:
         pickle.dump(queries, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     print("Done ", filename)
 
-def generate():
+def generate(inside=False):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     base_path = cfg.DATASET_FOLDER
     runs_folder = "dm_data/data_unsupervised"
@@ -124,9 +111,13 @@ def generate():
             else:
                 df_files_train.append(os.path.join(cc_dir,runs_folder,folder,file_))
                 df_indices_train.append(indx)
-
-    construct_dict(df_files_train, df_indices_train, "training_queries_baseline.pickle", folder_size, folder_num, k_nearest, k_furthest)
-    construct_dict(df_files_test, df_indices_test, "test_queries_baseline.pickle", folder_size, folder_num, k_nearest, k_furthest)
+    if inside:
+        construct_dict(df_files_train, df_indices_train, "generating_queries/training_queries_baseline.pickle", folder_size, folder_num, k_nearest, k_furthest)
+        construct_dict(df_files_test, df_indices_test, "generating_queries/test_queries_baseline.pickle", folder_size, folder_num, k_nearest, k_furthest)
+    else:
+        construct_dict(df_files_train, df_indices_train, "training_queries_baseline.pickle", folder_size, folder_num, k_nearest, k_furthest)
+        construct_dict(df_files_test, df_indices_test, "test_queries_baseline.pickle", folder_size, folder_num, k_nearest, k_furthest)
+    print("Done with updating pickle")
 
 if __name__ == "__main__":
     generate()
