@@ -1,5 +1,10 @@
 import torch
+<<<<<<< Updated upstream
 
+=======
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print("device:"+str(device))
+>>>>>>> Stashed changes
 import argparse
 import importlib
 import math
@@ -196,6 +201,9 @@ def train():
     LOG_FOUT.write("\n")
     LOG_FOUT.flush()
 
+    generate_dataset.generate()
+    TRAINING_QUERIES = get_queries_dict(cfg.TRAIN_FILE)
+    TEST_QUERIES = get_queries_dict(cfg.TEST_FILE)
     for epoch in range(starting_epoch, cfg.MAX_EPOCH):
         print(epoch)
         print()
