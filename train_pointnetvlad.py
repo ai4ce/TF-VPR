@@ -199,7 +199,7 @@ def train():
     for epoch in range(starting_epoch, cfg.MAX_EPOCH):
         print(epoch)
         print()
-        generate_dataset.generate(True)
+        #generate_dataset.generate(True)
         
         # Load dictionary of training queries
         TRAINING_QUERIES = get_queries_dict(cfg.TRAIN_FILE)
@@ -213,7 +213,7 @@ def train():
         log_string('EVALUATING...')
         cfg.OUTPUT_FILE = cfg.RESULTS_FOLDER + 'results_' + str(epoch) + '.txt'
 
-        eval_recall = evaluate.evaluate_model(model, True)
+        eval_recall = evaluate.evaluate_model(model, True, epoch)
         log_string('EVAL RECALL: %s' % str(eval_recall))
 
         train_writer.add_scalar("Val Recall", eval_recall, epoch)
