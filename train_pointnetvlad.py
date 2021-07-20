@@ -1,3 +1,5 @@
+import torch
+
 import argparse
 import importlib
 import math
@@ -8,25 +10,27 @@ import numpy as np
 from sklearn.neighbors import KDTree, NearestNeighbors
 
 import config as cfg
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print("device:"+str(device))
 import evaluate
 import loss.pointnetvlad_loss as PNV_loss
 import models.PointNetVlad as PNV
 import generating_queries.generate_training_tuples_cc_baseline as generate_dataset
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 import torch
 import torch.nn as nn
 from loading_pointclouds import *
 from tensorboardX import SummaryWriter
 from torch.autograd import Variable
-from torch.backends import cudnn
+#from torch.backends import cudnn
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-
+#os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
 
-cudnn.enabled = True
+#cudnn.enabled = True
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--log_dir', default='log/', help='Log dir [default: log]')
@@ -119,6 +123,7 @@ TRAINING_LATENT_VECTORS = []
 TOTAL_ITERATIONS = 0
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print("device:"+str(device))
 
 def get_bn_decay(batch):
     bn_momentum = cfg.BN_INIT_DECAY * \
@@ -247,7 +252,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
                 q_tuples.append(
                     get_query_tuple(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
                                     TRAINING_QUERIES, hard_neg=[], other_neg=True))
-                #print("q_tuples:"+str(q_tuples))
+                #print("q_tuples:"+str(len(TRAINING_QUERIES[batch_keys[j]]["positives"])))
                 # q_tuples.append(get_rotated_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_neg=[], other_neg=True))
                 # q_tuples.append(get_jittered_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_neg=[], other_neg=True))
 
