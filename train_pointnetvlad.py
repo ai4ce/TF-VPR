@@ -197,6 +197,7 @@ def train():
     LOG_FOUT.write("\n")
     LOG_FOUT.flush()
     data_index = 0
+
     for epoch in range(starting_epoch, cfg.MAX_EPOCH):
         print(epoch)
         print()
