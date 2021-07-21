@@ -1,5 +1,6 @@
 import torch
-
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print("device:"+str(device))
 import argparse
 import importlib
 import math
@@ -195,16 +196,21 @@ def train():
     LOG_FOUT.write(cfg.cfg_str())
     LOG_FOUT.write("\n")
     LOG_FOUT.flush()
-
+    data_index = 0
     for epoch in range(starting_epoch, cfg.MAX_EPOCH):
         print(epoch)
         print()
-        #generate_dataset.generate(True)
+        TRAIN_FILE = 'generating_queries/train_pickle/training_queries_baseline_'+str(data_index)+'.pickle'
+        TEST_FILE = 'generating_queries/train_pickle/test_queries_baseline_'+str(data_index)+'.pickle'
         
-        # Load dictionary of training queries
-        TRAINING_QUERIES = get_queries_dict(cfg.TRAIN_FILE)
-        TEST_QUERIES = get_queries_dict(cfg.TEST_FILE)
+        data_index = data_index +1 
+        if data_index==20:
+            data_index = 0
 
+        # Load dictionary of training queries
+        TRAINING_QUERIES = get_queries_dict(TRAIN_FILE)
+        TEST_QUERIES = get_queries_dict(TEST_FILE)
+        
         log_string('**** EPOCH %03d ****' % (epoch))
         sys.stdout.flush()
 
@@ -213,7 +219,7 @@ def train():
         log_string('EVALUATING...')
         cfg.OUTPUT_FILE = cfg.RESULTS_FOLDER + 'results_' + str(epoch) + '.txt'
 
-        eval_recall = evaluate.evaluate_model(model, True, epoch)
+        eval_recall = evaluate.evaluate_model(model, epoch, True)
         log_string('EVAL RECALL: %s' % str(eval_recall))
 
         train_writer.add_scalar("Val Recall", eval_recall, epoch)
@@ -367,7 +373,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
 
 def get_feature_representation(filename, model):
     model.eval()
-    queries = load_pc_files(filename, True)
+    queries = load_pc_files([filename],True)
     queries = np.expand_dims(queries, axis=1)
     # if(BATCH_NUM_QUERIES-1>0):
     #    fake_queries=np.zeros((BATCH_NUM_QUERIES-1,1,NUM_POINTS,3))
@@ -434,7 +440,7 @@ def get_latent_vectors(model, dict_to_process):
     # handle edge case
     for q_index in range((len(train_file_idxs) // batch_num * batch_num), len(dict_to_process.keys())):
         index = train_file_idxs[q_index]
-        queries = load_pc_files(dict_to_process[index]["query"],True)
+        queries = load_pc_files([dict_to_process[index]["query"]],True)
         queries = np.expand_dims(queries, axis=1)
 
         # if (BATCH_NUM_QUERIES - 1 > 0):
