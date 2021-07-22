@@ -7,31 +7,32 @@ import math
 import os
 import socket
 import sys
+
 import numpy as np
 from sklearn.neighbors import KDTree, NearestNeighbors
 
 import config as cfg
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print("device:"+str(device))
 import evaluate
 import loss.pointnetvlad_loss as PNV_loss
 import models.PointNetVlad as PNV
 import generating_queries.generate_training_tuples_cc_baseline as generate_dataset
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 import torch
 import torch.nn as nn
 from loading_pointclouds import *
 from tensorboardX import SummaryWriter
 from torch.autograd import Variable
-#from torch.backends import cudnn
+from torch.backends import cudnn
 
-#os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
 
-#cudnn.enabled = True
+
+
+cudnn.enabled = True
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--log_dir', default='log/', help='Log dir [default: log]')
@@ -103,10 +104,10 @@ LOG_FOUT = open(os.path.join(cfg.LOG_DIR, 'log_train.txt'), 'w')
 LOG_FOUT.write(str(FLAGS) + '\n')
 
 cfg.RESULTS_FOLDER = FLAGS.results_dir
-
 print("cfg.RESULTS_FOLDER:"+str(cfg.RESULTS_FOLDER))
 
 cfg.DATASET_FOLDER = FLAGS.dataset_folder
+
 # Load dictionary of training queries
 TRAINING_QUERIES = get_queries_dict(cfg.TRAIN_FILE)
 TEST_QUERIES = get_queries_dict(cfg.TEST_FILE)
@@ -124,7 +125,6 @@ TRAINING_LATENT_VECTORS = []
 TOTAL_ITERATIONS = 0
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print("device:"+str(device))
 
 def get_bn_decay(batch):
     bn_momentum = cfg.BN_INIT_DECAY * \
@@ -196,22 +196,19 @@ def train():
     LOG_FOUT.write(cfg.cfg_str())
     LOG_FOUT.write("\n")
     LOG_FOUT.flush()
-    data_index = 0
 
+    data_index = 0
     for epoch in range(starting_epoch, cfg.MAX_EPOCH):
         print(epoch)
         print()
+        #generate_dataset.generate()
         TRAIN_FILE = 'generating_queries/train_pickle/training_queries_baseline_'+str(data_index)+'.pickle'
         TEST_FILE = 'generating_queries/train_pickle/test_queries_baseline_'+str(data_index)+'.pickle'
-        
-        data_index = data_index +1 
-        if data_index==20:
-            data_index = 0
-
+        data_index = data_index+1
         # Load dictionary of training queries
         TRAINING_QUERIES = get_queries_dict(TRAIN_FILE)
         TEST_QUERIES = get_queries_dict(TEST_FILE)
-        
+
         log_string('**** EPOCH %03d ****' % (epoch))
         sys.stdout.flush()
 
@@ -220,7 +217,7 @@ def train():
         log_string('EVALUATING...')
         cfg.OUTPUT_FILE = cfg.RESULTS_FOLDER + 'results_' + str(epoch) + '.txt'
 
-        eval_recall = evaluate.evaluate_model(model, epoch, True)
+        eval_recall = evaluate.evaluate_model(model, True)
         log_string('EVAL RECALL: %s' % str(eval_recall))
 
         train_writer.add_scalar("Val Recall", eval_recall, epoch)
@@ -259,7 +256,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
                 q_tuples.append(
                     get_query_tuple(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
                                     TRAINING_QUERIES, hard_neg=[], other_neg=True))
-                #print("q_tuples:"+str(len(TRAINING_QUERIES[batch_keys[j]]["positives"])))
+                #print("q_tuples:"+str(q_tuples))
                 # q_tuples.append(get_rotated_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_neg=[], other_neg=True))
                 # q_tuples.append(get_jittered_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_neg=[], other_neg=True))
 

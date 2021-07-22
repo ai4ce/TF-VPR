@@ -45,7 +45,7 @@ def evaluate():
     print("ave_one_percent_recall:"+str(ave_one_percent_recall))
 
 
-def evaluate_model(model,temp_epoch,save=False):
+def evaluate_model(model,save=False):
     if save:
         torch.save({
             'state_dict': model.state_dict(),
@@ -102,7 +102,7 @@ def evaluate_model(model,temp_epoch,save=False):
     
     
     ### Save Evaluate vectors
-    file_name = os.path.join(cfg.RESULTS_FOLDER, "database"+str(temp_epoch)+".npy")
+    file_name = os.path.join(cfg.RESULTS_FOLDER, "database.npy")
     np.save(file_name, np.array(DATABASE_VECTORS))
     print("saving for DATABASE_VECTORS to "+str(file_name))
     
