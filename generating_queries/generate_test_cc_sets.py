@@ -21,7 +21,7 @@ pointcloud_fols = "/pointcloud_20m_10overlap/"
 
 print("cfg.DATASET_FOLDER:"+str(cfg.DATASET_FOLDER))
 
-cc_dir = "/mnt/ab0fe826-9b3c-455c-bb72-5999d52034e0/deepmapping/"
+cc_dir = "/home/cc/"
 all_folders = sorted(os.listdir(os.path.join(cc_dir,runs_folder)))
 
 folders = []

@@ -1,6 +1,6 @@
 import torch
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print("device:"+str(device))
+#device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+#print("device:"+str(device))
 import argparse
 import importlib
 import math
