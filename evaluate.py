@@ -118,7 +118,7 @@ def evaluate_model(model,save=False):
     
     #print("os.path.join(/home/cc/PointNet-torch2,cfg.OUTPUT_FILE,log.txt):"+str(os.path.join("/home/cc/PointNet-torch2",cfg.OUTPUT_FILE,"log.txt")))
     #assert(0)
-    with open(os.path.join("/home/cc/PointNet-torch2",cfg.OUTPUT_FILE), "w") as output:
+    with open(os.path.join("/home/cc/Supervised-PointNetVlad",cfg.OUTPUT_FILE), "w") as output:
         output.write("Average Recall @N:\n")
         output.write(str(ave_recall))
         output.write("\n\n")
