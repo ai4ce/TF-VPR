@@ -28,6 +28,7 @@ BN_DECAY_DECAY_RATE = 0.5
 BN_DECAY_CLIP = 0.99
 
 RESUME = False
+ROT_NUM = 8
 
 TRAIN_FILE = 'generating_queries/training_queries_baseline.pickle'
 TEST_FILE = 'generating_queries/test_queries_baseline.pickle'
