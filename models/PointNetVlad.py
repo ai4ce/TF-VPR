@@ -7,7 +7,8 @@ from torch.autograd import Variable
 import numpy as np
 import torch.nn.functional as F
 import math
-
+import random
+from .resnet_mod import *
 
 class NetVLADLoupe(nn.Module):
     def __init__(self, feature_size, max_samples, cluster_size, output_dim,
@@ -267,30 +268,6 @@ class ObsFeatAVD(nn.Module):
         #x = x.view(-1,self.n_out) #<Bxn_out>
         x = x.permute(0,2,3,1)
         return x
-'''
-class ObsFeat2D(nn.Module):
-    """Feature extractor for 1D organized point clouds"""
-    def __init__(self, n_points, n_out=1024):
-        super(ObsFeat2D, self).__init__()
-        self.n_out = n_out
-        k = 3
-        p = int(np.floor(k / 2)) + 2
-        self.stn = STN2d(num_points=n_points, k=2, use_bn=False)
-        self.feature_trans = STN2d(num_points=n_points, k=64, use_bn=False)
-        self.conv1 = nn.Conv1d(2, 64, kernel_size=k, padding=p, dilation=3)
-        self.conv2 = nn.Conv1d(64, 128, kernel_size=k, padding=p, dilation=3)
-        self.conv3 = nn.Conv1d(128, self.n_out, kernel_size=k, padding=p, dilation=3)
-        self.mp = nn.MaxPool1d(n_points)
-
-    def forward(self, x):
-        assert(x.shape[1] == 2), "the input size must be <Bx2xL> "
-        x = F.relu(self.conv1(x))
-        x = F.relu(self.conv2(x))
-        x = self.conv3(x)
-        x = self.mp(x)
-        x = x.view(-1, self.n_out)  # <Bx1024>
-        return x
-'''
 
 class PointNetfeat(nn.Module):
     def __init__(self, num_points=256, global_feat=True, feature_transform=False, max_pool=True):
@@ -349,6 +326,72 @@ class PointNetfeat(nn.Module):
                 return torch.cat([x, pointfeat], 1), trans
 
 
+class PointNetfeatCNN(nn.Module):
+    def __init__(self, num_points=256, global_feat=True, feature_transform=False, max_pool=True):
+        super(PointNetfeatCNN, self).__init__()
+        self.stn = STN2d(num_points=num_points, k=2, use_bn=False)
+        self.feature_trans = STN2d(num_points=num_points, k=64, use_bn=False)
+        self.apply_feature_trans = feature_transform
+        self.conv1 = torch.nn.Conv2d(1, 64, kernel_size=(3,1), stride=1, padding=(2,0),
+                                            bias=False, padding_mode='circular')
+        
+        self.conv2 = torch.nn.Conv2d(64, 64, kernel_size=(3,2), stride=1, padding=(2,1),
+                                                            bias=False, padding_mode='circular')
+        self.conv3 = torch.nn.Conv2d(64, 64, kernel_size=(3,1), stride=1, padding=(2,0),
+                                                            bias=False, padding_mode='circular')
+        self.conv4 = torch.nn.Conv2d(64, 128, kernel_size=(3,1), stride=1, padding=(2,0),
+                                                            bias=False, padding_mode='circular')
+        self.conv5 = torch.nn.Conv2d(128, 1024, kernel_size=(3,1), stride=1, padding=(2,0),
+                                                            bias=False, padding_mode='circular')
+        self.bn1 = nn.BatchNorm2d(64)
+        self.bn2 = nn.BatchNorm2d(64)
+        self.bn3 = nn.BatchNorm2d(64)
+        self.bn4 = nn.BatchNorm2d(128)
+        self.bn5 = nn.BatchNorm2d(1024)
+        self.mp1 = torch.nn.MaxPool2d((num_points, 1), 1)
+        self.num_points = num_points
+        self.global_feat = global_feat
+        self.max_pool = max_pool
+
+    def process_data(self,ob,low_th = -20,high_th = 20):
+        for i in range(ob.size()[0]):
+            seed = random.randint(low_th, high_th)
+            ob[i] = torch.roll(ob[i], seed, dims=1)
+            return ob
+
+    def forward(self, x):
+        x = x[:,:,:,:2]
+        batchsize = x.size()[0]
+        threshold = batchsize//2
+        x = self.process_data(x, low_th=-threshold, high_th=threshold)
+        #trans = self.stn(x)
+        #x = torch.matmul(torch.squeeze(x), trans)
+        x = x.view(batchsize, 1, -1, 2)
+        x = F.relu(self.bn1(self.conv1(x)))
+        x = F.relu(self.bn2(self.conv2(x)))
+        pointfeat = x
+        if self.apply_feature_trans:
+            f_trans = self.feature_trans(x)
+            x = torch.squeeze(x)
+            if batchsize == 1:
+                x = torch.unsqueeze(x, 0)
+            x = torch.matmul(x.transpose(1, 2), f_trans)
+            x = x.transpose(1, 2).contiguous()
+            x = x.view(batchsize, 64, -1, 1)
+        x = F.relu(self.bn3(self.conv3(x)))
+        x = F.relu(self.bn4(self.conv4(x)))
+        x = self.bn5(self.conv5(x))
+        if not self.max_pool:
+            return x
+        else:
+            x = self.mp1(x)
+            x = x.view(-1, 1024)
+            if self.global_feat:
+                return x, trans
+            else:
+                x = x.view(-1, 1024, 1).repeat(1, 1, self.num_points)
+                return torch.cat([x, pointfeat], 1), trans
+
 class PointNetVlad(nn.Module):
     def __init__(self, num_points=256, global_feat=True, feature_transform=False, max_pool=True, output_dim=1024):
         super(PointNetVlad, self).__init__()
@@ -356,7 +399,7 @@ class PointNetVlad(nn.Module):
         #                              feature_transform=feature_transform, max_pool=max_pool)
         #self.obs_feat_extractor = ObsFeatAVD(n_out=1024, num_points=num_points, global_feat=global_feat,
         #                              feature_transform=feature_transform, max_pool=max_pool)
-        self.obs_feat_extractor = PointNetfeat(num_points=num_points, global_feat=global_feat,
+        self.obs_feat_extractor = PointNetfeatCNN(num_points=num_points, global_feat=global_feat,
                                                feature_transform=feature_transform, max_pool=max_pool)
         self.net_vlad = NetVLADLoupe(feature_size=1024, max_samples=num_points, cluster_size=64,
                                      output_dim=output_dim, gating=True, add_batch_norm=True,

@@ -452,7 +452,7 @@ def get_latent_vectors(model, dict_to_process):
         #fake_other_neg = np.zeros((BATCH_NUM_QUERIES, 1, NUM_POINTS, 3))
         #o1, o2, o3, o4 = run_model(model, q, fake_pos, fake_neg, fake_other_neg)
         with torch.no_grad():
-            queries_tensor = torch.from_numpy(queries).float()
+            queries_tensor = torch.from_numpy(queries).float().cuda()
             o1 = model(queries_tensor)
 
         output = o1.detach().cpu().numpy()
