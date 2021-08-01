@@ -334,10 +334,6 @@ class PointNetfeatCNN(nn.Module):
         self.apply_feature_trans = feature_transform
         self.conv1 = torch.nn.Conv2d(1, 64, kernel_size=(3,1), stride=1, padding=(2,0),
                                             bias=False, padding_mode='circular')
-        #self.conv2 = torch.nn.Conv2d(64, 64, (1, 1))
-        #self.conv3 = torch.nn.Conv2d(64, 64, (1, 1))
-        #self.conv4 = torch.nn.Conv2d(64, 128, (1, 1))
-        #self.conv5 = torch.nn.Conv2d(128, 1024, (1, 1))
         
         self.conv2 = torch.nn.Conv2d(64, 64, kernel_size=(3,2), stride=1, padding=(2,1),
                                                             bias=False, padding_mode='circular')
@@ -374,7 +370,7 @@ class PointNetfeatCNN(nn.Module):
         x = F.relu(self.bn1(self.conv1(x)))
         x = F.relu(self.bn2(self.conv2(x)))
         pointfeat = x
-        #print("before_trans:"+str(x.shape))
+        
         if self.apply_feature_trans:
             f_trans = self.feature_trans(x)
             x = torch.squeeze(x)
@@ -385,15 +381,14 @@ class PointNetfeatCNN(nn.Module):
             x = x.view(batchsize, 64, -1, 1)
         x = F.relu(self.bn3(self.conv3(x)))
         x = F.relu(self.bn4(self.conv4(x)))
-        #print("x4:"+str(x.shape))
+        
         x = self.bn5(self.conv5(x))
-        #print("x5:"+str(x.shape))
         if not self.max_pool:
             return x
         else:
             x = self.mp1(x)
             x = x.view(-1, 1024)
-            #print("x.shap:"+str(x.shape))
+            
             if self.global_feat:
                 return x, trans
             else:
@@ -407,7 +402,7 @@ class PointNetVlad(nn.Module):
         #                              feature_transform=feature_transform, max_pool=max_pool)
         #self.obs_feat_extractor = ObsFeatAVD(n_out=1024, num_points=num_points, global_feat=global_feat,
         #                              feature_transform=feature_transform, max_pool=max_pool)
-        self.obs_feat_extractor = PointNetfeat(num_points=num_points, global_feat=global_feat,
+        self.obs_feat_extractor = PointNetfeatCNN(num_points=num_points, global_feat=global_feat,
                                                feature_transform=feature_transform, max_pool=max_pool)
         self.net_vlad = NetVLADLoupe(feature_size=1024, max_samples=num_points, cluster_size=64,
                                      output_dim=output_dim, gating=True, add_batch_norm=True,
