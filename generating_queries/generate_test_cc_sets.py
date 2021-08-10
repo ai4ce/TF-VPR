@@ -19,6 +19,7 @@ runs_folder = "dm_data"
 filename = "gt_pose.mat"
 pointcloud_fols = "/pointcloud_20m_10overlap/"
 
+evaluate_all = False
 print("cfg.DATASET_FOLDER:"+str(cfg.DATASET_FOLDER))
 
 cc_dir = "/home/cc/"
@@ -27,7 +28,10 @@ all_folders = sorted(os.listdir(os.path.join(cc_dir,runs_folder)))
 folders = []
 
 # All runs are used for training (both full and partial)
-index_list = [5,6,7,9]
+if evaluate_all:
+    index_list = list(range(18))
+else:
+    index_list = [5,6,7,9]
 print("Number of runs: "+str(len(index_list)))
 for index in index_list:
     print("all_folders[index]:"+str(all_folders[index]))
@@ -156,4 +160,7 @@ print("df_train:"+str(len(df_train)))
 
 
 #construct_query_dict(df_train,len(folders),"evaluation_database.pickle",False)
-construct_query_dict(df_test, df_train, len(folders),"evaluation_database.pickle", "evaluation_query.pickle", True)
+if not evaluate_all:
+    construct_query_dict(df_test, df_train, len(folders),"evaluation_database.pickle", "evaluation_query.pickle", True)
+else:
+    construct_query_dict(df_test, df_train, len(folders),"evaluation_database_full.pickle", "evaluation_query_full.pickle", True)

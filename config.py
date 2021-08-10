@@ -7,7 +7,7 @@ OUTPUT_FILE = "results/results.txt"
 LOG_DIR = 'log/'
 MODEL_FILENAME = "model.ckpt"
 
-DATASET_FOLDER = '../../benchmark_datasets/'
+DATASET_FOLDER = '/home/cc/dm_data'
 
 # TRAIN
 BATCH_NUM_QUERIES = 2
@@ -29,6 +29,9 @@ BN_DECAY_CLIP = 0.99
 
 RESUME = False
 ROT_NUM = 8
+EVAL_NEAREST = 16
+INIT_TRUST = 5
+INIT_TRUST_SCALAR = 1
 
 TRAIN_FILE = 'generating_queries/training_queries_baseline.pickle'
 TEST_FILE = 'generating_queries/test_queries_baseline.pickle'

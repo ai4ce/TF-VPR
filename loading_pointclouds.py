@@ -168,6 +168,8 @@ def get_rotated_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], oth
     for i in range(num_pos):
         pos_files.append(QUERY_DICT[dict_value["positives"][i]]["query"])
     #positives= load_pc_files(dict_value["positives"][0:num_pos])
+    #print("pos_files:"+str(pos_files))
+    #assert(0)
     positives = load_pc_files(pos_files)
     p_rot = rotate_point_cloud(positives)
 

@@ -7,6 +7,8 @@ import math
 import os
 import socket
 import sys
+sys.path.append('/usr/local/lib/python3.6/dist-packages/python_pcl-0.3-py3.6-linux-x86_64.egg/')
+import pcl
 
 import numpy as np
 from sklearn.neighbors import KDTree, NearestNeighbors
@@ -15,7 +17,8 @@ import config as cfg
 import evaluate
 import loss.pointnetvlad_loss as PNV_loss
 import models.PointNetVlad as PNV
-import generating_queries.generate_training_tuples_cc_baseline as generate_dataset
+import models.Verification as VFC
+import generating_queries.generate_training_tuples_cc_baseline_batch as generate_dataset
 
 import torch
 import torch.nn as nn
@@ -105,8 +108,6 @@ LOG_FOUT.write(str(FLAGS) + '\n')
 
 cfg.RESULTS_FOLDER = FLAGS.results_dir
 print("cfg.RESULTS_FOLDER:"+str(cfg.RESULTS_FOLDER))
-
-cfg.DATASET_FOLDER = FLAGS.dataset_folder
 
 # Load dictionary of training queries
 TRAINING_QUERIES = get_queries_dict(cfg.TRAIN_FILE)
@@ -198,10 +199,28 @@ def train():
     LOG_FOUT.flush()
 
     data_index = 0
+    potential_positives = None
+    potential_distributions = None
+    trusted_positives = None
+
+    all_folders = sorted(os.listdir(cfg.DATASET_FOLDER))
+    
+    folders = []
+    # All runs are used for training (both full and partial)
+    index_list = range(len(all_folders))
+    for index in index_list:
+        folders.append(all_folders[index])
+    
+    for folder in folders:
+        all_files = list(sorted(os.listdir(os.path.join(cfg.DATASET_FOLDER,folder))))
+        all_files.remove('gt_pose.mat')
+        all_files.remove('gt_pose.png')
+
     for epoch in range(starting_epoch, cfg.MAX_EPOCH):
         print(epoch)
         print()
-        #generate_dataset.generate()
+        print("trusted_positives:"+str(np.array(trusted_positives).shape))
+        generate_dataset.generate(data_index, definite_positives=trusted_positives, inside=False)  
         TRAIN_FILE = 'generating_queries/train_pickle/training_queries_baseline_'+str(data_index)+'.pickle'
         TEST_FILE = 'generating_queries/train_pickle/test_queries_baseline_'+str(data_index)+'.pickle'
         data_index = data_index+1
@@ -213,11 +232,88 @@ def train():
         sys.stdout.flush()
 
         train_one_epoch(model, optimizer, train_writer, loss_function, epoch)
-
+        
         log_string('EVALUATING...')
         cfg.OUTPUT_FILE = cfg.RESULTS_FOLDER + 'results_' + str(epoch) + '.txt'
 
-        eval_recall = evaluate.evaluate_model(model, True)
+        #eval_recall, db_vec = evaluate.evaluate_model(model, True) #db_vec gives the evaluate nearest neighbours, folder* 2048* positves_dim
+        _, db_vec = evaluate.evaluate_model(model, epoch, True, full_pickle=True)
+        eval_recall, _ = evaluate.evaluate_model(model, epoch, True, full_pickle=False)
+        if potential_positives is None:
+            potential_positives = []
+            potential_distributions = []
+            trusted_positives = []
+            db_vec = np.array(db_vec)
+            for index in range(db_vec.shape[0]):
+                trusted_positive = []
+                nbrs = NearestNeighbors(n_neighbors=cfg.EVAL_NEAREST, algorithm='ball_tree').fit(db_vec[index])
+                distance, indice = nbrs.kneighbors(db_vec[index])
+                #print("distance:"+str(np.exp(-distance*10)[0]))
+                #print("indice:"+str(indice[0]))
+                weight = np.exp(-distance*10).tolist()
+
+                potential_positives.append(indice.tolist())
+                potential_distributions.append(np.exp(-distance*10).tolist())
+                #print("np.array(indice)[np.argsort(weight)[::-1][0]]:"+str(np.array(indice)[np.argsort(weight[:,::-1])].shape))
+                #assert(0)
+                for index2 in range(db_vec.shape[1]):
+                    pre_trusted_positive = np.array(indice[index2])[np.argsort(weight[index2])[::-1][:(cfg.INIT_TRUST)]]
+                    folder_path = os.path.join(cfg.DATASET_FOLDER,folders[index])
+                    
+                    #print("pre_trusted_positive:"+str(pre_trusted_positive))
+                    trusted_pos = VFC.filter_trusted(folder_path, all_files, index2, pre_trusted_positive)  
+                    #print("trusted_positive:"+str(trusted_positive))
+                    trusted_positive.append(trusted_pos)
+
+                trusted_positives.append(trusted_positive)
+        else:
+            new_potential_positives = []
+            new_potential_distributions = []
+            new_trusted_positives = []
+            db_vec = np.array(db_vec)
+            for index in range(db_vec.shape[0]):
+                new_potential_positive = []
+                new_potential_distribution = []
+                new_trusted_positive = []
+                nbrs = NearestNeighbors(n_neighbors=cfg.EVAL_NEAREST, algorithm='ball_tree').fit(db_vec[index])
+                distance, indice = nbrs.kneighbors(db_vec[index])
+                weight = np.exp(-distance*10).tolist()
+                for index2 in range(db_vec.shape[1]):
+                    pos_set = potential_positives[index][index2]
+                    pos_dis = potential_distributions[index][index2]
+                    for count,inc in enumerate(indice[index2]):
+                        if inc not in pos_set:
+                            pos_set.append(inc)
+                            pos_dis.append(weight[index2][count])
+                        else:
+                            pos_dis[pos_set.index(inc)] = pos_dis[pos_set.index(inc)] + weight[index2][count] # if the element exists, distribution +1
+                    #print("np.argsort:",np.argsort(pos_dis)[::-1][:5])
+                    #print("pos_set[np.argsort(pos_dis)[:5]:]"+str(np.array(pos_set)[np.argsort(pos_dis)[::-1][:5]]))
+                    #assert(0)
+                    new_potential_positive.append(pos_set)
+                    new_potential_distribution.append(pos_dis)
+                    '''
+                    if data_index-1 >=5:
+                        data_index_constraint = 6
+                    else:
+                        data_index_constraint = data_index
+                    '''
+                    pre_trusted_positive = np.array(pos_set)[np.argsort(pos_dis)[::-1][:(cfg.INIT_TRUST+int(data_index-1)//cfg.INIT_TRUST_SCALAR)]]
+                    #print("pre_trusted_positive:"+str(pre_trusted_positive.shape))
+                    trusted_positive = VFC.filter_trusted(folder_path, all_files, index2, pre_trusted_positive)
+                    #print("trusted_positive:"+str(trusted_positive))
+                    new_trusted_positive.append(trusted_positive)
+
+                new_potential_positives.append(new_potential_positive)
+                new_potential_distributions.append(new_potential_distribution)
+                new_trusted_positives.append(new_trusted_positive)
+            potential_positives = new_potential_positives
+            potential_distributions = new_potential_distributions
+            trusted_positives = new_trusted_positives
+
+            #print("potential_positives:"+str(potential_positives[0][1]))
+            #print("potential_distributions:"+str(potential_distributions[0][1]))
+        #print("trusted_positives:"+str(np.array(trusted_positives)[1][2]))
         log_string('EVAL RECALL: %s' % str(eval_recall))
 
         train_writer.add_scalar("Val Recall", eval_recall, epoch)
