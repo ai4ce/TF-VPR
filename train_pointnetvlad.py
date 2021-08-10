@@ -110,10 +110,10 @@ cfg.RESULTS_FOLDER = FLAGS.results_dir
 print("cfg.RESULTS_FOLDER:"+str(cfg.RESULTS_FOLDER))
 
 # Load dictionary of training queries
-TRAINING_QUERIES = get_queries_dict(cfg.TRAIN_FILE)
-TEST_QUERIES = get_queries_dict(cfg.TEST_FILE)
-TRAINING_QUERIES_init = get_queries_dict(cfg.TRAIN_FILE)
-TEST_QUERIES_init = get_queries_dict(cfg.TEST_FILE)
+#TRAINING_QUERIES = get_queries_dict(cfg.TRAIN_FILE)
+#TEST_QUERIES = get_queries_dict(cfg.TEST_FILE)
+#TRAINING_QUERIES_init = get_queries_dict(cfg.TRAIN_FILE)
+#TEST_QUERIES_init = get_queries_dict(cfg.TEST_FILE)
 
 cfg.BN_INIT_DECAY = 0.5
 cfg.BN_DECAY_DECAY_RATE = 0.5
@@ -150,7 +150,7 @@ def get_learning_rate(epoch):
 
 def train():
     global HARD_NEGATIVES, TOTAL_ITERATIONS
-    global TRAINING_QUERIES, TEST_QUERIES
+    #global TRAINING_QUERIES, TEST_QUERIES
     bn_decay = get_bn_decay(0)
     #tf.summary.scalar('bn_decay', bn_decay)
 
