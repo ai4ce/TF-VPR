@@ -231,7 +231,7 @@ def train():
         log_string('**** EPOCH %03d ****' % (epoch))
         sys.stdout.flush()
 
-        train_one_epoch(model, optimizer, train_writer, loss_function, epoch)
+        train_one_epoch(model, optimizer, train_writer, loss_function, epoch, TRAINING_QUERIES, TEST_QUERIES)
         
         log_string('EVALUATING...')
         cfg.OUTPUT_FILE = cfg.RESULTS_FOLDER + 'results_' + str(epoch) + '.txt'
@@ -319,7 +319,7 @@ def train():
         train_writer.add_scalar("Val Recall", eval_recall, epoch)
 
 
-def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
+def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, TRAINING_QUERIES, TEST_QUERIES):
     global HARD_NEGATIVES
     global TRAINING_LATENT_VECTORS, TOTAL_ITERATIONS
 
