@@ -4,6 +4,7 @@ import numpy as np
 import random
 import config as cfg
 from open3d import read_point_cloud
+import cv2
 
 def get_queries_dict(filename):
     # key:{'query':file,'positives':[files],'negatives:[files], 'neighbors':[keys]}
@@ -50,6 +51,27 @@ def load_pc_files(filenames,full_path):
     pcs = np.array(pcs)
     return pcs
 
+def load_image_file(filename, full_path=False):
+    if full_path:
+        image = cv2.imread(filename)
+    else:
+        image = cv2.imread(os.path.join("/home/chao1804/Desktop/AVD/ActiveVisionDataset/", filename))
+    image = np.asarray(image, dtype=np.float32)
+
+    if(image.shape[2] != 3):
+        print("Error in pointcloud shape")
+        return np.array([])
+    #pc = np.reshape(pc,(pc.shape[0]//3, 3))
+    return image
+
+
+def load_image_files(filenames,full_path):
+    images = []
+    for filename in filenames:
+        image = load_image_file(filename, full_path=full_path)
+        images.append(image)
+    images = np.asarray(images, dtype=np.float32)
+    return images
 
 def rotate_point_cloud(batch_data):
     """ Randomly rotate the point clouds to augument the dataset
@@ -92,17 +114,14 @@ def jitter_point_cloud(batch_data, sigma=0.005, clip=0.05):
 def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other_neg=False):
         # get query tuple for dictionary entry
         # return list [query,positives,negatives]
-
-    query = load_pc_file(dict_value["query"])  # Nx3
-
+    query = load_image_file(dict_value["query"])  # Nx3
     random.shuffle(dict_value["positives"])
     pos_files = []
-
+    
     for i in range(num_pos):
         pos_files.append(QUERY_DICT[dict_value["positives"][i]]["query"])
     #positives= load_pc_files(dict_value["positives"][0:num_pos])
-    positives = load_pc_files(pos_files,full_path=True)
-
+    positives = load_image_files(pos_files,full_path=True)
     neg_files = []
     neg_indices = []
     if(len(hard_neg) == 0):
@@ -124,8 +143,8 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
                     QUERY_DICT[dict_value["negatives"][j]]["query"])
                 neg_indices.append(dict_value["negatives"][j])
             j += 1
-
-    negatives = load_pc_files(neg_files,full_path=True)
+    
+    negatives = load_image_files(neg_files,full_path=True)
 
     if other_neg is False:
         return [query, positives, negatives]
@@ -144,7 +163,7 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
         if(len(possible_negs) == 0):
             return [query, positives, negatives, np.array([])]
 
-        neg2 = load_pc_file(QUERY_DICT[possible_negs[0]]["query"],full_path=True)
+        neg2 = load_image_file(QUERY_DICT[possible_negs[0]]["query"],full_path=True)
         return [query, positives, negatives, neg2]
 
 

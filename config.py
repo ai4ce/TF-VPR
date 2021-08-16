@@ -1,5 +1,7 @@
 # GLOBAL
 NUM_POINTS = 256
+GRID_X = 1080
+GRID_Y = 1920
 FEATURE_OUTPUT_DIM = 3839
 RESULTS_FOLDER = "results/"
 OUTPUT_FILE = "results/results.txt"

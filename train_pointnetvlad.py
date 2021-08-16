@@ -13,7 +13,7 @@ from sklearn.neighbors import KDTree, NearestNeighbors
 import config as cfg
 import evaluate
 import loss.pointnetvlad_loss as PNV_loss
-import models.PointNetVlad as PNV
+import models.ImageNetVlad as INV
 import torch
 import torch.nn as nn
 from loading_pointclouds import *
@@ -73,7 +73,8 @@ parser.add_argument('--dataset_folder', default='../../dataset/',
 FLAGS = parser.parse_args()
 cfg.BATCH_NUM_QUERIES = FLAGS.batch_num_queries
 #cfg.EVAL_BATCH_SIZE = 12
-cfg.NUM_POINTS = 256
+cfg.GRID_X = 1080
+cfg.GRID_Y = 1920
 cfg.TRAIN_POSITIVES_PER_QUERY = FLAGS.positives_per_query
 cfg.TRAIN_NEGATIVES_PER_QUERY = FLAGS.negatives_per_query
 cfg.MAX_EPOCH = FLAGS.max_epoch
@@ -108,7 +109,6 @@ cfg.DATASET_FOLDER = FLAGS.dataset_folder
 # Load dictionary of training queries
 TRAINING_QUERIES = get_queries_dict(cfg.TRAIN_FILE)
 TEST_QUERIES = get_queries_dict(cfg.TEST_FILE)
-
 cfg.BN_INIT_DECAY = 0.5
 cfg.BN_DECAY_DECAY_RATE = 0.5
 BN_DECAY_DECAY_STEP = float(cfg.DECAY_STEP)
@@ -157,8 +157,8 @@ def train():
     train_writer = SummaryWriter(os.path.join(cfg.LOG_DIR, 'train'))
     #test_writer = SummaryWriter(os.path.join(cfg.LOG_DIR, 'test'))
 
-    model = PNV.PointNetVlad(global_feat=True, feature_transform=True,
-                             max_pool=False, output_dim=cfg.FEATURE_OUTPUT_DIM, num_points=cfg.NUM_POINTS)
+    model = INV.ImageNetVlad(global_feat=True, feature_transform=True,
+                             max_pool=False, output_dim=cfg.FEATURE_OUTPUT_DIM, grid_x = cfg.GRID_X, grid_y = cfg.GRID_Y)
     model = model.to(device)
 
     parameters = filter(lambda p: p.requires_grad, model.parameters())
@@ -196,7 +196,7 @@ def train():
         print()
         log_string('**** EPOCH %03d ****' % (epoch))
         sys.stdout.flush()
-
+        
         train_one_epoch(model, optimizer, train_writer, loss_function, epoch)
 
         log_string('EVALUATING...')
@@ -273,7 +273,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
                 # q_tuples.append(get_rotated_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
                 # q_tuples.append(get_jittered_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
             
-            if (q_tuples[j][3].shape[0] != cfg.NUM_POINTS):
+            if (q_tuples[j][3].shape[2] != 3):
                 no_other_neg = True
                 break
 
@@ -286,7 +286,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
             log_string('----' + str(i) + '-----')
             log_string('----' + 'NO OTHER NEG' + '-----')
             continue
-
+        
         queries = []
         positives = []
         negatives = []
@@ -305,7 +305,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
         negatives = np.array(negatives, dtype=np.float32)
 
         log_string('----' + str(i) + '-----')
-        if (len(queries.shape) != 4):
+        if (len(queries.shape) != 5):
             log_string('----' + 'FAULTY QUERY' + '-----')
             continue
 
@@ -314,14 +314,15 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
         
         output_queries, output_positives, output_negatives, output_other_neg = run_model(
             model, queries, positives, negatives, other_neg)
-        #print("output_queries:"+str(output_queries))
-        #print("output_positives:"+str(output_positives))
-        #print("output_negatives:"+str(output_negatives))
-        #print("output_other_neg:"+str(output_other_neg))
-
-        #print("negatives:"+str(negatives))
-        #print("other_neg:"+str(other_neg))
-        #print("queries:"+str(queries))
+        print("output_queries:"+str(output_queries))
+        print("output_positives:"+str(output_positives))
+        print("output_negatives:"+str(output_negatives))
+        print("output_other_neg:"+str(output_other_neg))
+        
+        print("negatives:"+str(negatives))
+        print("other_neg:"+str(other_neg))
+        print("queries:"+str(queries))
+        assert(0)
 
         loss = loss_function(output_queries, output_positives, output_negatives, output_other_neg, cfg.MARGIN_1, cfg.MARGIN_2, use_min=cfg.TRIPLET_USE_BEST_POSITIVES, lazy=cfg.LOSS_LAZY, ignore_zero_loss=cfg.LOSS_IGNORE_ZERO_BATCH)
         loss.backward()
@@ -458,12 +459,14 @@ def run_model(model, queries, positives, negatives, other_neg, require_grad=True
     other_neg_tensor = torch.from_numpy(other_neg).float()
     feed_tensor = torch.cat(
         (queries_tensor, positives_tensor, negatives_tensor, other_neg_tensor), 1)
-    feed_tensor = feed_tensor.view((-1, 1, cfg.NUM_POINTS, 3))
+    feed_tensor = feed_tensor.view((-1, 1, cfg.GRID_X, cfg.GRID_Y, 3))
+    
     feed_tensor.requires_grad_(require_grad)
     feed_tensor = feed_tensor.to(device)
     #print("feed_tensor:"+str(feed_tensor))
     if require_grad:
         output = model(feed_tensor)
+        assert(0)
     else:
         with torch.no_grad():
             output = model(feed_tensor)
