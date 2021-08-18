@@ -37,7 +37,7 @@ TRAIN_FILE = 'generating_queries/training_queries_baseline.pickle'
 TEST_FILE = 'generating_queries/test_queries_baseline.pickle'
 
 # LOSS
-LOSS_FUNCTION = 'quadruplet'
+LOSS_FUNCTION = 'triplet'
 LOSS_LAZY = True
 TRIPLET_USE_BEST_POSITIVES = False
 LOSS_IGNORE_ZERO_BATCH = False

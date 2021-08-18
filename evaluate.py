@@ -45,7 +45,7 @@ def evaluate():
     print("ave_one_percent_recall:"+str(ave_one_percent_recall))
 
 
-def evaluate_model(model,save=False):
+def evaluate_model(model, epoch, save=False):
     if save:
         torch.save({
             'state_dict': model.state_dict(),
@@ -81,12 +81,13 @@ def evaluate_model(model,save=False):
     QUERY_VECTORS = []
 
     for i in range(len(DATABASE_SETS)):
-        DATABASE_VECTORS.append(get_latent_vectors(model, DATABASE_SETS[i]))
-    
+        DATABASE_VECTORS.extend(get_latent_vectors(model, DATABASE_SETS[i]))
+
     for j in range(len(QUERY_SETS)):
-        QUERY_VECTORS.append(get_latent_vectors(model, QUERY_SETS[j]))
+        QUERY_VECTORS.extend(get_latent_vectors(model, QUERY_SETS[j]))
 
     #############
+    '''
     for m in range(len(QUERY_SETS)):
         for n in range(len(QUERY_SETS)):
             if (m == n):
@@ -98,14 +99,17 @@ def evaluate_model(model,save=False):
             one_percent_recall.append(pair_opr)
             for x in pair_similarity:
                 similarity.append(x)
+    '''
     #########
     
     
     ### Save Evaluate vectors
-    file_name = os.path.join(cfg.RESULTS_FOLDER, "database.npy")
+    file_name = os.path.join(cfg.RESULTS_FOLDER, "database"+str(epoch)+".npy")
+    print("np.array(DATABASE_VECTORS):"+str(np.array(DATABASE_VECTORS).shape))
     np.save(file_name, np.array(DATABASE_VECTORS))
     print("saving for DATABASE_VECTORS to "+str(file_name))
     
+    '''
     ave_recall = recall / count
     # print(ave_recall)
 
@@ -127,8 +131,8 @@ def evaluate_model(model,save=False):
         output.write("\n\n")
         output.write("Average Top 1% Recall:\n")
         output.write(str(ave_one_percent_recall))
-    
-    return ave_one_percent_recall
+    '''
+    return None
 
 
 def get_latent_vectors(model, dict_to_process):
@@ -145,20 +149,21 @@ def get_latent_vectors(model, dict_to_process):
         file_names = []
         for index in file_indices:
             file_names.append(dict_to_process[index]["query"])
-        queries = load_pc_files(file_names,True)
-
+        
+        queries = load_image_files(file_names,True)
+        
         with torch.no_grad():
             feed_tensor = torch.from_numpy(queries).float()
             feed_tensor = feed_tensor.unsqueeze(1)
             feed_tensor = feed_tensor.to(device)
             out = model(feed_tensor)
-
+      
         out = out.detach().cpu().numpy()
         out = np.squeeze(out)
 
         #out = np.vstack((o1, o2, o3, o4))
         q_output.append(out)
-
+    
     q_output = np.array(q_output)
     if(len(q_output) != 0):
         q_output = q_output.reshape(-1, q_output.shape[-1])
@@ -171,7 +176,7 @@ def get_latent_vectors(model, dict_to_process):
 
         for index in file_indices:
             file_names.append(dict_to_process[index]["query"])
-        queries = load_pc_files(file_names,True)
+        queries = load_image_files(file_names,True)
 
         with torch.no_grad():
             feed_tensor = torch.from_numpy(queries).float()
@@ -187,7 +192,7 @@ def get_latent_vectors(model, dict_to_process):
             q_output = output
 
     model.train()
-
+    
     return q_output
 
 

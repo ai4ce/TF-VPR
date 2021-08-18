@@ -149,13 +149,12 @@ for folder in folders:
     df_locations_ts_pitch.extend(list(df_locations[test_index,4]))
     df_locations_ts_yaw.extend(list(df_locations[test_index,5]))
 
-
     all_files = list(sorted(os.listdir(os.path.join(pre_dir,folder,"jpg_rgb"))))
 
     for (indx, file_) in enumerate(all_files):
         if indx in test_index:
-            df_files_test.append(os.path.join(pre_dir,folder,file_))
-        df_files_train.append(os.path.join(pre_dir,folder,file_))
+            df_files_test.append(os.path.join(pre_dir,folder,"jpg_rgb", file_))
+        df_files_train.append(os.path.join(pre_dir,folder,"jpg_rgb",file_))
 
 print("df_locations_tr_x:"+str(len(df_locations_tr_x)))
 print("df_files_test:"+str(len(df_files_test)))

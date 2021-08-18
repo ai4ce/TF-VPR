@@ -118,14 +118,17 @@ def jitter_point_cloud(batch_data, sigma=0.005, clip=0.05):
 def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other_neg=False):
         # get query tuple for dictionary entry
         # return list [query,positives,negatives]
+    #print("query:"+str(dict_value["query"]))
     query = load_image_file(dict_value["query"])  # Nx3
     #cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/query.jpg', query)
     random.shuffle(dict_value["positives"])
     pos_files = []
     
+    #print("dict_value[positives]:"+str(dict_value["positives"]))
     for i in range(num_pos):
         pos_files.append(QUERY_DICT[dict_value["positives"][i]]["query"])
     
+    #print("pos_files:"+str(pos_files))
     positives = load_image_files(pos_files,full_path=True)
     '''
     cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/color_img1.jpg', positives[0])
@@ -135,6 +138,7 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
     neg_indices = []
     if(len(hard_neg) == 0):
         random.shuffle(dict_value["negatives"])
+        #print("dict_value[negatives]:"+str(dict_value["negatives"]))
         for i in range(num_neg):
             neg_files.append(QUERY_DICT[dict_value["negatives"][i]]["query"])
             neg_indices.append(dict_value["negatives"][i])

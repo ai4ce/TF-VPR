@@ -55,7 +55,7 @@ parser.add_argument('--margin_1', type=float, default=0.5,
                     help='Margin for hinge loss [default: 0.5]')
 parser.add_argument('--margin_2', type=float, default=0.2,
                     help='Margin for hinge loss [default: 0.2]')
-parser.add_argument('--loss_function', default='quadruplet', choices=[
+parser.add_argument('--loss_function', default='triplet', choices=[
                     'triplet', 'quadruplet'], help='triplet or quadruplet [default: quadruplet]')
 parser.add_argument('--loss_not_lazy', action='store_false',
                     help='If present, do not use lazy variant of loss')
@@ -81,7 +81,6 @@ cfg.DECAY_RATE = FLAGS.decay_rate
 cfg.MARGIN1 = FLAGS.margin_1
 cfg.MARGIN2 = FLAGS.margin_2
 
-cfg.LOSS_FUNCTION = FLAGS.loss_function
 cfg.TRIPLET_USE_BEST_POSITIVES = FLAGS.triplet_use_best_positives
 cfg.LOSS_LAZY = FLAGS.loss_not_lazy
 cfg.LOSS_IGNORE_ZERO_BATCH = FLAGS.loss_ignore_zero_batch
@@ -117,6 +116,7 @@ TRAINING_LATENT_VECTORS = []
 TOTAL_ITERATIONS = 0
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+cfg.margin = 0.1
 
 def get_bn_decay(batch):
     bn_momentum = cfg.BN_INIT_DECAY * \
@@ -148,7 +148,7 @@ def train():
     if cfg.LOSS_FUNCTION == 'quadruplet':
         loss_function = PNV_loss.quadruplet_loss
     else:
-        loss_function = PNV_loss.triplet_loss_wrapper
+        loss_function = PNV_loss.triplet_loss
     learning_rate = get_learning_rate(0)
     
     train_writer = SummaryWriter(os.path.join(cfg.LOG_DIR, 'train'))
@@ -187,6 +187,9 @@ def train():
     LOG_FOUT.write(cfg.cfg_str())
     LOG_FOUT.write("\n")
     LOG_FOUT.flush()
+    
+    #criterion = nn.TripletMarginLoss(margin=cfg.margin**0.5, 
+    #                        p=2, reduction='sum').to(device)
 
     for epoch in range(starting_epoch, cfg.MAX_EPOCH):
         print(epoch)
@@ -199,10 +202,11 @@ def train():
         log_string('EVALUATING...')
         cfg.OUTPUT_FILE = cfg.RESULTS_FOLDER + 'results_' + str(epoch) + '.txt'
 
-        eval_recall = evaluate.evaluate_model(model, True)
-        log_string('EVAL RECALL: %s' % str(eval_recall))
+        evaluate.evaluate_model(model,epoch,True)
+        #eval_recall = evaluate.evaluate_model(model,epoch,True)
+        #log_string('EVAL RECALL: %s' % str(eval_recall))
 
-        train_writer.add_scalar("Val Recall", eval_recall, epoch)
+        #train_writer.add_scalar("Val Recall", eval_recall, epoch)
 
 
 def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
@@ -218,15 +222,16 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
     # Shuffle train files
     train_file_idxs = np.arange(0, len(TRAINING_QUERIES.keys()))
     np.random.shuffle(train_file_idxs)
+    
     for i in range(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES):
+    #for i in range(1):
         batch_keys = train_file_idxs[i *
                                      cfg.BATCH_NUM_QUERIES:(i+1)*cfg.BATCH_NUM_QUERIES]
         q_tuples = []
-
+        
         faulty_tuple = False
         no_other_neg = False
         for j in range(cfg.BATCH_NUM_QUERIES):
-            #print("batch_keys[j]:"+str(batch_keys[j]))
             #print("positives:"+str(TRAINING_QUERIES[batch_keys[j]]['positives']))
             #print("negatives:"+str(TRAINING_QUERIES[batch_keys[j]]['negatives']))
             if (len(TRAINING_QUERIES[batch_keys[j]]["positives"]) < cfg.TRAIN_POSITIVES_PER_QUERY):
@@ -312,7 +317,6 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
         
         output_queries, output_positives, output_negatives, output_other_neg = run_model(
             model, queries, positives, negatives, other_neg)
-        
         #print("output_queries:"+str(output_queries.shape))
         #print("output_positives:"+str(output_positives.shape))
         #print("output_negatives:"+str(output_negatives.shape))
@@ -321,8 +325,10 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
         #print("negatives:"+str(negatives.shape))
         #print("other_neg:"+str(other_neg.shape))
         #print("queries:"+str(queries.shape))
- 
-        loss = loss_function(output_queries, output_positives, output_negatives, output_other_neg, cfg.MARGIN_1, cfg.MARGIN_2, use_min=cfg.TRIPLET_USE_BEST_POSITIVES, lazy=cfg.LOSS_LAZY, ignore_zero_loss=cfg.LOSS_IGNORE_ZERO_BATCH)
+        
+        #loss = loss_function(output_queries, output_positives, output_negatives,  0.1,  use_min=cfg.TRIPLET_USE_BEST_POSITIVES, lazy=cfg.LOSS_LAZY, ignore_zero_loss=cfg.LOSS_IGNORE_ZERO_BATCH)
+        loss = loss_function(output_queries, output_positives, output_negatives,  0.1,  use_min=cfg.TRIPLET_USE_BEST_POSITIVES, lazy=False, ignore_zero_loss=cfg.LOSS_IGNORE_ZERO_BATCH)
+
         loss.backward()
         optimizer.step()
 

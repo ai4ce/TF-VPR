@@ -104,20 +104,20 @@ def construct_dict(df_files, df_all, df_index, filename, folder_sizes, all_folde
 
             while(len(negatives)<18):
                 n_radius = n_radius - 0.1
-                print("n_radius:"+str(n_radius))
                 ind_r = tree.query_radius(df_centroids[['x','y','z']], r=n_radius)
                 negatives = np.setdiff1d(df_centroids.index.values.tolist(),ind_r[i]).tolist()
-                print("negatives:"+str(negatives))
                 assert(n_radius>=0)
             assert(len(positives)>=2)
             assert(len(negatives)>=18)
 
+            positives = list(np.array(positives)+overhead)
             queries[ind+file_overhead] = {"query":df_centroids.iloc[i]['file'],
                           "positives":positives,"negatives":negatives}
-            #print("query:"+str(query))
-            #print("positives:"+str(positives))
-            #print("negatives:"+str(len(negatives)))
-    #print("queries:"+str(len(queries)))
+    
+            #print("queries:"+str(i))
+            #print("positives:"+str((positives)))
+            #print("negatives_max:"+str(max(negatives)))
+            #print("negatives_min:"+str(min(negatives)))
     with open(filename, 'wb') as handle:
         pickle.dump(queries, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
