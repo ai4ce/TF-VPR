@@ -13,7 +13,7 @@ import scipy.io as sio
 import torch
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-base_path = "/home/chao1804/Desktop/AVD/"
+base_path = "/data2/cc_data/AVD/"
 runs_folder = "ActiveVisionDataset/"
 pre_dir = os.path.join(base_path, runs_folder)
 

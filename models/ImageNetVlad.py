@@ -9,6 +9,60 @@ import torch.nn.functional as F
 import math
 from torchvision.models import resnet18
 
+class NetVLAD_Image(nn.Module):
+    """NetVLAD layer implementation"""
+    def __init__(self, num_clusters=64, dim=128, alpha=100.0,
+            normalize_input=True):
+        """
+        Args:
+        num_clusters : int
+        The number of clusters
+        dim : int
+        Dimension of descriptors
+        alpha : float
+        Parameter of initialization. Larger value is harder assignment.
+        normalize_input : bool
+        If true, descriptor-wise L2 normalization is applied to input.
+        """
+        super(NetVLAD_Image, self).__init__()
+        self.num_clusters = num_clusters
+        self.dim = dim
+        self.alpha = alpha
+        self.normalize_input = normalize_input
+        self.conv = nn.Conv2d(dim, num_clusters, kernel_size=(1, 1), bias=True)
+        self.centroids = nn.Parameter(torch.rand(num_clusters, dim))
+        self._init_params()
+    
+    def _init_params(self):  
+        self.conv.weight = nn.Parameter(
+                (2.0 * self.alpha * self.centroids).unsqueeze(-1).unsqueeze(-1)        
+        )
+        
+        self.conv.bias = nn.Parameter(
+                - self.alpha * self.centroids.norm(dim=1)        
+        )
+    
+    def forward(self, x):
+        N, C = x.shape[:2]
+        if self.normalize_input:
+            x = F.normalize(x, p=2, dim=1)  # across descriptor dim
+        
+        # soft-assignment
+        soft_assign = self.conv(x).view(N, self.num_clusters, -1)
+        soft_assign = F.softmax(soft_assign, dim=1)
+        x_flatten = x.view(N, C, -1)                                                                                                        
+
+        # calculate residuals to each clusters
+        residual = x_flatten.expand(self.num_clusters, -1, -1, -1).permute(1, 0, 2, 3) - \
+                   self.centroids.expand(x_flatten.size(-1), -1, -1).permute(1, 2, 0).unsqueeze(0)
+        residual *= soft_assign.unsqueeze(2)
+        
+        vlad = residual.sum(dim=-1)
+        vlad = F.normalize(vlad, p=2, dim=2)  # intra-normalization
+        vlad = vlad.view(x.size(0), -1)  # flatten
+        vlad = F.normalize(vlad, p=2, dim=1)  # L2 normalize
+        return vlad
+
 class NetVLADLoupe(nn.Module):
     def __init__(self, feature_size, max_samples, cluster_size, output_dim,
                  gating=True, add_batch_norm=True, is_training=True):
@@ -285,11 +339,8 @@ class ImageNetfeat(nn.Module):
 
     def forward(self, x):
         B,_,g_x,g_y,_ = x.shape
-        print("x:"+str(x.reshape(B,1,3,g_x,g_y).shape))
-        result = self.base_model(x.reshape(B,1,3,g_x,g_y).squeeze())
-        print("result:"+str(result.shape))
-        assert(0)
-        return self.base_model(x)
+        result = self.base_model(x.reshape(B,3,g_x,g_y))
+        return result
 
 class ImageNetVlad(nn.Module):
     def __init__(self, grid_x=256, grid_y=256, global_feat=True, feature_transform=False, max_pool=True, output_dim=1024):
@@ -298,9 +349,8 @@ class ImageNetVlad(nn.Module):
         self.obs_feat_extractor = ImageNetfeat(global_feat=global_feat,
                                                feature_transform=feature_transform, max_pool=max_pool)
         
-        self.net_vlad = NetVLADLoupe(feature_size=1024, max_samples=256, cluster_size=64,
-                                     output_dim=output_dim, gating=True, add_batch_norm=True,
-                                     is_training=True)
+        dim = list(self.obs_feat_extractor.parameters())[-1].shape[0]
+        self.net_vlad = NetVLAD_Image(num_clusters=32, dim=dim, alpha=1.0)
 
     def forward(self, x):
         #x = self.point_net(x)

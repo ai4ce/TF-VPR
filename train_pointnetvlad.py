@@ -21,8 +21,6 @@ from tensorboardX import SummaryWriter
 from torch.autograd import Variable
 from torch.backends import cudnn
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
@@ -71,12 +69,9 @@ parser.add_argument('--dataset_folder', default='../../dataset/',
                     help='PointNetVlad Dataset Folder')
 
 FLAGS = parser.parse_args()
-cfg.BATCH_NUM_QUERIES = FLAGS.batch_num_queries
 #cfg.EVAL_BATCH_SIZE = 12
 cfg.GRID_X = 1080
 cfg.GRID_Y = 1920
-cfg.TRAIN_POSITIVES_PER_QUERY = FLAGS.positives_per_query
-cfg.TRAIN_NEGATIVES_PER_QUERY = FLAGS.negatives_per_query
 cfg.MAX_EPOCH = FLAGS.max_epoch
 cfg.BASE_LEARNING_RATE = FLAGS.learning_rate
 cfg.MOMENTUM = FLAGS.momentum
@@ -85,7 +80,6 @@ cfg.DECAY_STEP = FLAGS.decay_step
 cfg.DECAY_RATE = FLAGS.decay_rate
 cfg.MARGIN1 = FLAGS.margin_1
 cfg.MARGIN2 = FLAGS.margin_2
-cfg.FEATURE_OUTPUT_DIM = 256
 
 cfg.LOSS_FUNCTION = FLAGS.loss_function
 cfg.TRIPLET_USE_BEST_POSITIVES = FLAGS.triplet_use_best_positives
@@ -94,6 +88,7 @@ cfg.LOSS_IGNORE_ZERO_BATCH = FLAGS.loss_ignore_zero_batch
 
 cfg.TRAIN_FILE = 'generating_queries/training_queries_baseline.pickle'
 cfg.TEST_FILE = 'generating_queries/test_queries_baseline.pickle'
+cfg.DB_FILE = 'generating_queries/db_queries_baseline.pickle'
 
 cfg.LOG_DIR = FLAGS.log_dir
 if not os.path.exists(cfg.LOG_DIR):
@@ -109,6 +104,8 @@ cfg.DATASET_FOLDER = FLAGS.dataset_folder
 # Load dictionary of training queries
 TRAINING_QUERIES = get_queries_dict(cfg.TRAIN_FILE)
 TEST_QUERIES = get_queries_dict(cfg.TEST_FILE)
+DB_QUERIES = get_queries_dict(cfg.DB_FILE)
+
 cfg.BN_INIT_DECAY = 0.5
 cfg.BN_DECAY_DECAY_RATE = 0.5
 BN_DECAY_DECAY_STEP = float(cfg.DECAY_STEP)
@@ -222,8 +219,6 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
     train_file_idxs = np.arange(0, len(TRAINING_QUERIES.keys()))
     np.random.shuffle(train_file_idxs)
     for i in range(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES):
-    #for i in range(2):
-        # for i in range (5):
         batch_keys = train_file_idxs[i *
                                      cfg.BATCH_NUM_QUERIES:(i+1)*cfg.BATCH_NUM_QUERIES]
         q_tuples = []
@@ -231,6 +226,9 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
         faulty_tuple = False
         no_other_neg = False
         for j in range(cfg.BATCH_NUM_QUERIES):
+            #print("batch_keys[j]:"+str(batch_keys[j]))
+            #print("positives:"+str(TRAINING_QUERIES[batch_keys[j]]['positives']))
+            #print("negatives:"+str(TRAINING_QUERIES[batch_keys[j]]['negatives']))
             if (len(TRAINING_QUERIES[batch_keys[j]]["positives"]) < cfg.TRAIN_POSITIVES_PER_QUERY):
                 faulty_tuple = True
                 break
@@ -239,7 +237,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
             if (len(TRAINING_LATENT_VECTORS) == 0):
                 q_tuples.append(
                     get_query_tuple(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
-                                    TRAINING_QUERIES, hard_neg=[], other_neg=True))
+                                    DB_QUERIES, hard_neg=[], other_neg=True))
                 #print("q_tuples:"+str(q_tuples))
                 # q_tuples.append(get_rotated_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_neg=[], other_neg=True))
                 # q_tuples.append(get_jittered_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_neg=[], other_neg=True))
@@ -254,7 +252,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
                     query, negatives, num_to_take)
                 q_tuples.append(
                     get_query_tuple(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
-                                    TRAINING_QUERIES, hard_negs, other_neg=True))
+                                    DB_QUERIES, hard_negs, other_neg=True))
                 # q_tuples.append(get_rotated_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
                 # q_tuples.append(get_jittered_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
             else:
@@ -269,7 +267,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
                     HARD_NEGATIVES[batch_keys[j]], hard_negs))
                 q_tuples.append(
                     get_query_tuple(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
-                                    TRAINING_QUERIES, hard_negs, other_neg=True))
+                                    DB_QUERIES, hard_negs, other_neg=True))
                 # q_tuples.append(get_rotated_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
                 # q_tuples.append(get_jittered_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
             
@@ -314,16 +312,16 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
         
         output_queries, output_positives, output_negatives, output_other_neg = run_model(
             model, queries, positives, negatives, other_neg)
-        print("output_queries:"+str(output_queries))
-        print("output_positives:"+str(output_positives))
-        print("output_negatives:"+str(output_negatives))
-        print("output_other_neg:"+str(output_other_neg))
         
-        print("negatives:"+str(negatives))
-        print("other_neg:"+str(other_neg))
-        print("queries:"+str(queries))
-        assert(0)
-
+        #print("output_queries:"+str(output_queries.shape))
+        #print("output_positives:"+str(output_positives.shape))
+        #print("output_negatives:"+str(output_negatives.shape))
+        #print("output_other_neg:"+str(output_other_neg.shape))
+        
+        #print("negatives:"+str(negatives.shape))
+        #print("other_neg:"+str(other_neg.shape))
+        #print("queries:"+str(queries.shape))
+ 
         loss = loss_function(output_queries, output_positives, output_negatives, output_other_neg, cfg.MARGIN_1, cfg.MARGIN_2, use_min=cfg.TRIPLET_USE_BEST_POSITIVES, lazy=cfg.LOSS_LAZY, ignore_zero_loss=cfg.LOSS_IGNORE_ZERO_BATCH)
         loss.backward()
         optimizer.step()
@@ -448,7 +446,6 @@ def get_latent_vectors(model, dict_to_process):
             q_output = output
 
     model.train()
-    print(q_output.shape)
     return q_output
 
 
@@ -459,18 +456,15 @@ def run_model(model, queries, positives, negatives, other_neg, require_grad=True
     other_neg_tensor = torch.from_numpy(other_neg).float()
     feed_tensor = torch.cat(
         (queries_tensor, positives_tensor, negatives_tensor, other_neg_tensor), 1)
-    feed_tensor = feed_tensor.view((-1, 1, cfg.GRID_X, cfg.GRID_Y, 3))
+    feed_tensor = feed_tensor.view((-1, 1, cfg.SIZED_GRID_X, cfg.SIZED_GRID_Y, 3))
     
     feed_tensor.requires_grad_(require_grad)
     feed_tensor = feed_tensor.to(device)
-    #print("feed_tensor:"+str(feed_tensor))
     if require_grad:
         output = model(feed_tensor)
-        assert(0)
     else:
         with torch.no_grad():
             output = model(feed_tensor)
-    #print("output:"+str(output))
     output = output.view(cfg.BATCH_NUM_QUERIES, -1, cfg.FEATURE_OUTPUT_DIM)
     o1, o2, o3, o4 = torch.split(
         output, [1, cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY, 1], dim=1)

@@ -54,8 +54,12 @@ def load_pc_files(filenames,full_path):
 def load_image_file(filename, full_path=False):
     if full_path:
         image = cv2.imread(filename)
+        dim = (128,128)
+        image = cv2.resize(image, dim,interpolation = cv2.INTER_AREA)
     else:
         image = cv2.imread(os.path.join("/home/chao1804/Desktop/AVD/ActiveVisionDataset/", filename))
+        dim = (128,128)
+        image = cv2.resize(image, dim,interpolation = cv2.INTER_AREA)
     image = np.asarray(image, dtype=np.float32)
 
     if(image.shape[2] != 3):
@@ -115,13 +119,18 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
         # get query tuple for dictionary entry
         # return list [query,positives,negatives]
     query = load_image_file(dict_value["query"])  # Nx3
+    #cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/query.jpg', query)
     random.shuffle(dict_value["positives"])
     pos_files = []
     
     for i in range(num_pos):
         pos_files.append(QUERY_DICT[dict_value["positives"][i]]["query"])
-    #positives= load_pc_files(dict_value["positives"][0:num_pos])
+    
     positives = load_image_files(pos_files,full_path=True)
+    '''
+    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/color_img1.jpg', positives[0])
+    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/color_img2.jpg', positives[1])
+    '''
     neg_files = []
     neg_indices = []
     if(len(hard_neg) == 0):
@@ -137,7 +146,6 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
             neg_indices.append(i)
         j = 0
         while(len(neg_files) < num_neg):
-
             if not dict_value["negatives"][j] in hard_neg:
                 neg_files.append(
                     QUERY_DICT[dict_value["negatives"][j]]["query"])
@@ -145,7 +153,14 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
             j += 1
     
     negatives = load_image_files(neg_files,full_path=True)
-
+    '''
+    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img1.jpg', negatives[0])
+    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img2.jpg', negatives[1])
+    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img3.jpg', negatives[2])
+    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img4.jpg', negatives[3])
+    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img5.jpg', negatives[4])
+    assert(0)
+    '''
     if other_neg is False:
         return [query, positives, negatives]
     # For Quadruplet Loss

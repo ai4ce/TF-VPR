@@ -2,7 +2,7 @@ import scipy.io as sio
 import os
 import numpy as np
 
-data_path = "/home/chao1804/Desktop/AVD/ActiveVisionDataset/"
+data_path = "/data2/cc_data/AVD/ActiveVisionDataset/"
 
 gt_file = "image_structs.mat"
 folders = os.listdir(data_path)

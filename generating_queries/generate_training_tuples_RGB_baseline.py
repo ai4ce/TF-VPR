@@ -55,60 +55,75 @@ def direction_filter(positives, df_centroids, index):
             filted_pos.append(pos)
     return positives
 
-def construct_dict(df_files, filename, folder_sizes, all_folder_sizes, folder_num, all_folders, pre_dir, definite_positives=None):
-    print("len_df_files:"+str(len(df_files)))
+def construct_dict(df_files, df_all, df_index, filename, folder_sizes, all_folder_sizes, folder_num, all_folders, pre_dir, definite_positives=None):
     queries = {}
     for num in range(folder_num):
         #print("df_files:"+str(len(df_files)))
         if num == 0:
             overhead = 0
+            file_overhead = 0
         else:
             overhead = 0
+            file_overhead = 0
             for i in range(num):
-                overhead = overhead + folder_sizes[i]
-        
-        df_centroids = df_files[overhead:overhead + folder_sizes[num]]
-        tree = KDTree(df_centroids[['x','y','z']])
-        ind_r = tree.query_radius(df_centroids[['x','y','z']], r=50)
+                overhead = overhead + all_folder_sizes[i]
+                file_overhead = file_overhead + folder_sizes[i]
 
-        for i in range(len(df_centroids)):
-            radius = 0.5
+        df_centroids = df_all[overhead:overhead + all_folder_sizes[num]]
+        df_folder_index = df_index[file_overhead: file_overhead + folder_sizes[num]]
+        
+        tree = KDTree(df_centroids[['x','y','z']])
+        ind_r = tree.query_radius(df_centroids[['x','y','z']], r=1.8)
+
+        for ind in range(len(df_folder_index)):
+            i = df_folder_index[ind]
+            radius = 0.2
+            n_radius = 1.8
             ind_nn = tree.query_radius(df_centroids[['x','y','z']],r=radius)
             query = df_centroids.iloc[i]["file"]
             pre_positives = np.setdiff1d(ind_nn[i],[i]).tolist()
             positives = direction_filter(pre_positives, df_centroids, i)
             negatives = np.setdiff1d(df_centroids.index.values.tolist(),ind_r[i]).tolist()
-            random.shuffle(negatives)
-
-            while(len(positives)<4):
-                radius = radius+0.5
-                ind_nn = tree.query_radius(df_centroids[['x','y','z']],r=radius)
-                query = df_centroids.iloc[i]["file"]
-                positives = np.setdiff1d(ind_nn[i],[i]).tolist()
-                positives = direction_filter(positives, df_centroids, i)
             
-            queries[i+overhead] = {"query":df_centroids.iloc[i]['file'],
+            count = 0
+            while(len(positives)<4 or len(positives)>20):
+                if len(positives)<4:
+                    radius = radius+0.2
+                    ind_nn = tree.query_radius(df_centroids[['x','y','z']],r=radius)
+                    query = df_centroids.iloc[i]["file"]
+                    positives = np.setdiff1d(ind_nn[i],[i]).tolist()
+                    positives = direction_filter(positives, df_centroids, i)
+                elif len(positives)>20:
+                    radius = radius - 0.02
+                    ind_nn = tree.query_radius(df_centroids[['x','y','z']],r=radius)
+                    query = df_centroids.iloc[i]["file"]
+                    positives = np.setdiff1d(ind_nn[i],[i]).tolist()
+                    positives = direction_filter(positives, df_centroids, i)
+                if count>100:
+                    assert(0)
+
+            while(len(negatives)<18):
+                n_radius = n_radius - 0.1
+                print("n_radius:"+str(n_radius))
+                ind_r = tree.query_radius(df_centroids[['x','y','z']], r=n_radius)
+                negatives = np.setdiff1d(df_centroids.index.values.tolist(),ind_r[i]).tolist()
+                print("negatives:"+str(negatives))
+                assert(n_radius>=0)
+            assert(len(positives)>=2)
+            assert(len(negatives)>=18)
+
+            queries[ind+file_overhead] = {"query":df_centroids.iloc[i]['file'],
                           "positives":positives,"negatives":negatives}
             #print("query:"+str(query))
             #print("positives:"+str(positives))
-            #print("negatives:"+str(max(negatives)))
-            '''
-            max_dis = 0
-            for pos in positives:
-                x_delta = df_centroids.iloc[pos+overhead]['x'] - df_centroids.iloc[i]['x']
-                y_delta = df_centroids.iloc[pos+overhead]['y'] - df_centroids.iloc[i]['y']
-                dis = math.sqrt(x_delta**2 + y_delta**2)
-                print("dis:"+str(dis))
-            if dis > max_dis:
-                max_dis = dis
-            '''
             #print("negatives:"+str(len(negatives)))
+    #print("queries:"+str(len(queries)))
     with open(filename, 'wb') as handle:
         pickle.dump(queries, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     print("Done ", filename)
 
-def generate(data_index, definite_positives=None, inside=True):
+def generate(definite_positives=None, inside=True):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     base_path = "/data2/cc_data/AVD/"
     runs_folder = "ActiveVisionDataset/"
@@ -119,7 +134,8 @@ def generate(data_index, definite_positives=None, inside=True):
 
     df_train = pd.DataFrame(columns=['file','x','y','z','roll','pitch','yaw'])
     df_test = pd.DataFrame(columns=['file','x','y','z','roll','pitch','yaw'])
-
+    df_all = pd.DataFrame(columns=['file','x','y','z','roll','pitch','yaw'])
+    
     df_files_test = []
     df_files_train =[]
     df_files = []
@@ -153,37 +169,53 @@ def generate(data_index, definite_positives=None, inside=True):
     folder_sizes = []
     filename = "gt_pose.mat"
 
-    for folder in all_folders:
+    all_file_index = []
+    test_index = []
+    train_index = []
+    
+    for index,folder in enumerate(all_folders):
         df_locations = sio.loadmat(os.path.join(
-                       pre_dir,folder,filename))
-        
+                                   pre_dir,folder,filename))
         df_locations = df_locations['pose']
         df_locations = torch.tensor(df_locations, dtype = torch.float).cpu()
-        
-        #n Training 10 testing
+    
         file_index = list(range(df_locations.shape[0]))
-        test_index = random.sample(range(len(df_locations)), k=10)
-        train_index = list(range(df_locations.shape[0]))
-        for ts_ind in test_index:
-            train_index.remove(ts_ind)
-        
-        folder_sizes_train.append(len(train_index))
-        folder_sizes_test.append(10)
         folder_sizes.append(df_locations.shape[0])
 
-        df_locations_tr_x.extend(list(df_locations[train_index,0]))
-        df_locations_tr_y.extend(list(df_locations[train_index,1]))
-        df_locations_tr_z.extend(list(df_locations[train_index,2]))
-        df_locations_tr_roll.extend(list(df_locations[train_index,3]))
-        df_locations_tr_pitch.extend(list(df_locations[train_index,4]))
-        df_locations_tr_yaw.extend(list(df_locations[train_index,5]))
+        if index == 0:
+            overhead = 0
+        else:
+            overhead = 0
+            for i in range(index):
+                overhead = overhead + folder_sizes[i]
 
-        df_locations_ts_x.extend(list(df_locations[test_index,0]))
-        df_locations_ts_y.extend(list(df_locations[test_index,1]))
-        df_locations_ts_z.extend(list(df_locations[test_index,2]))
-        df_locations_ts_roll.extend(list(df_locations[test_index,3]))
-        df_locations_ts_pitch.extend(list(df_locations[test_index,4]))
-        df_locations_ts_yaw.extend(list(df_locations[test_index,5]))
+        #n Training 10 testing
+        all_file_index.extend(list(file_index))
+
+        tst_index = random.sample(range(len(df_locations)), k=10)
+        test_index.extend(list(tst_index))
+        
+        trn_index = list(range(df_locations.shape[0]))
+        for ts_ind in tst_index:
+            trn_index.remove(ts_ind)
+        train_index.extend(list(trn_index))
+
+        folder_sizes_train.append(len(trn_index))
+        folder_sizes_test.append(10)
+
+        df_locations_tr_x.extend(list(df_locations[trn_index,0]))
+        df_locations_tr_y.extend(list(df_locations[trn_index,1]))
+        df_locations_tr_z.extend(list(df_locations[trn_index,2]))
+        df_locations_tr_roll.extend(list(df_locations[trn_index,3]))
+        df_locations_tr_pitch.extend(list(df_locations[trn_index,4]))
+        df_locations_tr_yaw.extend(list(df_locations[trn_index,5]))
+
+        df_locations_ts_x.extend(list(df_locations[tst_index,0]))
+        df_locations_ts_y.extend(list(df_locations[tst_index,1]))
+        df_locations_ts_z.extend(list(df_locations[tst_index,2]))
+        df_locations_ts_roll.extend(list(df_locations[tst_index,3]))
+        df_locations_ts_pitch.extend(list(df_locations[tst_index,4]))
+        df_locations_ts_yaw.extend(list(df_locations[tst_index,5]))
         
         df_locations_x.extend(list(df_locations[file_index,0]))
         df_locations_y.extend(list(df_locations[file_index,1]))
@@ -195,31 +227,29 @@ def generate(data_index, definite_positives=None, inside=True):
         all_files = list(sorted(os.listdir(os.path.join(pre_dir,folder,"jpg_rgb"))))
 
         for (indx, file_) in enumerate(all_files): 
-            if indx in test_index:
+            if indx in tst_index:
                 df_files_test.append(os.path.join(pre_dir,folder,"jpg_rgb",file_))
             else:
                 df_files_train.append(os.path.join(pre_dir,folder,"jpg_rgb",file_))
             df_files.append(os.path.join(pre_dir,folder,"jpg_rgb",file_))
-
+        
     #print("df_locations_tr_x:"+str(len(df_locations_tr_x)))
-    #print("df_files_test:"+str(len(df_files_test)))
     df_train = pd.DataFrame(list(zip(df_files_train, df_locations_tr_x, df_locations_tr_y, df_locations_tr_z,df_locations_tr_roll,df_locations_tr_pitch,df_locations_tr_yaw)),
                                                            columns =['file','x', 'y', 'z', 'roll', 'pitch', 'yaw'])
     df_test = pd.DataFrame(list(zip(df_files_test, df_locations_ts_x, df_locations_ts_y, df_locations_ts_z, df_locations_ts_roll, df_locations_ts_pitch, df_locations_ts_yaw)),
                                                            columns =['file','x', 'y', 'z', 'roll', 'pitch', 'yaw'])
-    df_files = pd.DataFrame(list(zip(df_files, df_locations_x, df_locations_y, df_locations_z, df_locations_roll, df_locations_pitch, df_locations_yaw)),
+    df_all = pd.DataFrame(list(zip(df_files, df_locations_x, df_locations_y, df_locations_z, df_locations_roll, df_locations_pitch, df_locations_yaw)),
                                                            columns =['file','x', 'y', 'z', 'roll', 'pitch', 'yaw'])
     
 
     if inside == True:
-        construct_dict(df_train,"train_pickle/training_queries_baseline_"+str(data_index)+".pickle", folder_sizes_train, folder_sizes, folder_num, all_folders, pre_dir)
-        construct_dict(df_test, "train_pickle/test_queries_baseline_"+str(data_index)+".pickle", folder_sizes_test, folder_sizes, folder_num, all_folders, pre_dir)
-        construct_dict(df_files, "train_pickle/db_queries_baseline_"+str(data_index)+".pickle", folder_sizes, folder_sizes, folder_num, all_folders, pre_dir)
+        construct_dict(df_train, df_all, train_index, "training_queries_baseline.pickle", folder_sizes_train, folder_sizes, folder_num, all_folders, pre_dir)
+        construct_dict(df_test, df_all, test_index, "test_queries_baseline.pickle", folder_sizes_test, folder_sizes, folder_num, all_folders, pre_dir)
+        construct_dict(df_all, df_all, all_file_index, "db_queries_baseline.pickle", folder_sizes, folder_sizes, folder_num, all_folders, pre_dir)
     else:
-        construct_dict(df_train, "generating_queries/train_pickle/training_queries_baseline_"+str(data_index)+".pickle", folder_sizes_train, folder_sizes, folder_num, all_folders, pre_dir, definite_positives=definite_positives)
-        construct_dict(df_test, "generating_queries/train_pickle/test_queries_baseline_"+str(data_index)+".pickle", folder_sizes_test, folder_sizes, folder_num, all_folders, pre_dir, definite_positives=definite_positives)
-        construct_dict(df_files, "generating_queries/train_pickle/db_queries_baseline_"+str(data_index)+".pickle", folder_sizes, folder_sizes, folder_num, all_folders, pre_dir, definite_positives=definite_positives)
+        construct_dict(df_train, df_all, train_index, "generating_queries/training_queries_baseline.pickle", folder_sizes_train, folder_sizes, folder_num, all_folders, pre_dir, definite_positives=definite_positives)
+        construct_dict(df_test, df_all, test_index, "generating_queries/test_queries_baseline.pickle", folder_sizes_test, folder_sizes, folder_num, all_folders, pre_dir, definite_positives=definite_positives)
+        construct_dict(df_all, df_all, all_file_index, "generating_queries/db_queries_baseline.pickle", folder_sizes, folder_sizes, folder_num, all_folders, pre_dir, definite_positives=definite_positives)
 
 if __name__ == "__main__":
-    for i in range(20):
-        generate(i)
+    generate()
