@@ -78,10 +78,10 @@ def construct_dict(df_files, df_indices, filename, folder_size, folder_num, all_
             positive_l = []
             negative_l = list(range(folder_size))
             for index_pos in pos_index_range:
-                if (index_pos + df_indice > 0) and (index_pos + df_indice < folder_size -1):
+                if (index_pos + df_indice >= 0) and (index_pos + df_indice <= folder_size -1):
                     positive_l.append(index_pos + df_indice)
             for index_pos in mid_index_range:
-                if (index_pos + df_indice > 0) and (index_pos + df_indice < folder_size -1):
+                if (index_pos + df_indice >= 0) and (index_pos + df_indice <= folder_size -1):
                     negative_l.remove(index_pos + df_indice)
             
             '''
