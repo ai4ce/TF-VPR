@@ -45,7 +45,7 @@ def evaluate():
     print("ave_one_percent_recall:"+str(ave_one_percent_recall))
 
 
-def evaluate_model(model,save=False):
+def evaluate_model(model,epoch,save=False):
     if save:
         torch.save({
             'state_dict': model.state_dict(),
@@ -102,7 +102,7 @@ def evaluate_model(model,save=False):
     
     
     ### Save Evaluate vectors
-    file_name = os.path.join(cfg.RESULTS_FOLDER, "database.npy")
+    file_name = os.path.join(cfg.RESULTS_FOLDER, "database"+str(epoch)+".npy")
     np.save(file_name, np.array(DATABASE_VECTORS))
     print("saving for DATABASE_VECTORS to "+str(file_name))
     
@@ -118,7 +118,7 @@ def evaluate_model(model,save=False):
     
     #print("os.path.join(/home/cc/PointNet-torch2,cfg.OUTPUT_FILE,log.txt):"+str(os.path.join("/home/cc/PointNet-torch2",cfg.OUTPUT_FILE,"log.txt")))
     #assert(0)
-    with open(os.path.join("/home/cc/Supervised-PointNetVlad",cfg.OUTPUT_FILE), "w") as output:
+    with open(os.path.join(cfg.OUTPUT_FILE), "w") as output:
         output.write("Average Recall @N:\n")
         output.write(str(ave_recall))
         output.write("\n\n")

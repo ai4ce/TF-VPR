@@ -202,7 +202,7 @@ def train():
         log_string('EVALUATING...')
         cfg.OUTPUT_FILE = cfg.RESULTS_FOLDER + 'results_' + str(epoch) + '.txt'
 
-        eval_recall = evaluate.evaluate_model(model, True)
+        eval_recall = evaluate.evaluate_model(model, epoch,True)
         log_string('EVAL RECALL: %s' % str(eval_recall))
 
         train_writer.add_scalar("Val Recall", eval_recall, epoch)
