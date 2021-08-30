@@ -3,7 +3,8 @@ import pickle5 as pickle
 import numpy as np
 import random
 import config as cfg
-from open3d import read_point_cloud
+import open3d as o3d
+#from open3d import read_point_cloud
 
 def get_queries_dict(filename):
     # key:{'query':file,'positives':[files],'negatives:[files], 'neighbors':[keys]}
@@ -26,9 +27,9 @@ def load_pc_file(filename,full_path=False):
     # returns Nx3 matrix
     #print("filename:"+str(filename))
     if full_path:
-        pc = read_point_cloud(os.path.join(filename))
+        pc = o3d.read_point_cloud(os.path.join(filename))
     else:
-        pc = read_point_cloud(os.path.join("/mnt/ab0fe826-9b3c-455c-bb72-5999d52034e0/deepmapping/benchmark_datasets/", filename))
+        pc = o3d.read_point_cloud(os.path.join("/mnt/ab0fe826-9b3c-455c-bb72-5999d52034e0/deepmapping/benchmark_datasets/", filename))
     pc = np.asarray(pc.points, dtype=np.float32)
     
     if(pc.shape[0] != 256):
@@ -91,7 +92,7 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
         # get query tuple for dictionary entry
         # return list [query,positives,negatives]
 
-    query = load_pc_file(dict_value["query"])  # Nx3
+    query = load_pc_file(dict_value["query"],True)  # Nx3
 
     random.shuffle(dict_value["positives"])
     pos_files = []
@@ -159,7 +160,7 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
 
 
 def get_rotated_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other_neg=False):
-    query = load_pc_file(dict_value["query"])  # Nx3
+    query = load_pc_file(dict_value["query"],True)  # Nx3
     q_rot = rotate_point_cloud(np.expand_dims(query, axis=0))
     q_rot = np.squeeze(q_rot)
 
@@ -170,7 +171,7 @@ def get_rotated_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], oth
     #positives= load_pc_files(dict_value["positives"][0:num_pos])
     #print("pos_files:"+str(pos_files))
     #assert(0)
-    positives = load_pc_files(pos_files)
+    positives = load_pc_files(pos_files,True)
     p_rot = rotate_point_cloud(positives)
 
     neg_files = []
@@ -192,7 +193,7 @@ def get_rotated_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], oth
                     QUERY_DICT[dict_value["negatives"][j]]["query"])
                 neg_indices.append(dict_value["negatives"][j])
             j += 1
-    negatives = load_pc_files(neg_files)
+    negatives = load_pc_files(neg_files, True)
     n_rot = rotate_point_cloud(negatives)
 
     if other_neg is False:
@@ -213,7 +214,7 @@ def get_rotated_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], oth
         if(len(possible_negs) == 0):
             return [q_jit, p_jit, n_jit, np.array([])]
 
-        neg2 = load_pc_file(QUERY_DICT[possible_negs[0]]["query"])
+        neg2 = load_pc_file(QUERY_DICT[possible_negs[0]]["query"], True)
         n2_rot = rotate_point_cloud(np.expand_dims(neg2, axis=0))
         n2_rot = np.squeeze(n2_rot)
 
@@ -221,7 +222,7 @@ def get_rotated_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], oth
 
 
 def get_jittered_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other_neg=False):
-    query = load_pc_file(dict_value["query"])  # Nx3
+    query = load_pc_file(dict_value["query"],True)  # Nx3
     #q_rot= rotate_point_cloud(np.expand_dims(query, axis=0))
     q_jit = jitter_point_cloud(np.expand_dims(query, axis=0))
     q_jit = np.squeeze(q_jit)
@@ -231,7 +232,7 @@ def get_jittered_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], ot
     for i in range(num_pos):
         pos_files.append(QUERY_DICT[dict_value["positives"][i]]["query"])
     #positives= load_pc_files(dict_value["positives"][0:num_pos])
-    positives = load_pc_files(pos_files)
+    positives = load_pc_files(pos_files,True)
     p_jit = jitter_point_cloud(positives)
 
     neg_files = []
@@ -253,7 +254,7 @@ def get_jittered_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], ot
                     QUERY_DICT[dict_value["negatives"][j]]["query"])
                 neg_indices.append(dict_value["negatives"][j])
             j += 1
-    negatives = load_pc_files(neg_files)
+    negatives = load_pc_files(neg_files,True)
     n_jit = jitter_point_cloud(negatives)
 
     if other_neg is False:
@@ -274,7 +275,7 @@ def get_jittered_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], ot
         if(len(possible_negs) == 0):
             return [q_jit, p_jit, n_jit, np.array([])]
 
-        neg2 = load_pc_file(QUERY_DICT[possible_negs[0]]["query"])
+        neg2 = load_pc_file(QUERY_DICT[possible_negs[0]]["query"],True)
         n2_jit = jitter_point_cloud(np.expand_dims(neg2, axis=0))
         n2_jit = np.squeeze(n2_jit)
 

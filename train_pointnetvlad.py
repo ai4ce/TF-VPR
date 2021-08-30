@@ -298,10 +298,23 @@ def train():
                     else:
                         data_index_constraint = data_index
                     '''
+                    folder_path = os.path.join(cfg.DATASET_FOLDER,folders[index])
+                    all_files = list(sorted(os.listdir(folder_path)))
+                    all_files.remove('gt_pose.mat')
+
+                    previous_trusted_positive = trusted_positives[index][index2]
                     pre_trusted_positive = np.array(pos_set)[np.argsort(pos_dis)[::-1][:(cfg.INIT_TRUST+int(data_index-1)//cfg.INIT_TRUST_SCALAR)]]
                     #print("pre_trusted_positive:"+str(pre_trusted_positive.shape))
-                    trusted_positive = VFC.filter_trusted(folder_path, all_files, index2, pre_trusted_positive)
+                    pre_trusted_positive = np.setdiff1d(pre_trusted_positive, previous_trusted_positive)
+                    filtered_trusted_positive = VFC.filter_trusted(folder_path, all_files, index2, pre_trusted_positive)
                     #print("trusted_positive:"+str(trusted_positive))
+                    if len(filtered_trusted_positive) == 0:
+                        trusted_positive = previous_trusted_positive
+                    else:
+                        trusted_positive = list(previous_trusted_positive)
+                        trusted_positive.extend(list(filtered_trusted_positive))
+                        trusted_positive = np.array(list(set(trusted_positive)),dtype=np.int32)
+
                     new_trusted_positive.append(trusted_positive)
 
                 new_potential_positives.append(new_potential_positive)

@@ -19,7 +19,7 @@ runs_folder = "dm_data"
 filename = "gt_pose.mat"
 pointcloud_fols = "/pointcloud_20m_10overlap/"
 
-evaluate_all = False
+evaluate_all = True
 print("cfg.DATASET_FOLDER:"+str(cfg.DATASET_FOLDER))
 
 cc_dir = "/home/cc/"
