@@ -113,7 +113,7 @@ def rotate_point_cloud(batch_data, rotation_angle):
     rotated_data = np.dot(batch_data, rotation_matrix)     
     return rotated_data
 
-def filter_trusted(folder_path, all_files, src_index, compared_index, threshold=0.1):
+def filter_trusted(folder_path, all_files, src_index, compared_index, threshold_ratio=0.1, cal_thresholds=None):
     compared_index = list(np.setdiff1d(compared_index,src_index))
     #print("src_index:"+str(src_index))
     k_nearest = 6
@@ -124,28 +124,77 @@ def filter_trusted(folder_path, all_files, src_index, compared_index, threshold=
     for pos_i in pos_index:
         if (pos_i>=0 and pos_i<=len(all_files)-1):
             compared_index = list(np.setdiff1d(compared_index,pos_i))
-            pc = o3d.read_point_cloud(os.path.join(folder_path, all_files[pos_i]))
-            pos_pc.append(np.asarray(pc.points, dtype=np.float32))
     
-    #print("compared_index:"+str(compared_index))
-    pc = o3d.read_point_cloud(os.path.join(folder_path, all_files[src_index]))
-    src_pc = np.asarray(pc.points, dtype=np.float32)
-    #pos_pc = np.asarray(pos_pc, dtype=np.float32)
+    if cal_thresholds is None:
+        for pos_i in pos_index:
+            if (pos_i>=0 and pos_i<=len(all_files)-1):
+                pc = o3d.read_point_cloud(os.path.join(folder_path, all_files[pos_i]))
+                pos_pc.append(np.asarray(pc.points, dtype=np.float32))
     
-    if(src_pc.shape[0] != 256):
-        print("Error in pointcloud shape")
-    trusted_positive = []
-    for c_ind in compared_index:
-        pc = o3d.read_point_cloud(os.path.join(folder_path, all_files[c_ind]))
-        tar_pc = np.asarray(pc.points, dtype=np.float32)
-        if(similarity_filter(src_pc, tar_pc, pos_pc, threshold)):
-            trusted_positive.append(c_ind)
-    trusted_positive = np.array(trusted_positive, dtype=np.int32)
+        #print("compared_index:"+str(compared_index))
+        pc = o3d.read_point_cloud(os.path.join(folder_path, all_files[src_index]))
+        src_pc = np.asarray(pc.points, dtype=np.float32)
+        #pos_pc = np.asarray(pos_pc, dtype=np.float32)
+    
+        if(src_pc.shape[0] != 256):
+            print("Error in pointcloud shape")
+        trusted_positive = []
+        for c_ind in compared_index:
+            pc = o3d.read_point_cloud(os.path.join(folder_path, all_files[c_ind]))
+            tar_pc = np.asarray(pc.points, dtype=np.float32)
+            if cal_thresholds is None:
+                cal_thresholds, boolean_value = similarity_filter(src_pc, tar_pc, pos_pc, threshold_ratio)
+            else:
+                _, boolean_value = similarity_filter(src_pc, tar_pc, pos_pc, threshold_ratio, cal_thresholds=cal_thresholds)
+            if(boolean_value):
+                trusted_positive.append(c_ind)
+        trusted_positive = np.array(trusted_positive, dtype=np.int32)
+    else:
+        pc = o3d.read_point_cloud(os.path.join(folder_path, all_files[src_index]))
+        src_pc = np.asarray(pc.points, dtype=np.float32)
+        trusted_positive = []
+        for c_ind in compared_index:
+            pc = o3d.read_point_cloud(os.path.join(folder_path, all_files[c_ind]))
+            tar_pc = np.asarray(pc.points, dtype=np.float32)
+            _, boolean_value = similarity_filter(src_pc, tar_pc, None, threshold_ratio, cal_thresholds=cal_thresholds)
+            if(boolean_value):
+                trusted_positive.append(c_ind)
+        trusted_positive = np.array(trusted_positive, dtype=np.int32)
+    return cal_thresholds,trusted_positive
 
-    #print("trusted_positive:"+str(trusted_positive))
-    return trusted_positive
+def threshold_cal(in_pcl, pos_pcs, threshold_ratio):
+    src = pcl.PointCloud(in_pcl.astype(np.float32))
+    icp = src.make_IterativeClosestPoint()
+    
+    similarities = []
+    
+    angle_range = 15*np.arange(24)
+    angle_range = angle_range/180 * np.pi
+    min_fitness = np.Inf
+    min_transf = None
+    min_converged = None
+    max_compare_fitness = 0
+    min_estimate = None    
+    best_tgt = None
 
-def similarity_filter(in_pcl, compare_pcl, pos_pcs, threshold):
+    for pos_pc in pos_pcs:
+        min_compare_fitness = np.Inf
+
+        for angle in angle_range:
+            tgt = pos_pc.copy()
+            tgt[:,:2] = rotate_point_cloud(tgt[:,:2], angle)
+            tgt = pcl.PointCloud(tgt.astype(np.float32))
+            converged, transf, estimate, fitness = icp.icp(src, tgt, max_iter=1)
+
+            if fitness < min_compare_fitness:
+                min_compare_fitness = fitness
+
+        if min_compare_fitness > max_compare_fitness:
+            max_compare_fitness = min_compare_fitness
+
+    return max_compare_fitness * threshold_ratio
+
+def similarity_filter(in_pcl, compare_pcl, pos_pcs, threshold_ratio, cal_thresholds=None):
     src = pcl.PointCloud(in_pcl.astype(np.float32))
     icp = src.make_IterativeClosestPoint()
     similarities = []
@@ -158,23 +207,25 @@ def similarity_filter(in_pcl, compare_pcl, pos_pcs, threshold):
     min_estimate = None
     best_tgt = None
 
-    for pos_pc in pos_pcs:
-        min_compare_fitness = np.Inf
-        for angle in angle_range:
-            tgt = pos_pc.copy()
-            tgt[:,:2] = rotate_point_cloud(tgt[:,:2], angle)
-            tgt = pcl.PointCloud(tgt.astype(np.float32))
-            converged, transf, estimate, fitness = icp.icp(src, tgt, max_iter=10)
+    if cal_thresholds is None:
+        for pos_pc in pos_pcs:
+            min_compare_fitness = np.Inf
+            for angle in angle_range:
+                tgt = pos_pc.copy()
+                tgt[:,:2] = rotate_point_cloud(tgt[:,:2], angle)
+                tgt = pcl.PointCloud(tgt.astype(np.float32))
+                converged, transf, estimate, fitness = icp.icp(src, tgt, max_iter=1)
             
-            if fitness < min_compare_fitness:
-                min_compare_fitness = fitness
-        if min_compare_fitness > max_compare_fitness:
-            max_compare_fitness = min_compare_fitness
+                if fitness < min_compare_fitness:
+                    min_compare_fitness = fitness
+            if min_compare_fitness > max_compare_fitness:
+                max_compare_fitness = min_compare_fitness
+    
     for angle in angle_range:
         tgt = compare_pcl.copy()
         tgt[:,:2] = rotate_point_cloud(tgt[:,:2], angle)
         tgt = pcl.PointCloud(tgt.astype(np.float32))
-        converged, transf, estimate, fitness = icp.icp(src, tgt, max_iter=10)
+        converged, transf, estimate, fitness = icp.icp(src, tgt, max_iter=1)
         if fitness < min_fitness:
             min_fitness = fitness
             min_trans = transf
@@ -188,10 +239,16 @@ def similarity_filter(in_pcl, compare_pcl, pos_pcs, threshold):
 
     #print("max_compare_fitness:"+str(max_compare_fitness))
     #print("min_fitness:"+str(min_fitness))
-    if threshold*max_compare_fitness > min_fitness:
-        return True
+    if cal_thresholds is None:
+        if threshold_ratio*max_compare_fitness > min_fitness:
+            return threshold_ratio*max_compare_fitness,True
+        else:
+            return threshold_ratio*max_compare_fitness,False
     else:
-        return False
+        if cal_thresholds > min_fitness:
+            return cal_thresholds,True
+        else:
+            return cal_thresholds,False
     '''
     print("min_fitness:"+str(min_fitness))
     print("min_trans:"+str(min_trans))
@@ -435,7 +492,7 @@ def plot_image(compare_pcl, im_compare_pcl, x_range, y_range):
 
 if __name__ == "__main__":
     runs_folder = "dm_data/"
-    top_k = 50
+    k_nearest = 2
 
     cc_dir = "/home/cc/"
     pre_dir = os.path.join(cc_dir,runs_folder)
@@ -449,7 +506,9 @@ if __name__ == "__main__":
         folders.append(all_folders[index])
 
     sim_array = []
+    thresholds = []
     for folder in folders:
+        threshold = []
         all_files = list(sorted(os.listdir(os.path.join(cc_dir,runs_folder,folder))))
         all_files.remove('gt_pose.mat')
         all_files.remove('gt_pose.png')
@@ -462,43 +521,33 @@ if __name__ == "__main__":
         df_locations = sio.loadmat(gt_mat)
         df_locations = df_locations['pose']
         df_locations = torch.tensor(df_locations, dtype = torch.float).cpu()
-        '''
-        print("df_locations[0]:"+str(df_locations[0]))
-        print("df_locations[1]:"+str(torch.norm(df_locations[1,:2]-df_locations[0,:2])))
-        print("df_locations[1545]:"+str(torch.norm(df_locations[1545,:2]-df_locations[0,:2])))
-        print("df_locations[1545]:"+str(df_locations[1545]))
-
-        print("df_locations[2]:"+str(df_locations[2]))
-        print("df_locations[4]:"+str(torch.norm(df_locations[4,:2]-df_locations[2,:2])))
-        print("df_locations[523:"+str(torch.norm(df_locations[523,:2]-df_locations[2,:2])))
-        print("df_locations[1546:"+str(torch.norm(df_locations[1546,:2]-df_locations[2,:2])))
-        print("check:"+str(df_locations[1546,:2]-df_locations[2,:2]))
-        print("df_locations[523]:"+str(df_locations[523]))
-        print("df_locations[1546]:"+str(df_locations[1546]))
-        print("df_locations[2:"+str(torch.norm(df_locations[2]-df_locations[0])))
-        print("df_locations[3:"+str(torch.norm(df_locations[3]-df_locations[0])))
-        print("df_locations[4:"+str(torch.norm(df_locations[4]-df_locations[0])))
-        print("df_locations[5:"+str(torch.norm(df_locations[5]-df_locations[0])))
         
-        print("df_locations[10:"+str(torch.norm(df_locations[10]-df_locations[0])))
-        print("df_locations[12:"+str(torch.norm(df_locations[12]-df_locations[0])))
-        print("df_locations[13:"+str(torch.norm(df_locations[13]-df_locations[0])))
-        print("df_locations[47:"+str(torch.norm(df_locations[47]-df_locations[0])))
-        '''
-        #print("all_files[0]:"+str(all_files[0]))
-        pc = o3d.io.read_point_cloud(os.path.join(pre_dir,folder,all_files[0]))
-        pc = np.asarray(pc.points, dtype=np.float32)
-        results = []
         for index, all_file in enumerate(all_files):
-            print("all_file:"+str(all_file))
-            comp_pc = o3d.io.read_point_cloud(os.path.join(pre_dir,folder,all_file))
-            comp_pc = np.asarray(comp_pc.points, dtype=np.float32)
-            result = similarity_filter(pc, comp_pc, 0.5)
-            if result==True:
-                results.append(index)
-                print("results:"+str(results))
-        assert(0)
-        #folder_sim = folder_similar_check(folder_, all_files, df_locations, top_k)
+            file_len = len(all_files) 
+            neigh_range = np.arange(-k_nearest//2, (k_nearest//2)+1)
+            neigh_range = np.setdiff1d(neigh_range,0)
+            neigh_index = []
+            pc = o3d.read_point_cloud(os.path.join(pre_dir,folder,all_file))
+            pc = np.asarray(pc.points, dtype=np.float32)
+            
+            comp_pcs = []
+            for neigh in neigh_range:
+                if (neigh+index>=0 and neigh+index<=file_len-1):
+                    neigh_index.append(neigh+index)
+                    comp_pc = o3d.read_point_cloud(os.path.join(pre_dir,folder,all_files[neigh+index]))
+                    comp_pc = np.asarray(comp_pc.points, dtype=np.float32)
+                    comp_pcs.append(comp_pc)
+            
+            comp_pcs = np.asarray(comp_pcs, dtype=np.float32)
+            result = threshold_cal(pc, comp_pcs, 0.1)
+            threshold.append(result)
+        thresholds.append(threshold)
+    thresholds = np.asarray(thresholds, dtype=np.float32)
+    print("thresholds:"+str(thresholds.shape))
+    print("np.min(values):"+str(np.min(thresholds)))
+    sio.savemat("thresholds.mat",{'data':thresholds})
+    
+    #folder_sim = folder_similar_check(folder_, all_files, df_locations, top_k)
         #sim_array.append(folder_sim)
 
     #sim_array = np.asarray(sim_array)

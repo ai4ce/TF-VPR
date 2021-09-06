@@ -9,6 +9,7 @@ import socket
 import sys
 sys.path.append('/usr/local/lib/python3.6/dist-packages/python_pcl-0.3-py3.6-linux-x86_64.egg/')
 import pcl
+import scipy.io as sio
 
 import numpy as np
 from sklearn.neighbors import KDTree, NearestNeighbors
@@ -46,7 +47,7 @@ parser.add_argument('--positives_per_query', type=int, default=2,
 parser.add_argument('--negatives_per_query', type=int, default=18,
                     help='Number of definite negatives in each training tuple [default: 18]')
 parser.add_argument('--max_epoch', type=int, default=20,
-                    help='Epoch to run [default: 20]')
+                    help='Epoch to run [default: 100]')
 parser.add_argument('--batch_num_queries', type=int, default=2,
                     help='Batch Size during training [default: 2]')
 parser.add_argument('--learning_rate', type=float, default=0.000005,
@@ -99,6 +100,10 @@ cfg.LOSS_IGNORE_ZERO_BATCH = FLAGS.loss_ignore_zero_batch
 
 cfg.TRAIN_FILE = 'generating_queries/training_queries_baseline.pickle'
 cfg.TEST_FILE = 'generating_queries/test_queries_baseline.pickle'
+threshold_file = 'models/thresholds.mat'
+thresholds = sio.loadmat(threshold_file)
+thresholds = np.array(thresholds['data'], dtype=np.float32)
+thresholds = 2.5780014e-06 * np.ones((18,2048), dtype=np.float32)
 
 cfg.LOG_DIR = FLAGS.log_dir
 if not os.path.exists(cfg.LOG_DIR):
@@ -220,6 +225,7 @@ def train():
         print(epoch)
         print()
         print("trusted_positives:"+str(np.array(trusted_positives).shape))
+
         generate_dataset.generate(data_index, definite_positives=trusted_positives, inside=False)  
         TRAIN_FILE = 'generating_queries/train_pickle/training_queries_baseline_'+str(data_index)+'.pickle'
         TEST_FILE = 'generating_queries/train_pickle/test_queries_baseline_'+str(data_index)+'.pickle'
@@ -261,10 +267,9 @@ def train():
                     folder_path = os.path.join(cfg.DATASET_FOLDER,folders[index])
                     
                     #print("pre_trusted_positive:"+str(pre_trusted_positive))
-                    trusted_pos = VFC.filter_trusted(folder_path, all_files, index2, pre_trusted_positive)  
+                    _, trusted_pos = VFC.filter_trusted(folder_path, all_files, index2, pre_trusted_positive, cal_thresholds=thresholds[index][index2])
                     #print("trusted_positive:"+str(trusted_positive))
                     trusted_positive.append(trusted_pos)
-
                 trusted_positives.append(trusted_positive)
         else:
             new_potential_positives = []
@@ -306,7 +311,7 @@ def train():
                     pre_trusted_positive = np.array(pos_set)[np.argsort(pos_dis)[::-1][:(cfg.INIT_TRUST+int(data_index-1)//cfg.INIT_TRUST_SCALAR)]]
                     #print("pre_trusted_positive:"+str(pre_trusted_positive.shape))
                     pre_trusted_positive = np.setdiff1d(pre_trusted_positive, previous_trusted_positive)
-                    filtered_trusted_positive = VFC.filter_trusted(folder_path, all_files, index2, pre_trusted_positive)
+                    _, filtered_trusted_positive = VFC.filter_trusted(folder_path, all_files, index2, pre_trusted_positive, cal_thresholds=thresholds[index][index2])
                     #print("trusted_positive:"+str(trusted_positive))
                     if len(filtered_trusted_positive) == 0:
                         trusted_positive = previous_trusted_positive
