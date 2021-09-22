@@ -4,7 +4,7 @@ import numpy as np
 import random
 import config as cfg
 import open3d as o3d
-#from open3d import read_point_cloud
+from open3d import read_point_cloud
 
 def get_queries_dict(filename):
     # key:{'query':file,'positives':[files],'negatives:[files], 'neighbors':[keys]}
@@ -51,6 +51,19 @@ def load_pc_files(filenames,full_path):
     pcs = np.array(pcs)
     return pcs
 
+def load_pos_neg_pc_files(filenames,full_path):
+    pcs = []
+    for filename in filenames:
+        # print(filename)
+        pc = load_pc_file(filename,full_path=full_path)
+        if(pc.shape[0] != 256):
+            continue
+        pcs.append(pc)
+        for i in range(2):
+            pcs.append(rotate_point_cloud_N3(pc))
+    
+    pcs = np.array(pcs)
+    return pcs
 
 def rotate_point_cloud(batch_data):
     """ Randomly rotate the point clouds to augument the dataset
@@ -72,6 +85,29 @@ def rotate_point_cloud(batch_data):
         shape_pc = batch_data[k, ...]
         rotated_data[k, ...] = np.dot(
                                shape_pc, rotation_matrix) 
+    return rotated_data
+
+def rotate_point_cloud_N3(batch_data):
+    """ Randomly rotate the point clouds to augument the dataset
+    rotation is per shape based along up direction
+    Input:
+    Nx3 array, original batch of point clouds
+    Return:
+    Nx3 array, rotated batch of point clouds
+    """
+    rotated_data = np.zeros(batch_data.shape, dtype=np.float32)
+    rotation_angle = (np.random.uniform()*2*np.pi) - np.pi
+    cosval = np.cos(rotation_angle)
+    sinval = np.sin(rotation_angle)
+    rotation_matrix = np.array([[cosval, -sinval,0],
+                               [sinval, cosval,0],
+                               [0, 0,1]])
+    for k in range(batch_data.shape[0]):
+        #rotation_angle = np.random.uniform() * 2 * np.pi
+        #-90 to 90
+        shape_pc = batch_data
+        rotated_data= np.dot(
+                shape_pc, rotation_matrix)
     return rotated_data
 
 def jitter_point_cloud(batch_data, sigma=0.005, clip=0.05):
@@ -100,7 +136,7 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
     for i in range(num_pos):
         pos_files.append(QUERY_DICT[dict_value["positives"][i]]["query"])
     #positives= load_pc_files(dict_value["positives"][0:num_pos])
-    positives = load_pc_files(pos_files,full_path=True)
+    positives = load_pos_neg_pc_files(pos_files,full_path=True)
     '''
     B, P, _ = positives.shape
     new_positives = np.zeros((B*(cfg.ROT_NUM+1),P,3), dtype = positives.dtype)
@@ -121,12 +157,12 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
         for i in range(num_neg):
             neg_files.append(QUERY_DICT[dict_value["negatives"][i]]["query"])
             neg_indices.append(dict_value["negatives"][i])
-
+        
     else:
         random.shuffle(dict_value["negatives"])
         for i in hard_neg:
             neg_files.append(QUERY_DICT[i]["query"])
-            neg_indices.append(i)
+            neg_indices.append(dict_value["negatives"][i])
         j = 0
         while(len(neg_files) < num_neg):
 
@@ -137,7 +173,6 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
             j += 1
 
     negatives = load_pc_files(neg_files,full_path=True)
-
     if other_neg is False:
         return [query, positives, negatives]
     # For Quadruplet Loss

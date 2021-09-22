@@ -58,7 +58,6 @@ def construct_dict(df_files, df_indices, filename, folder_size, folder_num, all_
         df_locations = torch.tensor(df_locations, dtype = torch.float).cpu()
         
         for index in range(len(df_indices)//folder_num):
-
             df_indice = df_indices[num * (len(df_indices)//folder_num) + index]
             positive_l = []
             negative_l = list(range(folder_size))
@@ -69,11 +68,29 @@ def construct_dict(df_files, df_indices, filename, folder_size, folder_num, all_
                 if (index_pos + df_indice >= 0) and (index_pos + df_indice <= folder_size -1):
                     negative_l.remove(index_pos + df_indice)
             if definite_positives is not None:
-                positive_l.extend(definite_positives[num][df_indice])
-                negative_l = [i for i in negative_l if i not in definite_positives[num][df_indice]]
-
+                # print("num:"+str(num))
+                # print("df_indice:"+str(df_indice))
+                # print("definite_positives[num]:"+str(len(definite_positives[num])))
+                # print("definite_positives:"+str(definite_positives))
+                if ((np.array(definite_positives[num][df_indice]).ndim) == 2) and (np.array(definite_positives[num][df_indice]).shape[0]!=0):
+                    extend_element = definite_positives[num][df_indice][0]
+                else:
+                    # print("extend_element_pre:"+str(definite_positives[num][df_indice]))
+                    extend_element = definite_positives[num][df_indice]
+                # print("extend_element:"+str(extend_element))
+                # # print("extend_element:"+str(extend_element))
+                # # extend_element = definite_positives[num][df_indice]
+                # print("np.array(2 []);"+str(np.array([[]]).ndim))
+                # print("np.array([]);"+str(np.array([]).ndim))
+                # print("definite_positives[num][df_indice]:"+str(np.array(definite_positives[num][df_indice]).shape))
+                positive_l.extend(extend_element)
+                # print("positive_l:"+str(positive_l))
+                negative_l = [i for i in negative_l if i not in extend_element]
+            
+            # print("positive_l:"+str(((positive_l))))
+            # assert(0)
             positive_l = list(set(positive_l))
-            #print("positive_l:"+str(len(positive_l)))
+            # print("positive_l:"+str((positive_l)))
             '''
             negative_l_sampled = random.sample(negative_l, k=k_furthest)
             negative_l_sampled, replace_count = check_negatives(negative_l_sampled, index, df_locations, mid_index_range)
@@ -120,9 +137,11 @@ def generate(data_index, definite_positives=None, inside=True):
 
     df_files_test = []
     df_files_train =[]
+    df_files = []
 
     df_indices_train = []
     df_indices_test = []
+    df_indices = []
 
     folder_num = len(folders)
 
@@ -144,14 +163,20 @@ def generate(data_index, definite_positives=None, inside=True):
             else:
                 df_files_train.append(os.path.join(cc_dir,runs_folder,folder,file_))
                 df_indices_train.append(indx)
+            df_files.append(os.path.join(cc_dir,runs_folder,folder,file_))
+            df_indices.append(indx)
+
     pre_dir = os.path.join(cc_dir,runs_folder)
 
     if inside == True:
         construct_dict(df_files_train, df_indices_train, "train_pickle/training_queries_baseline_"+str(data_index)+".pickle", folder_size, folder_num, all_folders, pre_dir, k_nearest, k_furthest)
         construct_dict(df_files_test, df_indices_test, "train_pickle/test_queries_baseline_"+str(data_index)+".pickle", folder_size, folder_num, all_folders, pre_dir, k_nearest, k_furthest)
+        construct_dict(df_files, df_indices, "train_pickle/db_queries_baseline_"+str(data_index)+".pickle", folder_size, folder_num, all_folders, pre_dir, k_nearest, k_furthest)
+
     else:
         construct_dict(df_files_train, df_indices_train, "generating_queries/train_pickle/training_queries_baseline_"+str(data_index)+".pickle", folder_size, folder_num, all_folders, pre_dir, k_nearest, k_furthest, definite_positives=definite_positives)
         construct_dict(df_files_test, df_indices_test, "generating_queries/train_pickle/test_queries_baseline_"+str(data_index)+".pickle", folder_size, folder_num, all_folders, pre_dir, k_nearest, k_furthest, definite_positives=definite_positives)
+        construct_dict(df_files, df_indices, "generating_queries/train_pickle/db_queries_baseline_"+str(data_index)+".pickle", folder_size, folder_num, all_folders, pre_dir, k_nearest, k_furthest, definite_positives=definite_positives)
 
 if __name__ == "__main__":
     for i in range(20):

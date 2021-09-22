@@ -45,12 +45,15 @@ def evaluate():
     print("ave_one_percent_recall:"+str(ave_one_percent_recall))
 
 
-def evaluate_model(model,epoch,save=False,full_pickle=False):
+def evaluate_model(model,optimizer,epoch,save=False,full_pickle=False):
     if save:
         torch.save({
             'state_dict': model.state_dict(),
+            'optimizer': optimizer.state_dict(),
+            'epoch': epoch,
             }, cfg.LOG_DIR + "checkpoint.pth.tar")
     
+    print("epoch:"+str(epoch))
     #checkpoint = torch.load(cfg.LOG_DIR + "checkpoint.pth.tar")
     #saved_state_dict = checkpoint['state_dict']
     #model.load_state_dict(saved_state_dict)
@@ -234,6 +237,8 @@ def get_recall(m, n, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS):
 
     one_percent_recall = (one_percent_retrieved/float(num_evaluated))*100
     recall = (np.cumsum(recall)/float(num_evaluated))*100
+    # one_percent_recall = 1
+    # recall = 1
     return recall, top1_similarity_score, one_percent_recall
 
 
