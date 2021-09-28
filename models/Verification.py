@@ -712,7 +712,8 @@ def Compute_positive(flag, db_vec, index, potential_positives, potential_distrib
             print("index2:"+str(index2))
             print("pre_trusted_positive:"+str(pre_trusted_positive))
             '''
-            _, trusted_pos = filter_trusted_pos(all_files_reshape, index2, pre_trusted_positive, cal_thresholds=thresholds[index][index2])
+            #trusted_pos = pre_trusted_positive
+            _, trusted_pos = filter_trusted_pos(all_files_reshape, index*db_vec.shape[1]+index2, pre_trusted_positive, cal_thresholds=thresholds[index][index2])
             # print("trusted_pos:"+str(trusted_pos.tolist()))
             '''
             if index2 == 0:
@@ -755,7 +756,7 @@ def Compute_positive(flag, db_vec, index, potential_positives, potential_distrib
             folder_path = os.path.join(cfg.DATASET_FOLDER,folders[index])
             all_files = list(sorted(os.listdir(folder_path)))
             all_files.remove('gt_pose.mat')
-
+            
             previous_trusted_positive = trusted_positives[index][index2]
             # print("previous_trusted_positive:"+str(previous_trusted_positive))
             if ((np.array(previous_trusted_positive).ndim) == 2) and (np.array(previous_trusted_positive).shape[0]!=0):
@@ -763,7 +764,7 @@ def Compute_positive(flag, db_vec, index, potential_positives, potential_distrib
             else:
                 pass
             # print("previous_trusted_positive[0]:"+str(previous_trusted_positive))
-            pre_trusted_positive = np.array(pos_set)[np.argsort(pos_dis)[::-1][:(cfg.INIT_TRUST+int(epoch-1)//cfg.INIT_TRUST_SCALAR)]]
+            pre_trusted_positive = np.array(pos_set)[np.argsort(pos_dis)[::-1][:(cfg.INIT_TRUST)]]
 
             pre_trusted_positive = np.setdiff1d(pre_trusted_positive, previous_trusted_positive)
             '''
@@ -774,8 +775,9 @@ def Compute_positive(flag, db_vec, index, potential_positives, potential_distrib
             '''
             # assert(0)
             pre_trusted_positive = np.setdiff1d(pre_trusted_positive, index2)
-       
-            _, filtered_trusted_positive = filter_trusted_pos(all_files_reshape, index2, pre_trusted_positive, cal_thresholds=thresholds[index][index2])
+            
+            #filtered_trusted_positive = pre_trusted_positive
+            _, filtered_trusted_positive = filter_trusted_pos(all_files_reshape, index*db_vec.shape[1]+index2, pre_trusted_positive, cal_thresholds=thresholds[index][index2])
             '''
             if index2 == 0:
                 print("filtered_trusted_positive:"+str(filtered_trusted_positive))

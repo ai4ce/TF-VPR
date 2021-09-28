@@ -58,8 +58,7 @@ def load_pos_neg_pc_files(filenames,full_path):
         pc = load_pc_file(filename,full_path=full_path)
         if(pc.shape[0] != 256):
             continue
-        pcs.append(pc)
-        for i in range(2):
+        for i in range(30):
             pcs.append(rotate_point_cloud_N3(pc))
     
     pcs = np.array(pcs)

@@ -7,8 +7,6 @@ import math
 import os
 import socket
 import sys
-sys.path.append('/usr/local/lib/python3.6/dist-packages/python_pcl-0.3-py3.6-linux-x86_64.egg/')
-import pcl
 import scipy.io as sio
 
 import numpy as np
@@ -214,7 +212,7 @@ def train():
 
         model.load_state_dict(saved_state_dict)
         optimizer.load_state_dict(checkpoint['optimizer'])
-        
+        '''
         model = PNV.PointNetVlad(global_feat=True, feature_transform=True,
                                 max_pool=False, output_dim=cfg.FEATURE_OUTPUT_DIM, num_points=cfg.NUM_POINTS)
         model = model.to(device)
@@ -227,7 +225,7 @@ def train():
         else:
             optimizer = None
             exit(0)
-        
+        '''
         print("starting_epoch:"+str(starting_epoch))
         trusted_positives = sio.loadmat("results/trusted_positives_folder/trusted_positives_"+str(starting_epoch)+".mat")['data']
         # print("trusted_positives:"+str(trusted_positives))
@@ -273,7 +271,21 @@ def train():
     for epoch in range(starting_epoch, cfg.MAX_EPOCH):
         print(epoch)
         print()
-        
+        if epoch == 5:
+            model = PNV.PointNetVlad(global_feat=True, feature_transform=True,
+                             max_pool=False, output_dim=cfg.FEATURE_OUTPUT_DIM, num_points=cfg.NUM_POINTS)
+            model = model.to(device)
+
+            parameters = filter(lambda p: p.requires_grad, model.parameters())
+
+            if cfg.OPTIMIZER == 'momentum':
+                optimizer = torch.optim.SGD(
+                    parameters, learning_rate, momentum=cfg.MOMENTUM)
+            elif cfg.OPTIMIZER == 'adam':
+                optimizer = torch.optim.Adam(parameters, learning_rate)
+            else:
+                optimizer = None
+                exit(0)
         # print("potential_positives_:"+str(np.array(potential_positives)))
         # print("potential_distributions_:"+str(np.array(potential_distributions)))
         
@@ -487,8 +499,8 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, TRAINI
     #print("TRAINING_QUERIES:"+str(TRAINING_QUERIES))
     train_file_idxs = np.arange(0, len(TRAINING_QUERIES.keys()))
     np.random.shuffle(train_file_idxs)
-    #for i in range(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES):
-    for i in range(1):
+    for i in range(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES):
+    #for i in range(1):
         # for i in range (5):
         batch_keys = train_file_idxs[i *
                                      cfg.BATCH_NUM_QUERIES:(i+1)*cfg.BATCH_NUM_QUERIES]
@@ -736,7 +748,7 @@ def run_model(model, queries, positives, negatives, other_neg, require_grad=True
     #print("output:"+str(output))
     output = output.view(cfg.BATCH_NUM_QUERIES, -1, cfg.FEATURE_OUTPUT_DIM)
     o1, o2, o3, o4 = torch.split(
-        output, [1, 3*cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY, 1], dim=1)
+        output, [1, 30*cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY, 1], dim=1)
 
     return o1, o2, o3, o4
 
