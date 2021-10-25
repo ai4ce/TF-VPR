@@ -4,7 +4,7 @@ import numpy as np
 import socket
 import importlib
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 import sys
 import torch
 import torch.nn as nn
@@ -45,10 +45,12 @@ def evaluate():
     print("ave_one_percent_recall:"+str(ave_one_percent_recall))
 
 
-def evaluate_model(model,epoch,save=False):
+def evaluate_model(model,optimizer,epoch,save=False):
     if save:
         torch.save({
             'state_dict': model.state_dict(),
+            'optimizer': optimizer.state_dict(),
+            'epoch': epoch,
             }, cfg.LOG_DIR + "checkpoint.pth.tar")
     
     #checkpoint = torch.load(cfg.LOG_DIR + "checkpoint.pth.tar")

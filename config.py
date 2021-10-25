@@ -7,7 +7,7 @@ OUTPUT_FILE = "results/results.txt"
 LOG_DIR = 'log/'
 MODEL_FILENAME = "model.ckpt"
 
-DATASET_FOLDER = '../../benchmark_datasets/'
+DATASET_FOLDER = '/home/cc/dm_data/'
 
 # TRAIN
 BATCH_NUM_QUERIES = 2
@@ -18,7 +18,7 @@ DECAY_RATE = 0.7
 BASE_LEARNING_RATE = 0.000005
 MOMENTUM = 0.9
 OPTIMIZER = 'ADAM'
-MAX_EPOCH = 20
+MAX_EPOCH = 100
 
 MARGIN_1 = 0.5
 MARGIN_2 = 0.2

@@ -27,7 +27,7 @@ all_folders = sorted(os.listdir(os.path.join(cc_dir,runs_folder)))
 folders = []
 
 # All runs are used for training (both full and partial)
-index_list = range(10)
+index_list = range(18)
 print("Number of runs: "+str(len(index_list)))
 for index in index_list:
     folders.append(all_folders[index])
