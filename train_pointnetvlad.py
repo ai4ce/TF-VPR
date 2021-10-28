@@ -37,8 +37,8 @@ parser.add_argument('--positives_per_query', type=int, default=2,
                     help='Number of potential positives in each training tuple [default: 2]')
 parser.add_argument('--negatives_per_query', type=int, default=18,
                     help='Number of definite negatives in each training tuple [default: 18]')
-parser.add_argument('--max_epoch', type=int, default=20,
-                    help='Epoch to run [default: 20]')
+parser.add_argument('--max_epoch', type=int, default=100,
+                    help='Epoch to run [default: 100]')
 parser.add_argument('--batch_num_queries', type=int, default=2,
                     help='Batch Size during training [default: 2]')
 parser.add_argument('--learning_rate', type=float, default=0.000005,
@@ -85,9 +85,9 @@ cfg.TRIPLET_USE_BEST_POSITIVES = FLAGS.triplet_use_best_positives
 cfg.LOSS_LAZY = FLAGS.loss_not_lazy
 cfg.LOSS_IGNORE_ZERO_BATCH = FLAGS.loss_ignore_zero_batch
 
-cfg.TRAIN_FILE = 'generating_queries/training_queries_baseline.pickle'
-cfg.TEST_FILE = 'generating_queries/test_queries_baseline.pickle'
-cfg.DB_FILE = 'generating_queries/db_queries_baseline.pickle'
+cfg.TRAIN_FILE = 'generating_queries/train_pickle/training_queries_baseline_0.pickle'
+cfg.TEST_FILE = 'generating_queries/train_pickle/test_queries_baseline_0.pickle'
+cfg.DB_FILE = 'generating_queries/train_pickle/db_queries_baseline_0.pickle'
 
 cfg.LOG_DIR = FLAGS.log_dir
 if not os.path.exists(cfg.LOG_DIR):
@@ -202,7 +202,9 @@ def train():
         log_string('EVALUATING...')
         cfg.OUTPUT_FILE = cfg.RESULTS_FOLDER + 'results_' + str(epoch) + '.txt'
 
-        evaluate.evaluate_model(model,epoch,True)
+        # evaluate.evaluate_model(model,epoch,True)
+        # asdasdasd
+        # 
         #eval_recall = evaluate.evaluate_model(model,epoch,True)
         #log_string('EVAL RECALL: %s' % str(eval_recall))
 

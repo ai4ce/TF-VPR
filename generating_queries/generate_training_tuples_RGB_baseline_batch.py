@@ -38,7 +38,7 @@ def construct_dict(df_files, df_indices, filename, pre_dir, k_nearest, k_furthes
         positive_l = list(set(positive_l))
         positive_l.remove(df_indice)
 
-        queries[df_indice] = {"query":df_files[count],
+        queries[count] = {"query":df_files[count],
                         "positives":positive_l,"negatives":negative_l}
         count = count + 1
 
@@ -62,9 +62,11 @@ def generate(data_index, definite_positives=None, inside=True):
 
     df_files_test = []
     df_files_train =[]
+    df_files = []
 
     df_indices_train = []
     df_indices_test = []
+    df_indices = []
 
     all_files = list(sorted(os.listdir(pre_dir)))
     all_files.remove(runs_folder+'.json')
@@ -88,14 +90,18 @@ def generate(data_index, definite_positives=None, inside=True):
         else:
             df_files_train.append(os.path.join(file_))
             df_indices_train.append(indx)       
-        # df_files.append(os.path.join(pre_dir,folder,"jpg_rgb",file_))
+        df_files.append(os.path.join(file_))
+        df_indices.append(indx)
     
     if inside == True:
         construct_dict(df_files_train, df_indices_train, "train_pickle/training_queries_baseline_"+str(data_index)+".pickle", pre_dir, k_nearest, k_furthest, traj_len)
         construct_dict(df_files_test, df_indices_test, "train_pickle/test_queries_baseline_"+str(data_index)+".pickle", pre_dir, k_nearest, k_furthest, traj_len)
+        construct_dict(df_files, df_indices, "train_pickle/db_queries_baseline_"+str(data_index)+".pickle", pre_dir, k_nearest, k_furthest, traj_len)
+
     else:
         construct_dict(df_files_train, df_indices_train, "generating_queries/train_pickle/training_queries_baseline_"+str(data_index)+".pickle", pre_dir, k_nearest, k_furthest, traj_len, definite_positives=definite_positives)
         construct_dict(df_files_test, df_indices_test, "generating_queries/train_pickle/test_queries_baseline_"+str(data_index)+".pickle", pre_dir, k_nearest, k_furthest, traj_len, definite_positives=definite_positives)
+        construct_dict(df_files, df_indices, "generating_queries/train_pickle/db_queries_baseline_"+str(data_index)+".pickle", pre_dir, k_nearest, k_furthest, traj_len, definite_positives=definite_positives)
 
 if __name__ == "__main__":
     for i in range(1):

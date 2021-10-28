@@ -54,16 +54,16 @@ def load_pc_files(filenames,full_path):
 def load_image_file(filename, full_path=False):
     if full_path:
         image = cv2.imread(filename)
-        dim = (128,128)
+        dim = (128*4,128)
         image = cv2.resize(image, dim,interpolation = cv2.INTER_AREA)
     else:
-        image = cv2.imread(os.path.join("/home/chao1804/Desktop/AVD/ActiveVisionDataset/", filename))
-        dim = (128,128)
+        image = cv2.imread(os.path.join("/mnt/NAS/home/yuhang/videomap_v2/Adrian/", filename))
+        dim = (128*4,128)
         image = cv2.resize(image, dim,interpolation = cv2.INTER_AREA)
     image = np.asarray(image, dtype=np.float32)
 
     if(image.shape[2] != 3):
-        print("Error in pointcloud shape")
+        print("Error in Image shape")
         return np.array([])
     #pc = np.reshape(pc,(pc.shape[0]//3, 3))
     return image
@@ -119,7 +119,7 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
         # get query tuple for dictionary entry
         # return list [query,positives,negatives]
     #print("query:"+str(dict_value["query"]))
-    query = load_image_file(dict_value["query"])  # Nx3
+    query = load_image_file(dict_value["query"], full_path=False)  # Nx3
     #cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/query.jpg', query)
     random.shuffle(dict_value["positives"])
     pos_files = []
@@ -129,7 +129,7 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
         pos_files.append(QUERY_DICT[dict_value["positives"][i]]["query"])
     
     #print("pos_files:"+str(pos_files))
-    positives = load_image_files(pos_files,full_path=True)
+    positives = load_image_files(pos_files,full_path=False)
     '''
     cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/color_img1.jpg', positives[0])
     cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/color_img2.jpg', positives[1])
@@ -156,7 +156,7 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
                 neg_indices.append(dict_value["negatives"][j])
             j += 1
     
-    negatives = load_image_files(neg_files,full_path=True)
+    negatives = load_image_files(neg_files,full_path=False)
     '''
     cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img1.jpg', negatives[0])
     cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img2.jpg', negatives[1])
@@ -182,7 +182,7 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
         if(len(possible_negs) == 0):
             return [query, positives, negatives, np.array([])]
 
-        neg2 = load_image_file(QUERY_DICT[possible_negs[0]]["query"],full_path=True)
+        neg2 = load_image_file(QUERY_DICT[possible_negs[0]]["query"],full_path=False)
         return [query, positives, negatives, neg2]
 
 
