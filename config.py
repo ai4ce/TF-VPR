@@ -2,8 +2,8 @@
 NUM_POINTS = 256
 GRID_X = 1080
 GRID_Y = 1920
-SIZED_GRID_X = 128*4
-SIZED_GRID_Y = 128
+SIZED_GRID_X = 64*4
+SIZED_GRID_Y = 64
 FEATURE_OUTPUT_DIM = 16384
 RESULTS_FOLDER = "results/"
 OUTPUT_FILE = "results/results.txt"
@@ -37,7 +37,7 @@ TRAIN_FILE = 'generating_queries/training_queries_baseline.pickle'
 TEST_FILE = 'generating_queries/test_queries_baseline.pickle'
 
 # LOSS
-LOSS_FUNCTION = 'triplet'
+LOSS_FUNCTION = 'triplet_RI'
 LOSS_LAZY = True
 TRIPLET_USE_BEST_POSITIVES = False
 LOSS_IGNORE_ZERO_BATCH = False

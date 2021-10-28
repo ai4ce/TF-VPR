@@ -91,3 +91,25 @@ def quadruplet_loss(q_vec, pos_vecs, neg_vecs, other_neg, m1, m2, use_min=False,
 
     total_loss = triplet_loss + second_loss
     return total_loss
+
+def rotation_loss(q_vec, pos_vecs, neg_vecs, rot_q_vec, rot_pos_vecs, rot_neg_vecs):
+    diff = ((q_vec - rot_q_vec) ** 2).sum(2)
+    max_pos1, _ = diff.max(1)
+    loss1 = max_pos1.mean()
+
+    diff = ((pos_vecs - rot_pos_vecs) ** 2).sum(2)
+    max_pos2, _ = diff.max(1)
+    loss2 = max_pos2.mean()
+
+    diff = ((neg_vecs - rot_neg_vecs) ** 2).sum(2)
+    max_pos3, _ = diff.max(1)
+    loss3 = max_pos3.mean()
+
+    return loss1 + loss2 + loss3
+
+def triplet_loss_RI(q_vec, pos_vecs, neg_vecs, rot_q_vec, rot_pos_vecs, rot_neg_vecs, margin, use_min=False, lazy=False, ignore_zero_loss=False):
+    tr1 = triplet_loss(q_vec, pos_vecs, neg_vecs, margin, use_min=use_min, lazy=lazy, ignore_zero_loss=ignore_zero_loss)
+    tr2 = triplet_loss(rot_q_vec, rot_pos_vecs, rot_neg_vecs, margin, use_min=use_min, lazy=lazy, ignore_zero_loss=ignore_zero_loss)
+    rl = rotation_loss(q_vec, pos_vecs, neg_vecs, rot_q_vec, rot_pos_vecs, rot_neg_vecs)
+    total_loss = tr1 + tr2 +rl
+    return total_loss

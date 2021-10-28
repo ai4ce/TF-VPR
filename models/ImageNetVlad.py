@@ -8,6 +8,21 @@ import numpy as np
 import torch.nn.functional as F
 import math
 import torchvision.models as models
+import random
+
+def rotate_images(image, save_image = False):
+    dim_2 = image.shape[2]
+    cut_index = random.randint(0, dim_2-1)
+    list_range = list(range(dim_2))
+    new_list = list_range[cut_index:] + list_range[:cut_index]
+    if save_image:
+        print("here:"+str(os.path.join('./results/visualization_2/',"before_rotate.png")))
+        cv2.imwrite(os.path.join('./results/visualization_2/',"before_rotate.png"), image)
+    image =  image[:, :, new_list, :,:]
+    if save_image:
+        cv2.imwrite(os.path.join('./results/visualization_2/',"after_rotate.png"), image)
+    
+    return image
 
 class NetVLAD_Image(nn.Module):
     """NetVLAD layer implementation"""
@@ -451,9 +466,13 @@ class ImageNetVlad(nn.Module):
         self.net_vlad = NetVLAD_Image(num_clusters=32, dim=512, vladv2=True)
 
     def forward(self, x):
+        rot_x = rotate_images(x)
         x = self.obs_feat_extractor(x)
+        rot_x = self.obs_feat_extractor(rot_x)
         x = self.net_vlad(x)
-        return x
+        rot_x = self.net_vlad(rot_x)
+
+        return x, rot_x
 
 
 if __name__ == '__main__':

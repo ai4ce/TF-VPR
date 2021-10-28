@@ -4,7 +4,7 @@ import numpy as np
 import socket
 import importlib
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 import sys
 import torch
 import torch.nn as nn

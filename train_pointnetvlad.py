@@ -55,7 +55,7 @@ parser.add_argument('--margin_1', type=float, default=0.5,
                     help='Margin for hinge loss [default: 0.5]')
 parser.add_argument('--margin_2', type=float, default=0.2,
                     help='Margin for hinge loss [default: 0.2]')
-parser.add_argument('--loss_function', default='triplet', choices=[
+parser.add_argument('--loss_function', default='triplet_RI', choices=[
                     'triplet', 'quadruplet'], help='triplet or quadruplet [default: quadruplet]')
 parser.add_argument('--loss_not_lazy', action='store_false',
                     help='If present, do not use lazy variant of loss')
@@ -147,6 +147,8 @@ def train():
     #loss = lazy_quadruplet_loss(q_vec, pos_vecs, neg_vecs, other_neg_vec, MARGIN1, MARGIN2)
     if cfg.LOSS_FUNCTION == 'quadruplet':
         loss_function = PNV_loss.quadruplet_loss
+    elif cfg.LOSS_FUNCTION == 'triplet_RI':
+        loss_function = PNV_loss.triplet_loss_RI
     else:
         loss_function = PNV_loss.triplet_loss
     learning_rate = get_learning_rate(0)
@@ -317,7 +319,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
         model.train()
         optimizer.zero_grad()
         
-        output_queries, output_positives, output_negatives, output_other_neg = run_model(
+        output_queries, output_positives, output_negatives, output_other_neg, rot_output_queries, rot_output_positives, rot_output_negatives, rot_output_other_neg = run_model(
             model, queries, positives, negatives, other_neg)
         #print("output_queries:"+str(output_queries.shape))
         #print("output_positives:"+str(output_positives.shape))
@@ -329,7 +331,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
         #print("queries:"+str(queries.shape))
         
         #loss = loss_function(output_queries, output_positives, output_negatives,  0.1,  use_min=cfg.TRIPLET_USE_BEST_POSITIVES, lazy=cfg.LOSS_LAZY, ignore_zero_loss=cfg.LOSS_IGNORE_ZERO_BATCH)
-        loss = loss_function(output_queries, output_positives, output_negatives,  0.1,  use_min=cfg.TRIPLET_USE_BEST_POSITIVES, lazy=False, ignore_zero_loss=cfg.LOSS_IGNORE_ZERO_BATCH)
+        loss = loss_function(output_queries, output_positives, output_negatives,  rot_output_queries, rot_output_positives, rot_output_negatives, 0.1,  use_min=cfg.TRIPLET_USE_BEST_POSITIVES, lazy=False, ignore_zero_loss=cfg.LOSS_IGNORE_ZERO_BATCH)
 
         loss.backward()
         optimizer.step()
@@ -468,16 +470,20 @@ def run_model(model, queries, positives, negatives, other_neg, require_grad=True
     
     feed_tensor.requires_grad_(require_grad)
     feed_tensor = feed_tensor.to(device)
+    print("feed_tensor:"+str(feed_tensor.shape))
     if require_grad:
-        output = model(feed_tensor)
+        output, rot_output = model(feed_tensor)
     else:
         with torch.no_grad():
-            output = model(feed_tensor)
+            output, rot_output = model(feed_tensor)
     output = output.view(cfg.BATCH_NUM_QUERIES, -1, cfg.FEATURE_OUTPUT_DIM)
+    rot_output = rot_output.view(cfg.BATCH_NUM_QUERIES, -1, cfg.FEATURE_OUTPUT_DIM)
+    # print("output:"+str(output.shape))
     o1, o2, o3, o4 = torch.split(
-        output, [1, cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY, 1], dim=1)
-
-    return o1, o2, o3, o4
+        output, [1, 2*cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY, 1], dim=1)
+    ro1, ro2, ro3, ro4 = torch.split(
+        rot_output, [1, 2*cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY, 1], dim=1)
+    return o1, o2, o3, o4, ro1, ro2, ro3, ro4 
 
 
 if __name__ == "__main__":

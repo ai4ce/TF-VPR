@@ -5,6 +5,21 @@ import random
 import config as cfg
 from open3d import read_point_cloud
 import cv2
+import random
+
+def rotate_image(image, save_image = False):
+    dim_1 = image.shape[1]
+    cut_index = random.randint(0, dim_1-1)
+    list_range = list(range(dim_1))
+    new_list = list_range[cut_index:] + list_range[:cut_index]
+    if save_image:
+        print("here:"+str(os.path.join('./results/visualization_2/',"before_rotate.png")))
+        cv2.imwrite(os.path.join('./results/visualization_2/',"before_rotate.png"), image)
+    image =  image[:, new_list, :]
+    if save_image:
+        cv2.imwrite(os.path.join('./results/visualization_2/',"after_rotate.png"), image)
+    
+    return image
 
 def get_queries_dict(filename):
     # key:{'query':file,'positives':[files],'negatives:[files], 'neighbors':[keys]}
@@ -54,12 +69,14 @@ def load_pc_files(filenames,full_path):
 def load_image_file(filename, full_path=False):
     if full_path:
         image = cv2.imread(filename)
-        dim = (128*4,128)
+        dim = (64*4,64)
         image = cv2.resize(image, dim,interpolation = cv2.INTER_AREA)
     else:
         image = cv2.imread(os.path.join("/mnt/NAS/home/yuhang/videomap_v2/Adrian/", filename))
-        dim = (128*4,128)
+        dim = (64*4,64)
         image = cv2.resize(image, dim,interpolation = cv2.INTER_AREA)
+        # print("image2:"+str(image.shape))
+        # assert(0)
     image = np.asarray(image, dtype=np.float32)
 
     if(image.shape[2] != 3):
@@ -74,6 +91,15 @@ def load_image_files(filenames,full_path):
     for filename in filenames:
         image = load_image_file(filename, full_path=full_path)
         images.append(image)
+    images = np.asarray(images, dtype=np.float32)
+    return images
+
+def load_pos_neg_image_files(filenames,full_path):
+    images = []
+    for filename in filenames:
+        image = load_image_file(filename, full_path=full_path)
+        for i in range(2):
+            images.append(rotate_image(image,False))
     images = np.asarray(images, dtype=np.float32)
     return images
 
@@ -129,7 +155,7 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
         pos_files.append(QUERY_DICT[dict_value["positives"][i]]["query"])
     
     #print("pos_files:"+str(pos_files))
-    positives = load_image_files(pos_files,full_path=False)
+    positives = load_pos_neg_image_files(pos_files,full_path=False)
     '''
     cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/color_img1.jpg', positives[0])
     cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/color_img2.jpg', positives[1])
