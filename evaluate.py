@@ -45,18 +45,23 @@ def evaluate():
     print("ave_one_percent_recall:"+str(ave_one_percent_recall))
 
 
-def evaluate_model(model, epoch, save=False):
+def evaluate_model(model, optimizer, epoch, save=False, full_pickle=False):
     if save:
         torch.save({
             'state_dict': model.state_dict(),
+            'optimizer': optimizer.state_dict(),
+            'epoch': epoch,
             }, cfg.LOG_DIR + "checkpoint.pth.tar")
     
     #checkpoint = torch.load(cfg.LOG_DIR + "checkpoint.pth.tar")
     #saved_state_dict = checkpoint['state_dict']
     #model.load_state_dict(saved_state_dict)
-    DATABASE_SETS = get_sets_dict(cfg.EVAL_DATABASE_FILE)
-
-    QUERY_SETS = get_sets_dict(cfg.EVAL_QUERY_FILE)
+    if full_pickle:
+        DATABASE_SETS = get_sets_dict('generating_queries/evaluation_database_full.pickle')
+        QUERY_SETS = get_sets_dict('generating_queries/evaluation_query_full.pickle')
+    else:
+        DATABASE_SETS = get_sets_dict(cfg.EVAL_DATABASE_FILE)
+        QUERY_SETS = get_sets_dict(cfg.EVAL_QUERY_FILE)
     '''
     QUERY_SETS = []
     for i in range(4):
@@ -104,10 +109,13 @@ def evaluate_model(model, epoch, save=False):
     
     
     ### Save Evaluate vectors
-    file_name = os.path.join(cfg.RESULTS_FOLDER, "database"+str(epoch)+".npy")
-    print("np.array(DATABASE_VECTORS):"+str(np.array(DATABASE_VECTORS).shape))
-    np.save(file_name, np.array(DATABASE_VECTORS))
-    print("saving for DATABASE_VECTORS to "+str(file_name))
+    if full_pickle:
+        pass
+    else:
+        file_name = os.path.join(cfg.RESULTS_FOLDER, "database"+str(epoch)+".npy")
+        print("np.array(DATABASE_VECTORS):"+str(np.array(DATABASE_VECTORS).shape))
+        np.save(file_name, np.array(DATABASE_VECTORS))
+        print("saving for DATABASE_VECTORS to "+str(file_name))
     
     '''
     ave_recall = recall / count
@@ -132,7 +140,7 @@ def evaluate_model(model, epoch, save=False):
         output.write("Average Top 1% Recall:\n")
         output.write(str(ave_one_percent_recall))
     '''
-    return None
+    return DATABASE_VECTORS
 
 
 def get_latent_vectors(model, dict_to_process):
@@ -150,13 +158,13 @@ def get_latent_vectors(model, dict_to_process):
         for index in file_indices:
             file_names.append(dict_to_process[index]["query"])
         
-        queries = load_image_files(file_names,True)
+        queries = load_image_files(file_names,False)
         
         with torch.no_grad():
             feed_tensor = torch.from_numpy(queries).float()
             feed_tensor = feed_tensor.unsqueeze(1)
             feed_tensor = feed_tensor.to(device)
-            out = model(feed_tensor)
+            out,rot_out = model(feed_tensor)
       
         out = out.detach().cpu().numpy()
         out = np.squeeze(out)
@@ -176,13 +184,13 @@ def get_latent_vectors(model, dict_to_process):
 
         for index in file_indices:
             file_names.append(dict_to_process[index]["query"])
-        queries = load_image_files(file_names,True)
+        queries = load_image_files(file_names,False)
 
         with torch.no_grad():
             feed_tensor = torch.from_numpy(queries).float()
             feed_tensor = feed_tensor.unsqueeze(1)
             feed_tensor = feed_tensor.to(device)
-            o1 = model(feed_tensor)
+            o1, rot_o1 = model(feed_tensor)
 
         output = o1.detach().cpu().numpy()
         output = np.squeeze(output)

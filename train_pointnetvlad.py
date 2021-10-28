@@ -204,7 +204,8 @@ def train():
         log_string('EVALUATING...')
         cfg.OUTPUT_FILE = cfg.RESULTS_FOLDER + 'results_' + str(epoch) + '.txt'
 
-        # evaluate.evaluate_model(model,epoch,True)
+        DATABASE_VECTORS = evaluate.evaluate_model(model,optimizer,epoch,True,True)
+
         # asdasdasd
         # 
         #eval_recall = evaluate.evaluate_model(model,epoch,True)
@@ -227,8 +228,8 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
     train_file_idxs = np.arange(0, len(TRAINING_QUERIES.keys()))
     np.random.shuffle(train_file_idxs)
     
-    for i in range(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES):
-    #for i in range(1):
+    #for i in range(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES):
+    for i in range(1):
         batch_keys = train_file_idxs[i *
                                      cfg.BATCH_NUM_QUERIES:(i+1)*cfg.BATCH_NUM_QUERIES]
         q_tuples = []
@@ -470,7 +471,6 @@ def run_model(model, queries, positives, negatives, other_neg, require_grad=True
     
     feed_tensor.requires_grad_(require_grad)
     feed_tensor = feed_tensor.to(device)
-    print("feed_tensor:"+str(feed_tensor.shape))
     if require_grad:
         output, rot_output = model(feed_tensor)
     else:

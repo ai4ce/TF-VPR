@@ -21,6 +21,7 @@ r_mid = 25
 r_ind = 50
 
 filename = "gt_pose.mat"
+evaluate_all = True
 
 all_files = list(sorted(os.listdir(pre_dir)))
 all_files.remove(runs_folder+'.json')
@@ -37,12 +38,13 @@ def output_to_file(output, filename):
         print("Done ", filename)
 
 #########################################
-def construct_query_dict(df_centroids, df_database, traj_len,  filename_train, filename_test, test=False):
+def construct_query_dict(df_centroids, df_database, traj_len,  filename_train, filename_test, test=False, evaluate_all=False):
     database_trees = []
     test_trees = []
-    tree = KDTree(df_centroids[['x','y']])
-    ind_nn = tree.query_radius(df_centroids[['x','y']],r=nn_ind)
-    ind_r = tree.query_radius(df_centroids[['x','y']], r=r_ind)
+    if not evaluate_all:
+        tree = KDTree(df_centroids[['x','y']])
+        ind_nn = tree.query_radius(df_centroids[['x','y']],r=nn_ind)
+        ind_r = tree.query_radius(df_centroids[['x','y']], r=r_ind)
     queries_sets = []
     database_sets = []
     # for folder in range(folder_num):
@@ -52,92 +54,116 @@ def construct_query_dict(df_centroids, df_database, traj_len,  filename_train, f
         query = df_centroids.iloc[i]["file"]
         #print("folder:"+str(folder))
         #print("query:"+str(query))
-        queries[len(queries.keys())] = {"query":query,
-            "x":float(df_centroids.iloc[i]['x']),"y":float(df_centroids.iloc[i]['y'])}
+        if not evaluate_all:
+            queries[len(queries.keys())] = {"query":query,
+                "x":float(df_centroids.iloc[i]['x']),"y":float(df_centroids.iloc[i]['y'])}
+        else:
+            queries[len(queries.keys())] = {"query":query}
+
     queries_sets.append(queries)
-    test_tree = KDTree(df_centroids[['x','y']])
-    test_trees.append(test_tree)
+    if not evaluate_all:
+        test_tree = KDTree(df_centroids[['x','y']])
+        test_trees.append(test_tree)
 
     # for folder in range(folder_num):
     dataset = {}
     for i in range(len(df_database)):
         # temp_indx = folder*len(df_database)//folder_num + i
         data = df_database.iloc[i]["file"]
-        dataset[len(dataset.keys())] = {"query":data,
-                    "x":float(df_database.iloc[i]['x']),"y":float(df_database.iloc[i]['y']) }
+        if not evaluate_all:
+            dataset[len(dataset.keys())] = {"query":data,
+                        "x":float(df_database.iloc[i]['x']),"y":float(df_database.iloc[i]['y']) }
+        else:
+            dataset[len(dataset.keys())] = {"query":data}
     database_sets.append(dataset)
-    database_tree = KDTree(df_database[['x','y']])
-    database_trees.append(database_tree)
+    if not evaluate_all:
+        database_tree = KDTree(df_database[['x','y']])
+        database_trees.append(database_tree)
 
     if test:
-        for i in range(len(database_sets)):
-            tree = database_trees[i]
-            for j in range(len(queries_sets)):
-                if(i == j):
-                    continue
-                for key in range(len(queries_sets[j].keys())):
-                    coor = np.array(
-                        [[queries_sets[j][key]["x"],queries_sets[j][key]["y"]]])
-                    index = tree.query_radius(coor, r=r_mid)
-                    # indices of the positive matches in database i of each query (key) in test set j
-                    queries_sets[j][key][i] = index[0].tolist()
-    
+        if not evaluate_all:
+            for i in range(len(database_sets)):
+                tree = database_trees[i]
+                for j in range(len(queries_sets)):
+                    if(i == j):
+                        continue
+                    for key in range(len(queries_sets[j].keys())):
+                        coor = np.array(
+                            [[queries_sets[j][key]["x"],queries_sets[j][key]["y"]]])
+                        index = tree.query_radius(coor, r=r_mid)
+                        # indices of the positive matches in database i of each query (key) in test set j
+                        queries_sets[j][key][i] = index[0].tolist()
+        else:
+            pass
+        
     print("queries_sets:"+str(queries_sets))
     print("database_sets:"+str(database_sets))
     output_to_file(queries_sets, filename_test)
     output_to_file(database_sets, filename_train)
 
 # Initialize pandas DataFrame
-df_train = pd.DataFrame(columns=['file','x','y'])
-df_test = pd.DataFrame(columns=['file','x','y'])
+if evaluate_all:
+    df_train = pd.DataFrame(columns=['file'])
+    df_test = pd.DataFrame(columns=['file'])
+else:
+    df_train = pd.DataFrame(columns=['file','x','y'])
+    df_test = pd.DataFrame(columns=['file','x','y'])
 
-df_files_test = []
-df_files_train =[]
+if not evaluate_all:
+    df_files_test = []
+    df_files_train =[]
 
-df_locations_tr_x = []
-df_locations_tr_y = []
+    df_locations_tr_x = []
+    df_locations_tr_y = []
 
-df_locations_ts_x = []
-df_locations_ts_y = []
+    df_locations_ts_x = []
+    df_locations_ts_y = []
 
 
-df_locations = sio.loadmat(os.path.join(
-    pre_dir,filename))
+    df_locations = sio.loadmat(os.path.join(
+        pre_dir,filename))
 
-df_locations = df_locations['pose']
-df_locations = torch.tensor(df_locations, dtype = torch.float).cpu()
+    df_locations = df_locations['pose']
+    df_locations = torch.tensor(df_locations, dtype = torch.float).cpu()
+else:
+    df_files_test = []
+    df_files_train =[]
 
 #2038 Training 10 testing
 test_index = random.choices(range(traj_len), k=10)
 train_index = list(range(traj_len))
 #for i in test_index:
 #    train_index.pop(i)
+if not evaluate_all:
+    df_locations_tr_x.extend(list(df_locations[train_index,0]))
+    df_locations_tr_y.extend(list(df_locations[train_index,1]))
 
-df_locations_tr_x.extend(list(df_locations[train_index,0]))
-df_locations_tr_y.extend(list(df_locations[train_index,1]))
+    df_locations_ts_x.extend(list(df_locations[test_index,0]))
+    df_locations_ts_y.extend(list(df_locations[test_index,1]))
 
-df_locations_ts_x.extend(list(df_locations[test_index,0]))
-df_locations_ts_y.extend(list(df_locations[test_index,1]))
-
-for index in range(traj_len):
+for indx in range(traj_len):
     file_ = 'panoimg_'+str(indx)+'.png'
     if indx in test_index:
         df_files_test.append(os.path.join(file_))
     df_files_train.append(os.path.join(file_))
 
-
-print("df_locations_tr_x:"+str(len(df_locations_tr_x)))
-print("df_files_test:"+str(len(df_files_test)))
-
-df_train = pd.DataFrame(list(zip(df_files_train, df_locations_tr_x, df_locations_tr_y)),
-                                               columns =['file','x', 'y'])
-df_test = pd.DataFrame(list(zip(df_files_test, df_locations_ts_x, df_locations_ts_y)),
-                                               columns =['file','x', 'y'])
-
+if not evaluate_all:
+    df_train = pd.DataFrame(list(zip(df_files_train, df_locations_tr_x, df_locations_tr_y)),
+                                                columns =['file','x', 'y'])
+    df_test = pd.DataFrame(list(zip(df_files_test, df_locations_ts_x, df_locations_ts_y)),
+                                                columns =['file','x', 'y'])
+else:
+    df_train = pd.DataFrame(list(zip(df_files_train)),
+                                                columns =['file'])
+    df_test = pd.DataFrame(list(zip(df_files_test)),
+                                                columns =['file'])
 print("Number of training submaps: "+str(len(df_train['file'])))
 print("Number of non-disjoint test submaps: "+str(len(df_test['file'])))
 
 print("df_train:"+str(len(df_train)))
 
 #construct_query_dict(df_train,len(folders),"evaluation_database.pickle",False)
-construct_query_dict(df_test, df_train, traj_len,"evaluation_database.pickle", "evaluation_query.pickle", True)
+if not evaluate_all:
+    construct_query_dict(df_test, df_train, traj_len,"evaluation_database.pickle", "evaluation_query.pickle", True, evaluate_all)
+else:
+    construct_query_dict(df_test, df_train, traj_len,"evaluation_database_full.pickle", "evaluation_query_full.pickle", True, evaluate_all)
