@@ -194,10 +194,11 @@ def get_latent_vectors(model, dict_to_process):
 
 
 def get_recall(m, n, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS):
-
-    database_output = DATABASE_VECTORS[m]
-    queries_output = QUERY_VECTORS[n]
-    # print(len(queries_output))
+    print("m:"+str(m))
+    print("n:"+str(n))
+    database_output = DATABASE_VECTORS[m]  #2048*256
+    queries_output = QUERY_VECTORS[n]      #10*256
+    
     database_nbrs = KDTree(database_output)
     num_neighbors = 25
     recall = [0] * num_neighbors
@@ -205,15 +206,22 @@ def get_recall(m, n, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS):
     top1_similarity_score = []
     one_percent_retrieved = 0
     threshold = max(int(round(len(database_output)/100.0)), 1)
-
+    
     num_evaluated = 0
     for i in range(len(queries_output)):
         true_neighbors = QUERY_SETS[n][i][m]
+        print("QUERY_SETS[n][i]:"+str(QUERY_SETS[n][i]))
+        print("true_neighbors:"+str(true_neighbors))
         if(len(true_neighbors) == 0):
             continue
         num_evaluated += 1
         distances, indices = database_nbrs.query(
             np.array([queries_output[i]]),k=num_neighbors)
+        
+        indices = indices + n*2048
+        print("indices:"+str(indices))
+        print("indices:"+str(indices.shape))
+        assert(0)
         for j in range(len(indices[0])):
             if indices[0][j] in true_neighbors:
                 if(j == 0):
