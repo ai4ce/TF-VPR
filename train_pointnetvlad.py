@@ -202,10 +202,12 @@ def train():
         log_string('EVALUATING...')
         cfg.OUTPUT_FILE = cfg.RESULTS_FOLDER + 'results_' + str(epoch) + '.txt'
 
-        eval_recall = evaluate.evaluate_model(model,optimizer,epoch,True)
-        log_string('EVAL RECALL: %s' % str(eval_recall))
+        eval_recall_1, eval_recall_5, eval_recall_10 = evaluate.evaluate_model(model,optimizer,epoch,True)
+        log_string('EVAL RECALL_1: %s' % str(eval_recall_1))
+        log_string('EVAL RECALL_5: %s' % str(eval_recall_5))
+        log_string('EVAL RECALL_10: %s' % str(eval_recall_10))
 
-        train_writer.add_scalar("Val Recall", eval_recall, epoch)
+        train_writer.add_scalar("Val Recall", eval_recall_1, eval_recall_5, eval_recall_10, epoch)
 
 
 def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):

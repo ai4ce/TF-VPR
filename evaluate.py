@@ -74,10 +74,18 @@ def evaluate_model(model,optimizer,epoch,save=False):
     if not os.path.exists(cfg.RESULTS_FOLDER):
         os.mkdir(cfg.RESULTS_FOLDER)
 
-    recall = np.zeros(25)
+    recall_1 = np.zeros(25)
+    recall_5 = np.zeros(25)
+    recall_10 = np.zeros(25)
     count = 0
-    similarity = []
+
+    similarity_1 = []
+    similarity_5 = []
+    similarity_10 = []
+
     one_percent_recall = []
+    five_percent_recall = []
+    ten_percent_recall = []
 
     DATABASE_VECTORS = []
     QUERY_VECTORS = []
@@ -93,13 +101,23 @@ def evaluate_model(model,optimizer,epoch,save=False):
         for n in range(len(QUERY_SETS)):
             if (m == n):
                 continue
-            pair_recall, pair_similarity, pair_opr = get_recall(
+            pair_recall_1, pair_recall_5, pair_recall_10, pair_similarity_1, pair_similarity_5, pair_similarity_10, pair_opr_1, pair_opr_5, pair_opr_10 = get_recall(
                 m, n, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS)
-            recall += np.array(pair_recall)
+            recall_1 += np.array(pair_recall_1)
+            recall_5 += np.array(pair_recall_5)
+            recall_10 += np.array(pair_recall_10)
+
             count += 1
-            one_percent_recall.append(pair_opr)
-            for x in pair_similarity:
-                similarity.append(x)
+            one_percent_recall.append(pair_opr_1)
+            five_percent_recall.append(pair_opr_5)
+            ten_percent_recall.append(pair_opr_10)
+
+            for x in pair_similarity_1:
+                similarity_1.append(x)
+            for x in pair_similarity_5:
+                similarity_5.append(x)
+            for x in pair_similarity_10:
+                similarity_10.append(x)
     #########
     
     
@@ -108,29 +126,47 @@ def evaluate_model(model,optimizer,epoch,save=False):
     np.save(file_name, np.array(DATABASE_VECTORS))
     print("saving for DATABASE_VECTORS to "+str(file_name))
     
-    ave_recall = recall / count
+    ave_recall_1 = recall_1 / count
+    ave_recall_5 = recall_5 / count
+    ave_recall_10 = recall_10 / count
     # print(ave_recall)
 
     # print(similarity)
-    average_similarity = np.mean(similarity)
+    average_similarity_1 = np.mean(similarity_1)
+    average_similarity_5 = np.mean(similarity_5)
+    average_similarity_10 = np.mean(similarity_10)
     # print(average_similarity)
 
     ave_one_percent_recall = np.mean(one_percent_recall)
+    ave_five_percent_recall = np.mean(five_percent_recall)
+    ave_ten_percent_recall = np.mean(ten_percent_recall)
     # print(ave_one_percent_recall)
     
     #print("os.path.join(/home/cc/PointNet-torch2,cfg.OUTPUT_FILE,log.txt):"+str(os.path.join("/home/cc/PointNet-torch2",cfg.OUTPUT_FILE,"log.txt")))
     #assert(0)
     with open(os.path.join(cfg.OUTPUT_FILE), "w") as output:
-        output.write("Average Recall @N:\n")
-        output.write(str(ave_recall))
+        output.write("Average Recall @1:\n")
+        output.write(str(ave_recall_1)+"\n")
+        output.write("Average Recall @5:\n")
+        output.write(str(ave_recall_5)+"\n")
+        output.write("Average Recall @10:\n")
+        output.write(str(ave_recall_10)+"\n")
         output.write("\n\n")
-        output.write("Average Similarity:\n")
-        output.write(str(average_similarity))
+        output.write("Average Similarity_1:\n")
+        output.write(str(average_similarity_1)+"\n")
+        output.write("Average Similarity_5:\n")
+        output.write(str(average_similarity_5)+"\n")
+        output.write("Average Similarity_10:\n")
+        output.write(str(average_similarity_10)+"\n")
         output.write("\n\n")
         output.write("Average Top 1% Recall:\n")
-        output.write(str(ave_one_percent_recall))
+        output.write(str(ave_one_percent_recall)+"\n")
+        output.write("Average Top 5% Recall:\n")
+        output.write(str(ave_five_percent_recall)+"\n")
+        output.write("Average Top 10% Recall:\n")
+        output.write(str(ave_ten_percent_recall)+"\n")
     
-    return ave_one_percent_recall
+    return ave_one_percent_recall, ave_five_percent_recall, ave_ten_percent_recall
 
 
 def get_latent_vectors(model, dict_to_process):
@@ -199,37 +235,52 @@ def get_recall(m, n, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS):
     
     database_nbrs = KDTree(database_output)
     num_neighbors = 25
-    recall = [0] * num_neighbors
 
-    top1_similarity_score = []
-    one_percent_retrieved = 0
-    threshold = max(int(round(len(database_output)/100.0)), 1)
-    
-    num_evaluated = 0
-    for i in range(len(queries_output)):
-        true_neighbors = QUERY_SETS[n][i][m]
-        if(len(true_neighbors) == 0):
-            continue
-        num_evaluated += 1
-        distances, indices = database_nbrs.query(
-            np.array([queries_output[i]]),k=num_neighbors)
+    recalls = []
+    similarity_scores = []
+    N_percent_recalls = []
+
+    percent_array = [100, 20, 10]
+    for percent in percent_array:
+        recall_N = [0] * num_neighbors
+        topN_similarity_score = []
+        N_percent_retrieved = 0
+
+        threshold = max(int(round(len(database_output)/percent)), 1)
         
-        #indices = indices + n*2048
-        for j in range(len(indices[0])):
-            if indices[0][j] in true_neighbors:
-                if(j == 0):
-                    similarity = np.dot(
-                        queries_output[i], database_output[indices[0][j]])
-                    top1_similarity_score.append(similarity)
-                recall[j] += 1
-                break
+        num_evaluated = 0
+        for i in range(len(queries_output)):
+            true_neighbors = QUERY_SETS[n][i][m]
+            if(len(true_neighbors) == 0):
+                continue
+            num_evaluated += 1
+            distances, indices = database_nbrs.query(
+                np.array([queries_output[i]]),k=num_neighbors)
+            
+            #indices = indices + n*2048
+            for j in range(len(indices[0])):
+                if indices[0][j] in true_neighbors:
+                    if(j == 0):
+                        similarity = np.dot(
+                            queries_output[i], database_output[indices[0][j]])
+                        topN_similarity_score.append(similarity)
+                    recall_N[j] += 1
+                    break
 
-        if len(list(set(indices[0][0:threshold]).intersection(set(true_neighbors)))) > 0:
-            one_percent_retrieved += 1
-    
-    one_percent_recall = (one_percent_retrieved/float(num_evaluated))*100
-    recall = (np.cumsum(recall)/float(num_evaluated))*100
-    return recall, top1_similarity_score, one_percent_recall
+            if len(list(set(indices[0][0:threshold]).intersection(set(true_neighbors)))) > 0:
+                N_percent_retrieved += 1
+        
+        N_percent_recall = (N_percent_retrieved/float(num_evaluated))*100
+        recall_N = (np.cumsum(recall_N)/float(num_evaluated))*100
+        recalls.append(recall_N)
+        similarity_scores.append(topN_similarity_score)
+        N_percent_recalls.append(N_percent_recall)
+
+    recall_1, recall_5, recall_10 = recalls[0], recalls[1], recalls[2] 
+    top1_similarity_score, top5_similarity_score, top10_similarity_score = similarity_scores[0], similarity_scores[1], similarity_scores[2] 
+    one_percent_recall, five_percent_recall, ten_percent_recall = N_percent_recalls[0], N_percent_recalls[1], N_percent_recalls[2] 
+
+    return recall_1, recall_5, recall_10, top1_similarity_score, top5_similarity_score, top10_similarity_score, one_percent_recall, five_percent_recall, ten_percent_recall
 
 
 if __name__ == "__main__":
