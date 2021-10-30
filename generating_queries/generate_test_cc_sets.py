@@ -70,7 +70,7 @@ def construct_query_dict(df_centroids, df_database, folder_num,  filename_train,
             queries[len(queries.keys())] = {"query":query,
                 "x":float(df_centroids.iloc[temp_indx]['x']),"y":float(df_centroids.iloc[temp_indx]['y'])}
         queries_sets.append(queries)
-        test_tree = KDTree(df_centroids[['x','y']])
+        test_tree = KDTree(df_centroids[folder*10:(folder+1)*10][['x','y']])
         test_trees.append(test_tree)
 
     for folder in range(folder_num):
@@ -80,8 +80,9 @@ def construct_query_dict(df_centroids, df_database, folder_num,  filename_train,
             data = df_database.iloc[temp_indx]["file"]
             dataset[len(dataset.keys())] = {"query":data,
                      "x":float(df_database.iloc[temp_indx]['x']),"y":float(df_database.iloc[temp_indx]['y'])}
+        
         database_sets.append(dataset)
-        database_tree = KDTree(df_database[['x','y']])
+        database_tree = KDTree(df_database[folder*2048:(folder+1)*2048][['x','y']])
         database_trees.append(database_tree)
 
     if test:
@@ -94,7 +95,6 @@ def construct_query_dict(df_centroids, df_database, folder_num,  filename_train,
                     coor = np.array(
                         [[queries_sets[j][key]["x"],queries_sets[j][key]["y"]]])
                     index = tree.query_radius(coor, r=25)
-                    
                     # indices of the positive matches in database i of each query (key) in test set j
                     queries_sets[j][key][i] = index[0].tolist()
     

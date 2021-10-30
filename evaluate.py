@@ -194,8 +194,6 @@ def get_latent_vectors(model, dict_to_process):
 
 
 def get_recall(m, n, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS):
-    print("m:"+str(m))
-    print("n:"+str(n))
     database_output = DATABASE_VECTORS[m]  #2048*256
     queries_output = QUERY_VECTORS[n]      #10*256
     
@@ -210,18 +208,13 @@ def get_recall(m, n, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS):
     num_evaluated = 0
     for i in range(len(queries_output)):
         true_neighbors = QUERY_SETS[n][i][m]
-        print("QUERY_SETS[n][i]:"+str(QUERY_SETS[n][i]))
-        print("true_neighbors:"+str(true_neighbors))
         if(len(true_neighbors) == 0):
             continue
         num_evaluated += 1
         distances, indices = database_nbrs.query(
             np.array([queries_output[i]]),k=num_neighbors)
         
-        indices = indices + n*2048
-        print("indices:"+str(indices))
-        print("indices:"+str(indices.shape))
-        assert(0)
+        #indices = indices + n*2048
         for j in range(len(indices[0])):
             if indices[0][j] in true_neighbors:
                 if(j == 0):
@@ -233,7 +226,7 @@ def get_recall(m, n, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS):
 
         if len(list(set(indices[0][0:threshold]).intersection(set(true_neighbors)))) > 0:
             one_percent_retrieved += 1
-
+    
     one_percent_recall = (one_percent_retrieved/float(num_evaluated))*100
     recall = (np.cumsum(recall)/float(num_evaluated))*100
     return recall, top1_similarity_score, one_percent_recall
