@@ -199,9 +199,6 @@ def train(scene_index):
         #potential_positives = sio.loadmat("results/trusted_positives_folder/potential_positives_"+str(starting_epoch)+".mat")['data']
         #potential_distributions = sio.loadmat("results/trusted_positives_folder/potential_distributions_"+str(starting_epoch)+".mat")['data']
         
-        #print("trusted_positives:"+str(trusted_positives.shape))
-        #print("potential_positives:"+str(potential_positives.shape))
-        #print("potential_distributions:"+str(potential_distributions.shape))
     else:
         starting_epoch = 0
 
