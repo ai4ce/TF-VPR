@@ -97,7 +97,6 @@ class NetVLAD_Image(nn.Module):
         soft_assign = self.conv(x).view(N, self.num_clusters, -1)
         soft_assign = F.softmax(soft_assign, dim=1)
         x_flatten = x.view(N, C, -1)
-        
         # calculate residuals to each clusters
         vlad = torch.zeros([N, self.num_clusters, C], dtype=x.dtype, layout=x.layout, device=x.device)
         for C in range(self.num_clusters): # slower than non-looped, but lower memory usage 
@@ -154,7 +153,7 @@ class NetVLAD_Image2(nn.Module):
         soft_assign = self.conv(x).view(N, self.num_clusters, -1)
         soft_assign = F.softmax(soft_assign, dim=1)
         x_flatten = x.view(N, C, -1)                                                                                                        
-
+        
         # calculate residuals to each clusters
         residual = x_flatten.expand(self.num_clusters, -1, -1, -1).permute(1, 0, 2, 3) - \
                    self.centroids.expand(x_flatten.size(-1), -1, -1).permute(1, 2, 0).unsqueeze(0)
@@ -464,15 +463,25 @@ class ImageNetVlad(nn.Module):
         
         dim = list(self.obs_feat_extractor.parameters())[-1].shape[0]
         self.net_vlad = NetVLAD_Image(num_clusters=32, dim=512, vladv2=True)
+        self.fc1 = nn.Linear(16384, 4096)
+        self.bn1 = nn.BatchNorm1d(4096) 
+        self.fc2 = nn.Linear(4096, output_dim)
+        self.bn2 = nn.BatchNorm1d(output_dim) 
+        self.relu = nn.ReLU()
 
     def forward(self, x):
-        rot_x = rotate_images(x)
+        #rot_x = rotate_images(x)
         x = self.obs_feat_extractor(x)
-        rot_x = self.obs_feat_extractor(rot_x)
+        #rot_x = self.obs_feat_extractor(rot_x)
         x = self.net_vlad(x)
-        rot_x = self.net_vlad(rot_x)
+        #rot_x = self.net_vlad(rot_x)
+        x = self.relu(self.bn1(self.fc1(x)))
+        x = self.relu(self.bn2(self.fc2(x)))
 
-        return x, rot_x
+        #rot_x = self.relu(self.bn1(self.fc1(rot_x)))
+        #rot_x = self.relu(self.bn2(self.fc2(rot_x)))
+
+        return x#, rot_x
 
 
 if __name__ == '__main__':

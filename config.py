@@ -4,14 +4,15 @@ GRID_X = 1080
 GRID_Y = 1920
 SIZED_GRID_X = 64*4
 SIZED_GRID_Y = 64
-FEATURE_OUTPUT_DIM = 16384
+FEATURE_OUTPUT_DIM = 512
 RESULTS_FOLDER = "results/"
 OUTPUT_FILE = "results/results.txt"
+file_name = "Springhill"
 
 LOG_DIR = 'log/'
 MODEL_FILENAME = "model.ckpt"
 
-DATASET_FOLDER = '../../benchmark_datasets/'
+DATASET_FOLDER = '/mnt/NAS/home/yiming/habitat/Springhill'
 
 # TRAIN
 BATCH_NUM_QUERIES = 2
@@ -33,11 +34,13 @@ BN_DECAY_CLIP = 0.99
 
 RESUME = False
 
-TRAIN_FILE = 'generating_queries/training_queries_baseline.pickle'
-TEST_FILE = 'generating_queries/test_queries_baseline.pickle'
+#scene_names = ['Micanopy','Nimmons','Reyno','Spotswood','Springhill','Stilwell']
+
+TRAIN_FILE = 'generating_queries/train_pickle/training_queries_baseline_0.pickle'
+TEST_FILE = 'generating_queries/train_pickle/test_queries_baseline_0.pickle'
 
 # LOSS
-LOSS_FUNCTION = 'triplet_RI'
+LOSS_FUNCTION = 'triplet'
 LOSS_LAZY = True
 TRIPLET_USE_BEST_POSITIVES = False
 LOSS_IGNORE_ZERO_BATCH = False
@@ -46,6 +49,7 @@ LOSS_IGNORE_ZERO_BATCH = False
 EVAL_BATCH_SIZE = 2
 EVAL_POSITIVES_PER_QUERY = 4
 EVAL_NEGATIVES_PER_QUERY = 12
+INIT_TRUST = 3
 
 EVAL_DATABASE_FILE = 'generating_queries/evaluation_database.pickle'
 EVAL_QUERY_FILE = 'generating_queries/evaluation_query.pickle'

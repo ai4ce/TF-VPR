@@ -12,28 +12,6 @@ import config as cfg
 import scipy.io as sio
 import torch
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-base_path = cfg.DATASET_FOLDER
-
-runs_folder = "dm_data/"
-filename = "gt_pose.mat"
-pointcloud_fols = "/pointcloud_20m_10overlap/"
-
-print("cfg.DATASET_FOLDER:"+str(cfg.DATASET_FOLDER))
-
-cc_dir = "/home/cc/"
-all_folders = sorted(os.listdir(os.path.join(cc_dir,runs_folder)))
-
-folders = []
-
-# All runs are used for training (both full and partial)
-index_list = range(10)
-print("Number of runs: "+str(len(index_list)))
-for index in index_list:
-    folders.append(all_folders[index])
-print(folders)
-
-
 #####For training and test data split#####
 
 def check_in_test_set(northing, easting, points, x_width, y_width):
@@ -65,6 +43,28 @@ def construct_query_dict(df_centroids, filename):
         pickle.dump(queries, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     print("Done ", filename)
+
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+base_path = cfg.DATASET_FOLDER
+
+runs_folder = "dm_data/"
+filename = "gt_pose.mat"
+pointcloud_fols = "/pointcloud_20m_10overlap/"
+
+print("cfg.DATASET_FOLDER:"+str(cfg.DATASET_FOLDER))
+
+cc_dir = "/home/cc/"
+all_folders = sorted(os.listdir(os.path.join(cc_dir,runs_folder)))
+
+folders = []
+
+# All runs are used for training (both full and partial)
+index_list = range(10)
+print("Number of runs: "+str(len(index_list)))
+for index in index_list:
+    folders.append(all_folders[index])
+print(folders)
 
 
 # Initialize pandas DataFrame
