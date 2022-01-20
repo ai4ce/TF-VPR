@@ -19,6 +19,7 @@ runs_folder = "dm_data"
 filename = "gt_pose.mat"
 pointcloud_fols = "/pointcloud_20m_10overlap/"
 
+evaluate_all = True
 print("cfg.DATASET_FOLDER:"+str(cfg.DATASET_FOLDER))
 
 cc_dir = "/home/cc/"
@@ -27,7 +28,10 @@ all_folders = sorted(os.listdir(os.path.join(cc_dir,runs_folder)))
 folders = []
 
 # All runs are used for training (both full and partial)
-index_list = [11,14,15,17]
+if evaluate_all:
+    index_list = list(range(18))
+else:
+    index_list = [5,6,7,9]
 print("Number of runs: "+str(len(index_list)))
 for index in index_list:
     print("all_folders[index]:"+str(all_folders[index]))
@@ -62,8 +66,8 @@ def construct_query_dict(df_centroids, df_database, folder_num,  filename_train,
     database_sets = []
     for folder in range(folder_num):
         queries = {}
-        for i in range(len(df_centroids)//10):
-            temp_indx = folder*(len(df_centroids)//10) + i
+        for i in range(len(df_centroids)//folder_num):
+            temp_indx = folder*(len(df_centroids)//folder_num) + i
             query = df_centroids.iloc[temp_indx]["file"]
             #print("folder:"+str(folder))
             #print("query:"+str(query))
@@ -153,7 +157,8 @@ print("Number of non-disjoint test submaps: "+str(len(df_test['file'])))
 
 print("df_train:"+str(len(df_train)))
 
-
-
 #construct_query_dict(df_train,len(folders),"evaluation_database.pickle",False)
-construct_query_dict(df_test, df_train, len(folders),"evaluation_database.pickle", "evaluation_query.pickle", True)
+if not evaluate_all:
+    construct_query_dict(df_test, df_train, len(folders),"evaluation_database.pickle", "evaluation_query.pickle", True)
+else:
+    construct_query_dict(df_test, df_train, len(folders),"evaluation_database_full.pickle", "evaluation_query_full.pickle", True)
