@@ -69,14 +69,22 @@ def load_pc_files(filenames,full_path):
 def load_image_file(filename, full_path=False):
     if full_path:
         image = cv2.imread(filename)
-        dim = (64*4,64)
+        '''
+        dim = (cfg.SIZED_GRID_X,cfg.SIZED_GRID_Y)
+        print("image:"+str(image.shape))
         image = cv2.resize(image, dim,interpolation = cv2.INTER_AREA)
+        print("image_after:"+str(image.shape))
+        assert(0)
+        '''
     else:
-        image = cv2.imread(os.path.join("/mnt/NAS/home/yuhang/videomap_v2/Adrian/", filename))
-        dim = (64*4,64)
+        image = cv2.imread(os.path.join("/mnt/NAS/data/cc_data/", filename))
+        '''
+        dim = (cfg.SIZED_GRID_X,cfg.SIZED_GRID_Y)
+        print("image:"+str(image.shape))
         image = cv2.resize(image, dim,interpolation = cv2.INTER_AREA)
-        # print("image2:"+str(image.shape))
-        # assert(0)
+        print("image_after:"+str(image.shape))
+        assert(0)
+        '''
     image = np.asarray(image, dtype=np.float32)
 
     if(image.shape[2] != 3):
@@ -98,8 +106,11 @@ def load_pos_neg_image_files(filenames,full_path):
     images = []
     for filename in filenames:
         image = load_image_file(filename, full_path=full_path)
+        '''
         for i in range(2):
             images.append(rotate_image(image,False))
+        '''
+        images.append(image)
     images = np.asarray(images, dtype=np.float32)
     return images
 
