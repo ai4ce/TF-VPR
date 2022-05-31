@@ -120,12 +120,6 @@ LOG_FOUT.write(str(FLAGS) + '\n')
 cfg.RESULTS_FOLDER = FLAGS.results_dir
 print("cfg.RESULTS_FOLDER:"+str(cfg.RESULTS_FOLDER))
 
-# Load dictionary of training queries
-#TRAINING_QUERIES = get_queries_dict(cfg.TRAIN_FILE)
-#TEST_QUERIES = get_queries_dict(cfg.TEST_FILE)
-#TRAINING_QUERIES_init = get_queries_dict(cfg.TRAIN_FILE)
-#TEST_QUERIES_init = get_queries_dict(cfg.TEST_FILE)
-
 cfg.BN_INIT_DECAY = 0.5
 cfg.BN_DECAY_DECAY_RATE = 0.5
 BN_DECAY_DECAY_STEP = float(cfg.DECAY_STEP)
@@ -212,20 +206,6 @@ def train():
 
         model.load_state_dict(saved_state_dict)
         optimizer.load_state_dict(checkpoint['optimizer'])
-        '''
-        model = PNV.PointNetVlad(global_feat=True, feature_transform=True,
-                                max_pool=False, output_dim=cfg.FEATURE_OUTPUT_DIM, num_points=cfg.NUM_POINTS)
-        model = model.to(device)
-        parameters = filter(lambda p: p.requires_grad, model.parameters())
-        if cfg.OPTIMIZER == 'momentum':
-            optimizer = torch.optim.SGD(
-                    parameters, learning_rate, momentum=cfg.MOMENTUM)
-        elif cfg.OPTIMIZER == 'adam':
-            optimizer = torch.optim.Adam(parameters, learning_rate)
-        else:
-            optimizer = None
-            exit(0)
-        '''
         print("starting_epoch:"+str(starting_epoch))
         trusted_positives = sio.loadmat("results/trusted_positives_folder/trusted_positives_"+str(starting_epoch)+".mat")['data']
         # print("trusted_positives:"+str(trusted_positives))
@@ -264,15 +244,12 @@ def train():
         all_files.remove('gt_pose.png')
         for all_file in all_files:
             all_files_reshape.append(os.path.join(cfg.DATASET_FOLDER,folder,all_file))
-    '''
-    print("all_files_reshape:"+str(len(all_files_reshape)))
-    print("all_files_reshape:"+str((all_files_reshape[100])))
-    print("all_files_reshape:"+str((all_files_reshape[3000])))
-    '''
+    
     for epoch in range(starting_epoch, cfg.MAX_EPOCH):
         print(epoch)
         print()
-        '''
+        
+        ''' # soft warmup
         if epoch == 5:
             model = PNV.PointNetVlad(global_feat=True, feature_transform=True,
                              max_pool=False, output_dim=cfg.FEATURE_OUTPUT_DIM, num_points=cfg.NUM_POINTS)
@@ -289,22 +266,17 @@ def train():
                 optimizer = None
                 exit(0)
         '''
-        # print("potential_positives_:"+str(np.array(potential_positives)))
-        # print("potential_distributions_:"+str(np.array(potential_distributions)))
         
         if trusted_positives is not None:
             sio.savemat("results/trusted_positives_folder/trusted_positives_"+str(epoch)+".mat",{'data':trusted_positives})
             sio.savemat("results/trusted_positives_folder/potential_positives_"+str(epoch)+".mat",{'data':potential_positives})
             sio.savemat("results/trusted_positives_folder/potential_distributions_"+str(epoch)+".mat",{'data':potential_distributions})
         
-        # print("trusted_positives:"+str(trusted_positives[0][0]))
-        # assert(0)
         generate_dataset.generate(epoch, definite_positives=trusted_positives, inside=False)  
         TRAIN_FILE = 'generating_queries/train_pickle/training_queries_baseline_'+str(epoch)+'.pickle'
         TEST_FILE = 'generating_queries/train_pickle/test_queries_baseline_'+str(epoch)+'.pickle'
         DB_FILE = 'generating_queries/train_pickle/db_queries_baseline_'+str(epoch)+'.pickle'
 
-        # data_index = data_index+1
         # Load dictionary of training queries
         TRAINING_QUERIES = get_queries_dict(TRAIN_FILE)
         TEST_QUERIES = get_queries_dict(TEST_FILE)
@@ -333,163 +305,28 @@ def train():
             potential_distributions = []
             trusted_positives = []
             
-            # for index in range(db_vec.shape[0]):
-            # index_list = list(range(db_vec.shape[0]))
-            #print("indice:"+str(indice.shape))
             potential_positives = indice
             potential_distributions = weight
-            # print("potential_positives:"+str(np.array(potential_positives).shape))
-            # print("potential_distributions:"+str(np.array(potential_distributions).shape))
-
-            #pool = Pool(processes=db_vec.shape[0])
-            #inputs = [(True, db_vec, rank, [], [], None, folders, thresholds, all_files_reshape, weight, indice, epoch) for rank in range(db_vec.shape[0])]
-            #results = pool.starmap(VFC.Compute_positive, inputs)
+            
             for rank in range(db_vec.shape[0]):
                 results = VFC.Compute_positive(True, db_vec, rank, [], [], None, folders, thresholds, all_files_reshape, weight, indice, epoch)
                 trusted_positives.append(results[2])
-            # print("results:"+str(results[0][2][2]))
-            # assert(0)
-            '''
-            for i in range(len(results)):
-                trusted_positives.append(results[i][2])
-            '''
             
-            #_, _, trusted_positives
-
-            # trusted_positives = result
-
-            # with Pool(db_vec.shape[0]) as p:
-                # trusted_positives.append(VFC.Compute_positive(True, db_vec, index_list, [], [], None, folders, thresholds))
-
-                # trusted_positive = []
-                # db_vec_all = db_vec.reshape(-1,db_vec.shape[-1])
-                # print("db_vec_all:"+str(db_vec_all.shape))
-                # nbrs = NearestNeighbors(n_neighbors=cfg.EVAL_NEAREST, algorithm='ball_tree').fit(db_vec_all)
-                # distance, indice = nbrs.kneighbors(db_vec_all)
-                # #print("distance:"+str(np.exp(-distance*10)[0]))
-                # #print("indice:"+str(indice[0]))
-                # weight = np.exp(-distance*10).tolist()
-
-                # potential_positives.append(indice.tolist())
-                # potential_distributions.append(np.exp(-distance*10).tolist())
-                # #print("np.array(indice)[np.argsort(weight)[::-1][0]]:"+str(np.array(indice)[np.argsort(weight[:,::-1])].shape))
-                # #assert(0)
-                # for index2 in range(db_vec.shape[1]):
-                #     pre_trusted_positive = np.array(indice[index2])[np.argsort(weight[index2])[::-1][:(cfg.INIT_TRUST)]]
-                #     pre_trusted_positive = np.setdiff1d(pre_trusted_positive,index2)
-                #     folder_path = os.path.join(cfg.DATASET_FOLDER,folders[index])
-                #     '''
-                #     print("index2:"+str(index2))
-                #     print("pre_trusted_positive:"+str(pre_trusted_positive))
-                #     '''
-                #     _, trusted_pos = VFC.filter_trusted_pos(all_files_reshape, index2, pre_trusted_positive, cal_thresholds=thresholds[index][index2])
-                #     print("trusted_pos:"+str(trusted_pos))
-                #     #if len(trusted_pos)!=0:
-                #     #    print("index:"+str(index2))
-                    
-                #     trusted_positive.append(trusted_pos)
-                #trusted_positives.append(trusted_positive)
         else:
             new_potential_positives = []
             new_potential_distributions = []
             new_trusted_positives = []
 
-            #pool = Pool(processes=db_vec.shape[0])
-            # print("potential_positives:"+str(potential_positives.shape))
-            # print("potential_distributions:"+str(potential_distributions.shape))
-            # print("trusted_positives:"+str(trusted_positives.shape))
-
-            #inputs = [(False, db_vec, rank, potential_positives, potential_distributions, trusted_positives, folders, thresholds, all_files_reshape, weight, indice, epoch) for rank in range(db_vec.shape[0])]
-            #results = pool.starmap(VFC.Compute_positive, inputs)
             for rank in range(db_vec.shape[0]):
                 results = VFC.Compute_positive(False, db_vec, rank, potential_positives, potential_distributions, trusted_positives, folders, thresholds, all_files_reshape, weight, indice, epoch)
                 new_potential_positives.append(results[0])
                 new_potential_distributions.append(results[1])
                 new_trusted_positives.append(results[2])
-            # print("results:"+str(len(results)))
-            # print("results[0]:"+str(len(results[0])))
-            # print("results[0][0]:"+str((results[0][0][0])))
-
-
-            # # print("results:"+str(results))
-            # # print("results_1:"+str(np.array(results[0][1][0]).shape))
-            # assert(0)
-            '''
-            for i in range(len(results)):
-                new_potential_positives.append(results[i][0])
-                new_potential_distributions.append(results[i][1])
-                new_trusted_positives.append(results[i][2])
-            '''
-            # print("new_potential_positives[0]:"+str(np.array(new_potential_positives[0]).shape))
-            # print("new_potential_distributions:"+str(np.array(new_potential_distributions).shape))
-            # print("new_trusted_positives:"+str(np.array(new_trusted_positives[0][0])))
-            # print("result:"+str(result))
-            # trusted_positives = result
-
-            # with Pool(db_vec.shape[0]) as p:
-            #     new_potential_positive, new_potential_distribution, new_trusted_positive = VFC.Compute_positive(False, db_vec, index, potential_positives, potential_distributions, trusted_positives, folders, thresholds)
-                # new_potential_positive = []
-                # new_potential_distribution = []
-                # new_trusted_positive = []
-                # db_vec_all = db_vec.reshape(-1,db_vec.shape[-1])
-                # nbrs = NearestNeighbors(n_neighbors=cfg.EVAL_NEAREST, algorithm='ball_tree').fit(db_vec_all)
-                # distance, indice = nbrs.kneighbors(db_vec_all)
-                # weight = np.exp(-distance*10).tolist()
-                # for index2 in range(db_vec.shape[1]):
-                    
-                    # pos_set = potential_positives[index][index2]
-                    # pos_dis = potential_distributions[index][index2]
-                    # for count,inc in enumerate(indice[index2]):
-                    #     if inc not in pos_set:
-                    #         pos_set.append(inc)
-                    #         pos_dis.append(weight[index2][count])
-                    #     else:
-                    #         pos_dis[pos_set.index(inc)] = pos_dis[pos_set.index(inc)] + weight[index2][count] # if the element exists, distribution +1
-                    # #print("np.argsort:",np.argsort(pos_dis)[::-1][:5])
-                    # #print("pos_set[np.argsort(pos_dis)[:5]:]"+str(np.array(pos_set)[np.argsort(pos_dis)[::-1][:5]]))
-                    # #assert(0)
-                    # new_potential_positive.append(pos_set)
-                    # new_potential_distribution.append(pos_dis)
-                    # '''
-                    # if data_index-1 >=5:
-                    #     data_index_constraint = 6
-                    # else:
-                    #     data_index_constraint = data_index
-                    # '''
-                    # folder_path = os.path.join(cfg.DATASET_FOLDER,folders[index])
-                    # all_files = list(sorted(os.listdir(folder_path)))
-                    # all_files.remove('gt_pose.mat')
-
-                    # previous_trusted_positive = trusted_positives[index][index2]
-                    # pre_trusted_positive = np.array(pos_set)[np.argsort(pos_dis)[::-1][:(cfg.INIT_TRUST+int(data_index-1)//cfg.INIT_TRUST_SCALAR)]]
-                    # #print("pre_trusted_positive:"+str(pre_trusted_positive.shape))
-                    # pre_trusted_positive = np.setdiff1d(pre_trusted_positive, previous_trusted_positive)
-                    # pre_trusted_positive = np.setdiff1d(pre_trusted_positive, index2)
-                    # print("index2:"+str(index2))
-                    # print("pre_trusted_positive:"+str(pre_trusted_positive))
-                    # _, filtered_trusted_positive = VFC.filter_trusted_pos(all_files_shape, index2, pre_trusted_positive, cal_thresholds=thresholds[index][index2])
-                    # print("filtered_trusted_positive:"+str(filtered_trusted_positive))
-                    # print("previous_trusted_positive:"+str(previous_trusted_positive))
-                    # if len(filtered_trusted_positive) == 0:
-                    #     trusted_positive = previous_trusted_positive
-                    # else:
-                    #     trusted_positive = list(previous_trusted_positive)
-                    #     trusted_positive.extend(list(filtered_trusted_positive))
-                    #     trusted_positive = np.array(list(set(trusted_positive)),dtype=np.int32)
-                    
-                    # new_trusted_positive.append(trusted_positive)
-                    # print("trusted_positive:"+str(trusted_positive))
-
-                # new_potential_positives.append(new_potential_positive)
-                # new_potential_distributions.append(new_potential_distribution)
-                # new_trusted_positives.append(new_trusted_positive)
+            
             potential_positives = new_potential_positives
             potential_distributions = new_potential_distributions
             trusted_positives = new_trusted_positives
 
-            #print("potential_positives:"+str(potential_positives[0][1]))
-            #print("potential_distributions:"+str(potential_distributions[0][1]))
-        #print("trusted_positives:"+str(np.array(trusted_positives)[1][2]))
         log_string('EVALUATING...')
         cfg.OUTPUT_FILE = cfg.RESULTS_FOLDER + 'results_' + str(epoch) + '.txt'
 
@@ -511,12 +348,10 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, TRAINI
     num_to_take = 10
 
     # Shuffle train files
-    #print("TRAINING_QUERIES:"+str(TRAINING_QUERIES))
     train_file_idxs = np.arange(0, len(TRAINING_QUERIES.keys()))
     np.random.shuffle(train_file_idxs)
     for i in range(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES):
     #for i in range(1):
-        # for i in range (5):
         batch_keys = train_file_idxs[i *
                                      cfg.BATCH_NUM_QUERIES:(i+1)*cfg.BATCH_NUM_QUERIES]
         q_tuples = []
@@ -533,10 +368,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, TRAINI
                 q_tuples.append(
                     get_query_tuple(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
                                     DB_QUERIES, hard_neg=[], other_neg=True))
-                #print("q_tuples:"+str(q_tuples))
-                # q_tuples.append(get_rotated_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_neg=[], other_neg=True))
-                # q_tuples.append(get_jittered_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_neg=[], other_neg=True))
-
+            
             elif (len(HARD_NEGATIVES.keys()) == 0):
                 query = get_feature_representation(
                     TRAINING_QUERIES[batch_keys[j]]['query'], model)
@@ -548,8 +380,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, TRAINI
                 q_tuples.append(
                     get_query_tuple(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
                                     DB_QUERIES, hard_negs, other_neg=True))
-                # q_tuples.append(get_rotated_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
-                # q_tuples.append(get_jittered_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
+            
             else:
                 query = get_feature_representation(
                     TRAINING_QUERIES[batch_keys[j]]['query'], model)
@@ -563,8 +394,6 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, TRAINI
                 q_tuples.append(
                     get_query_tuple(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
                                     DB_QUERIES, hard_negs, other_neg=True))
-                # q_tuples.append(get_rotated_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
-                # q_tuples.append(get_jittered_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
             
             if (q_tuples[j][3].shape[0] != cfg.NUM_POINTS):
                 no_other_neg = True
@@ -607,14 +436,6 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, TRAINI
         
         output_queries, output_positives, output_negatives, output_other_neg = run_model(
             model, queries, positives, negatives, other_neg)
-        #print("output_queries:"+str(output_queries))
-        #print("output_positives:"+str(output_positives))
-        #print("output_negatives:"+str(output_negatives))
-        #print("output_other_neg:"+str(output_other_neg))
-
-        #print("negatives:"+str(negatives))
-        #print("other_neg:"+str(other_neg))
-        #print("queries:"+str(queries))
 
         loss = loss_function(output_queries, output_positives, output_negatives, output_other_neg, cfg.MARGIN_1, cfg.MARGIN_2, use_min=cfg.TRIPLET_USE_BEST_POSITIVES, lazy=cfg.LOSS_LAZY, ignore_zero_loss=cfg.LOSS_IGNORE_ZERO_BATCH)
         loss.backward()
@@ -624,28 +445,6 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, TRAINI
         train_writer.add_scalar("Loss", loss.cpu().item(), TOTAL_ITERATIONS)
         TOTAL_ITERATIONS += cfg.BATCH_NUM_QUERIES
 
-        # EVALLLL
-        '''
-        if (epoch > 5 and i % (1400 // cfg.BATCH_NUM_QUERIES) == 29):
-            TRAINING_LATENT_VECTORS = get_latent_vectors(
-                model, DB_QUERIES)
-            print("Updated cached feature vectors")
-
-        if (i % (6000 // cfg.BATCH_NUM_QUERIES) == 101):
-            if isinstance(model, nn.DataParallel):
-                model_to_save = model.module
-            else:
-                model_to_save = model
-            save_name = cfg.LOG_DIR + cfg.MODEL_FILENAME
-            torch.save({
-                'epoch': epoch,
-                'iter': TOTAL_ITERATIONS,
-                'state_dict': model_to_save.state_dict(),
-                'optimizer': optimizer.state_dict(),
-            },
-                save_name)
-            print("Model Saved As " + save_name)
-          '''
 
 def get_feature_representation(filename, model):
     model.eval()
@@ -719,16 +518,6 @@ def get_latent_vectors(model, dict_to_process):
         queries = load_pc_files([dict_to_process[index]["query"]],True)
         queries = np.expand_dims(queries, axis=1)
 
-        # if (BATCH_NUM_QUERIES - 1 > 0):
-        #    fake_queries = np.zeros((BATCH_NUM_QUERIES - 1, 1, NUM_POINTS, 3))
-        #    q = np.vstack((queries, fake_queries))
-        # else:
-        #    q = queries
-
-        #fake_pos = np.zeros((BATCH_NUM_QUERIES, POSITIVES_PER_QUERY, NUM_POINTS, 3))
-        #fake_neg = np.zeros((BATCH_NUM_QUERIES, NEGATIVES_PER_QUERY, NUM_POINTS, 3))
-        #fake_other_neg = np.zeros((BATCH_NUM_QUERIES, 1, NUM_POINTS, 3))
-        #o1, o2, o3, o4 = run_model(model, q, fake_pos, fake_neg, fake_other_neg)
         with torch.no_grad():
             queries_tensor = torch.from_numpy(queries).float().cuda()
             o1 = model(queries_tensor)
@@ -755,13 +544,11 @@ def run_model(model, queries, positives, negatives, other_neg, require_grad=True
     feed_tensor = feed_tensor.view((-1, 1, cfg.NUM_POINTS, 3))
     feed_tensor.requires_grad_(require_grad)
     feed_tensor = feed_tensor.to(device)
-    #print("feed_tensor:"+str(feed_tensor))
     if require_grad:
         output = model(feed_tensor)
     else:
         with torch.no_grad():
             output = model(feed_tensor)
-    #print("output:"+str(output))
     output = output.view(cfg.BATCH_NUM_QUERIES, -1, cfg.FEATURE_OUTPUT_DIM)
     o1, o2, o3, o4 = torch.split(
         output, [1, 30*cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY, 1], dim=1)

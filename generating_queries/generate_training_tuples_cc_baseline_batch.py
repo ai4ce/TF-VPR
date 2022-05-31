@@ -24,13 +24,7 @@ def construct_dict(df_files, df_indices, filename, folder_size, folder_num, all_
     replace_counts = 0
     queries = {}
     for num in range(folder_num):
-        '''
-        folder = os.path.join(pre_dir,all_folders[num])
-        gt_mat = os.path.join(folder, 'gt_pose.mat')
-        df_locations = sio.loadmat(gt_mat)
-        df_locations = df_locations['pose']
-        df_locations = torch.tensor(df_locations, dtype = torch.float).cpu()
-        '''
+
         for index in range(len(df_indices)//folder_num):
             df_indice = df_indices[num * (len(df_indices)//folder_num) + index]
             positive_l = []
@@ -42,35 +36,18 @@ def construct_dict(df_files, df_indices, filename, folder_size, folder_num, all_
                 if (index_pos + df_indice >= 0) and (index_pos + df_indice <= folder_size -1):
                     negative_l.remove(index_pos + df_indice+folder_size*num)
             if definite_positives is not None:
-                # print("num:"+str(num))
-                # print("df_indice:"+str(df_indice))
-                # print("definite_positives[num]:"+str(len(definite_positives[num])))
-                # print("definite_positives:"+str(definite_positives))
+
                 if ((np.array(definite_positives[num][df_indice]).ndim) == 2) and (np.array(definite_positives[num][df_indice]).shape[0]!=0):
                     extend_element = definite_positives[num][df_indice][0]
                 else:
                     # print("extend_element_pre:"+str(definite_positives[num][df_indice]))
                     extend_element = definite_positives[num][df_indice]
-                # print("extend_element:"+str(extend_element))
-                # # print("extend_element:"+str(extend_element))
-                # # extend_element = definite_positives[num][df_indice]
-                # print("np.array(2 []);"+str(np.array([[]]).ndim))
-                # print("np.array([]);"+str(np.array([]).ndim))
-                # print("definite_positives[num][df_indice]:"+str(np.array(definite_positives[num][df_indice]).shape))
+
                 positive_l.extend(extend_element)
                 # print("positive_l:"+str(positive_l))
                 positive_l = list(set(positive_l))
                 negative_l = [i for i in negative_l if i not in extend_element]
-            '''
-            negative_l_sampled = random.sample(negative_l, k=k_furthest)
-            negative_l_sampled, replace_count = check_negatives(negative_l_sampled, index, df_locations, mid_index_range)
-            while (replace_count!=0):
-                negative_l_sampled_new = random.sample(negative_l, k=replace_count)
-                negative_l_sampled_new, replace_count = check_negatives(negative_l_sampled_new, index, df_locations, mid_index_range)
-                negative_l_sampled.extend(negative_l_sampled_new)
-            
-            replace_counts = replace_counts + replace_count
-            '''
+
             queries[num * (len(df_indices)//folder_num) + index] = {"query":df_files[num * (len(df_indices)//folder_num) + index],
                           "positives":positive_l,"negatives":negative_l}
     
