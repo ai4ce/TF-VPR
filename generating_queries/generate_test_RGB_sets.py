@@ -89,11 +89,11 @@ def construct_query_dict(df_centroids, df_database, folder_num, traj_len,  filen
     output_to_file(queries_sets, filename_test)
     output_to_file(database_sets, filename_train)
 
-def generate(scene_index, evaluate_all = False, inside=True):
-    base_path = "/mnt/NAS/home/yiming/habitat_4/train"
-    #runs_folder = cfg.scene_names[scene_index]
-    runs_folder = "Goffs"
-    pre_dir = os.path.join(base_path, runs_folder)
+def generate(evaluate_all = False, inside=True):
+    base_path = "/mnt/NAS/data/cc_data/2D_RGB_real_edited3"
+    # runs_folder = cfg.scene_list[scene_index]
+    #runs_folder = "Goffs"
+    pre_dir = os.path.join(base_path)
 
     nn_ind = 0.2
     r_mid = 0.2
@@ -103,7 +103,7 @@ def generate(scene_index, evaluate_all = False, inside=True):
 
     folders = list(sorted(os.listdir(pre_dir)))
     if evaluate_all == False:
-        index_list = [0,1,2,3,4,5,6]
+        index_list = list(range(len(folders)))
     else:
         index_list = list(range(len(folders)))
 
@@ -118,7 +118,7 @@ def generate(scene_index, evaluate_all = False, inside=True):
         files.remove('gt_pose.mat')
         # print("len(files):"+str(len(files)))
         for ind in range(len(files)):
-            file_ = "panoimg_"+str(ind)+".png"
+            file_ = "panoimg_"+str(ind)+".jpg"
             files_.append(os.path.join(pre_dir, fold, file_))
         all_files.extend(files_)
     # all_files.remove('trajectory.mp4')
@@ -146,7 +146,7 @@ def generate(scene_index, evaluate_all = False, inside=True):
         df_locations_ts_y = []
 
         # print("os.path.join(pre_dir,filename):"+str(os.path.join(pre_dir,filename)))
-        df_locations = torch.zeros((traj_len, 3), dtype = torch.float)
+        df_locations = torch.zeros((traj_len, 2), dtype = torch.float)
         for count, fold in enumerate(fold_list):
             data = sio.loadmat(os.path.join(pre_dir,fold,filename))
             df_location = data['pose']
@@ -166,10 +166,10 @@ def generate(scene_index, evaluate_all = False, inside=True):
     #    train_index.pop(i)
     if not evaluate_all:
         df_locations_tr_x.extend(list(df_locations[train_index,0]))
-        df_locations_tr_y.extend(list(df_locations[train_index,2]))
+        df_locations_tr_y.extend(list(df_locations[train_index,1]))
 
         df_locations_ts_x.extend(list(df_locations[test_index,0]))
-        df_locations_ts_y.extend(list(df_locations[test_index,2]))
+        df_locations_ts_y.extend(list(df_locations[test_index,1]))
 
     for indx in range(traj_len):
         # file_ = 'panoimg_'+str(indx)+'.png'
@@ -203,4 +203,4 @@ def generate(scene_index, evaluate_all = False, inside=True):
         else:
             construct_query_dict(df_train, df_train, len(fold_list), traj_len,"evaluation_database_full.pickle", "evaluation_query_full.pickle", nn_ind, r_mid, r_ind, True, evaluate_all)
 if __name__ == "__main__":
-    generate(1, evaluate_all=True)
+    generate(evaluate_all=True)

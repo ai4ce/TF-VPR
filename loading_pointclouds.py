@@ -72,7 +72,7 @@ def load_image_file(filename, full_path=False):
         dim = (cfg.SIZED_GRID_X,cfg.SIZED_GRID_Y)
         image = cv2.resize(image, dim,interpolation = cv2.INTER_AREA)
     else:
-        image = cv2.imread(os.path.join("/mnt/NAS/home/yiming/habitat_4/train/", filename))
+        image = cv2.imread(os.path.join("/mnt/NAS/data/cc_data/2D_RGB_real_full3", filename))
         dim = (cfg.SIZED_GRID_X,cfg.SIZED_GRID_Y)
         image = cv2.resize(image, dim,interpolation = cv2.INTER_AREA)
         # print("image2:"+str(image.shape))
@@ -153,11 +153,9 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
     random.shuffle(dict_value["positives"])
     pos_files = []
     
-    #print("dict_value[positives]:"+str(dict_value["positives"]))
     for i in range(num_pos):
         pos_files.append(QUERY_DICT[dict_value["positives"][i]]["query"])
     
-    #print("pos_files:"+str(pos_files))
     positives = load_pos_neg_image_files(pos_files,full_path=False)
     '''
     cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/color_img1.jpg', positives[0])

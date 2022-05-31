@@ -2,17 +2,15 @@
 NUM_POINTS = 256
 GRID_X = 1080
 GRID_Y = 1920
-SIZED_GRID_X = 64*4
-SIZED_GRID_Y = 64
+SIZED_GRID_X = 128
+SIZED_GRID_Y = 72
 FEATURE_OUTPUT_DIM = 512
 RESULTS_FOLDER = "results/"
 OUTPUT_FILE = "results/results.txt"
-file_name = "Springhill"
+#file_name = "Goffs"
 
 LOG_DIR = 'log/'
 MODEL_FILENAME = "model.ckpt"
-
-DATASET_FOLDER = '/mnt/NAS/home/yiming/habitat/Springhill'
 
 # TRAIN
 BATCH_NUM_QUERIES = 2
@@ -23,7 +21,7 @@ DECAY_RATE = 0.7
 BASE_LEARNING_RATE = 0.000005
 MOMENTUM = 0.9
 OPTIMIZER = 'ADAM'
-MAX_EPOCH = 20
+MAX_EPOCH = 30
 
 MARGIN_1 = 0.5
 MARGIN_2 = 0.2
@@ -33,8 +31,6 @@ BN_DECAY_DECAY_RATE = 0.5
 BN_DECAY_CLIP = 0.99
 
 RESUME = False
-
-#scene_names = ['Micanopy','Nimmons','Reyno','Spotswood','Springhill','Stilwell']
 
 TRAIN_FILE = 'generating_queries/train_pickle/training_queries_baseline_0.pickle'
 TEST_FILE = 'generating_queries/train_pickle/test_queries_baseline_0.pickle'
