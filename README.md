@@ -22,7 +22,7 @@ python generate_training_tuples_RGB_baseline_batch.py
 
 
 # For network evaluation
-python generate_test_cc_sets.py
+python generate_test_RGB_sets.py
 ```
 
 ### Train
