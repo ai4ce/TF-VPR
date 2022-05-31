@@ -44,7 +44,7 @@ parser.add_argument('--positives_per_query', type=int, default=2,
                     help='Number of potential positives in each training tuple [default: 2]')
 parser.add_argument('--negatives_per_query', type=int, default=18,
                     help='Number of definite negatives in each training tuple [default: 18]')
-parser.add_argument('--max_epoch', type=int, default=20,
+parser.add_argument('--max_epoch', type=int, default=100,
                     help='Epoch to run [default: 100]')
 parser.add_argument('--batch_num_queries', type=int, default=2,
                     help='Batch Size during training [default: 2]')
@@ -231,6 +231,7 @@ def train():
         # print("trusted_positives:"+str(trusted_positives))
         potential_positives = sio.loadmat("results/trusted_positives_folder/potential_positives_"+str(starting_epoch)+".mat")['data']
         potential_distributions = sio.loadmat("results/trusted_positives_folder/potential_distributions_"+str(starting_epoch)+".mat")['data']
+        starting_epoch = starting_epoch+1
     else:
         starting_epoch = 0
 
@@ -271,6 +272,7 @@ def train():
     for epoch in range(starting_epoch, cfg.MAX_EPOCH):
         print(epoch)
         print()
+        '''
         if epoch == 5:
             model = PNV.PointNetVlad(global_feat=True, feature_transform=True,
                              max_pool=False, output_dim=cfg.FEATURE_OUTPUT_DIM, num_points=cfg.NUM_POINTS)
@@ -286,6 +288,7 @@ def train():
             else:
                 optimizer = None
                 exit(0)
+        '''
         # print("potential_positives_:"+str(np.array(potential_positives)))
         # print("potential_distributions_:"+str(np.array(potential_distributions)))
         
@@ -317,14 +320,13 @@ def train():
 
         #eval_recall, db_vec = evaluate.evaluate_model(model, True) #db_vec gives the evaluate nearest neighbours, folder* 2048* positves_dim
         _, db_vec = evaluate.evaluate_model(model, optimizer, epoch, True, full_pickle=True)
-        eval_recall, _ = evaluate.evaluate_model(model, optimizer, epoch, True, full_pickle=False)
         db_vec = np.array(db_vec)
         db_vec_all = db_vec.reshape(-1,db_vec.shape[-1])
         nbrs = NearestNeighbors(n_neighbors=cfg.EVAL_NEAREST, algorithm='ball_tree').fit(db_vec_all)
         distance, indice = nbrs.kneighbors(db_vec_all)
         weight = np.exp(-distance*10)
-        indice = indice.reshape(int(indice.shape[0]/2048),2048,indice.shape[1]).tolist()
-        weight = weight.reshape(int(weight.shape[0]/2048),2048,weight.shape[1]).tolist()
+        indice = indice.reshape(cfg.FOLD_NUM,int(indice.shape[0]/cfg.FOLD_NUM),indice.shape[1]).tolist()
+        weight = weight.reshape(cfg.FOLD_NUM,int(weight.shape[0]/cfg.FOLD_NUM),weight.shape[1]).tolist()
 
         if potential_positives is None:
             potential_positives = []
@@ -339,15 +341,18 @@ def train():
             # print("potential_positives:"+str(np.array(potential_positives).shape))
             # print("potential_distributions:"+str(np.array(potential_distributions).shape))
 
-            pool = Pool(processes=db_vec.shape[0])
-            inputs = [(True, db_vec, rank, [], [], None, folders, thresholds, all_files_reshape, weight, indice, epoch) for rank in range(db_vec.shape[0])]
-            results = pool.starmap(VFC.Compute_positive, inputs)
+            #pool = Pool(processes=db_vec.shape[0])
+            #inputs = [(True, db_vec, rank, [], [], None, folders, thresholds, all_files_reshape, weight, indice, epoch) for rank in range(db_vec.shape[0])]
+            #results = pool.starmap(VFC.Compute_positive, inputs)
+            for rank in range(db_vec.shape[0]):
+                results = VFC.Compute_positive(True, db_vec, rank, [], [], None, folders, thresholds, all_files_reshape, weight, indice, epoch)
+                trusted_positives.append(results[2])
             # print("results:"+str(results[0][2][2]))
             # assert(0)
-
+            '''
             for i in range(len(results)):
                 trusted_positives.append(results[i][2])
-
+            '''
             
             #_, _, trusted_positives
 
@@ -389,13 +394,18 @@ def train():
             new_potential_distributions = []
             new_trusted_positives = []
 
-            pool = Pool(processes=db_vec.shape[0])
+            #pool = Pool(processes=db_vec.shape[0])
             # print("potential_positives:"+str(potential_positives.shape))
             # print("potential_distributions:"+str(potential_distributions.shape))
             # print("trusted_positives:"+str(trusted_positives.shape))
 
-            inputs = [(False, db_vec, rank, potential_positives, potential_distributions, trusted_positives, folders, thresholds, all_files_reshape, weight, indice, epoch) for rank in range(db_vec.shape[0])]
-            results = pool.starmap(VFC.Compute_positive, inputs)
+            #inputs = [(False, db_vec, rank, potential_positives, potential_distributions, trusted_positives, folders, thresholds, all_files_reshape, weight, indice, epoch) for rank in range(db_vec.shape[0])]
+            #results = pool.starmap(VFC.Compute_positive, inputs)
+            for rank in range(db_vec.shape[0]):
+                results = VFC.Compute_positive(False, db_vec, rank, potential_positives, potential_distributions, trusted_positives, folders, thresholds, all_files_reshape, weight, indice, epoch)
+                new_potential_positives.append(results[0])
+                new_potential_distributions.append(results[1])
+                new_trusted_positives.append(results[2])
             # print("results:"+str(len(results)))
             # print("results[0]:"+str(len(results[0])))
             # print("results[0][0]:"+str((results[0][0][0])))
@@ -404,12 +414,12 @@ def train():
             # # print("results:"+str(results))
             # # print("results_1:"+str(np.array(results[0][1][0]).shape))
             # assert(0)
-
+            '''
             for i in range(len(results)):
                 new_potential_positives.append(results[i][0])
                 new_potential_distributions.append(results[i][1])
                 new_trusted_positives.append(results[i][2])
-
+            '''
             # print("new_potential_positives[0]:"+str(np.array(new_potential_positives[0]).shape))
             # print("new_potential_distributions:"+str(np.array(new_potential_distributions).shape))
             # print("new_trusted_positives:"+str(np.array(new_trusted_positives[0][0])))
@@ -480,9 +490,14 @@ def train():
             #print("potential_positives:"+str(potential_positives[0][1]))
             #print("potential_distributions:"+str(potential_distributions[0][1]))
         #print("trusted_positives:"+str(np.array(trusted_positives)[1][2]))
-        log_string('EVAL RECALL: %s' % str(eval_recall))
+        log_string('EVALUATING...')
+        cfg.OUTPUT_FILE = cfg.RESULTS_FOLDER + 'results_' + str(epoch) + '.txt'
 
-        train_writer.add_scalar("Val Recall", eval_recall, epoch)
+        eval_recall_1, eval_recall_5, eval_recall_10 = evaluate.evaluate_model(model,optimizer,epoch,True,False)
+        log_string('EVAL RECALL_1: %s' % str(eval_recall_1))
+        log_string('EVAL RECALL_5: %s' % str(eval_recall_5))
+        log_string('EVAL RECALL_10: %s' % str(eval_recall_10))
+
 
 
 def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, TRAINING_QUERIES, TEST_QUERIES, DB_QUERIES):
@@ -610,6 +625,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, TRAINI
         TOTAL_ITERATIONS += cfg.BATCH_NUM_QUERIES
 
         # EVALLLL
+        '''
         if (epoch > 5 and i % (1400 // cfg.BATCH_NUM_QUERIES) == 29):
             TRAINING_LATENT_VECTORS = get_latent_vectors(
                 model, DB_QUERIES)
@@ -629,7 +645,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, TRAINI
             },
                 save_name)
             print("Model Saved As " + save_name)
-
+          '''
 
 def get_feature_representation(filename, model):
     model.eval()
