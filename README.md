@@ -23,6 +23,11 @@ python generate_training_tuples_RGB_baseline_batch.py
 # For network evaluation
 python generate_test_RGB_sets.py
 ```
+### Generate threshold files
+```
+# To generate max_thresholds.mat and min_thresholds.mat for dynamic threshold from temporal neighborhood
+python models/Verification.py
+```
 
 ### Train
 ```
