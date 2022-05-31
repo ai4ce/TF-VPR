@@ -24,6 +24,7 @@ python generate_training_tuples_cc_baseline_batch.py
 python generate_test_cc_sets.py
 ```
 
+### Generate threshold files
 ```
 # To generate max_thresholds.mat and min_thresholds.mat for dynamic threshold from temporal neighborhood
 python models/Verification.py
