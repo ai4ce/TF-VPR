@@ -2,16 +2,17 @@
 NUM_POINTS = 256
 GRID_X = 1080
 GRID_Y = 1920
-SIZED_GRID_X = 128
-SIZED_GRID_Y = 128
-FEATURE_OUTPUT_DIM = 16384
+SIZED_GRID_X = 64*4
+SIZED_GRID_Y = 64
+FEATURE_OUTPUT_DIM = 512
 RESULTS_FOLDER = "results/"
 OUTPUT_FILE = "results/results.txt"
+file_name = "Goffs"
 
 LOG_DIR = 'log/'
 MODEL_FILENAME = "model.ckpt"
 
-DATASET_FOLDER = '../../benchmark_datasets/'
+DATASET_FOLDER = '/mnt/NAS/home/cc/data/habitat/Goffs'
 
 # TRAIN
 BATCH_NUM_QUERIES = 2
@@ -22,7 +23,7 @@ DECAY_RATE = 0.7
 BASE_LEARNING_RATE = 0.000005
 MOMENTUM = 0.9
 OPTIMIZER = 'ADAM'
-MAX_EPOCH = 20
+MAX_EPOCH = 50
 
 MARGIN_1 = 0.5
 MARGIN_2 = 0.2
@@ -35,6 +36,7 @@ RESUME = False
 
 TRAIN_FILE = 'generating_queries/training_queries_baseline.pickle'
 TEST_FILE = 'generating_queries/test_queries_baseline.pickle'
+scene_list = ['Goffs']#,'Nimmons','Reyno','Spotswood','Springhill','Stilwell']
 
 # LOSS
 LOSS_FUNCTION = 'triplet'
@@ -49,7 +51,7 @@ EVAL_NEGATIVES_PER_QUERY = 12
 
 EVAL_DATABASE_FILE = 'generating_queries/evaluation_database.pickle'
 EVAL_QUERY_FILE = 'generating_queries/evaluation_query.pickle'
-
+INIT_TRUST = 3
 
 def cfg_str():
     out_string = ""

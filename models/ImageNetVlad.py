@@ -449,10 +449,18 @@ class ImageNetVlad(nn.Module):
         
         dim = list(self.obs_feat_extractor.parameters())[-1].shape[0]
         self.net_vlad = NetVLAD_Image(num_clusters=32, dim=512, vladv2=True)
+        self.fc1 = nn.Linear(16384, 4096)
+        self.bn1 = nn.BatchNorm1d(4096)
+        self.fc2 = nn.Linear(4096, output_dim)
+        self.bn2 = nn.BatchNorm1d(output_dim)
+        self.relu = nn.ReLU()
 
     def forward(self, x):
         x = self.obs_feat_extractor(x)
         x = self.net_vlad(x)
+        x = self.relu(self.bn1(self.fc1(x)))
+        x = self.relu(self.bn2(self.fc2(x)))
+
         return x
 
 

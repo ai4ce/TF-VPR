@@ -1,3 +1,4 @@
+import datetime
 #import torch
 #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 import argparse
@@ -9,10 +10,13 @@ import sys
 
 import numpy as np
 from sklearn.neighbors import KDTree, NearestNeighbors
+import generating_queries.generate_training_tuples_RGB_baseline_batch as generate_dataset_tt
+import generating_queries.generate_test_RGB_sets as generate_dataset_eval
 
 import config as cfg
 import evaluate
 import loss.pointnetvlad_loss as PNV_loss
+import models.Verification as VFC
 import models.ImageNetVlad as INV
 import torch
 import torch.nn as nn
@@ -20,7 +24,7 @@ from loading_pointclouds import *
 from tensorboardX import SummaryWriter
 from torch.autograd import Variable
 from torch.backends import cudnn
-
+import scipy.io as sio
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
@@ -37,8 +41,8 @@ parser.add_argument('--positives_per_query', type=int, default=2,
                     help='Number of potential positives in each training tuple [default: 2]')
 parser.add_argument('--negatives_per_query', type=int, default=18,
                     help='Number of definite negatives in each training tuple [default: 18]')
-parser.add_argument('--max_epoch', type=int, default=20,
-                    help='Epoch to run [default: 20]')
+parser.add_argument('--max_epoch', type=int, default=100,
+                    help='Epoch to run [default: 100]')
 parser.add_argument('--batch_num_queries', type=int, default=2,
                     help='Batch Size during training [default: 2]')
 parser.add_argument('--learning_rate', type=float, default=0.000005,
@@ -65,14 +69,14 @@ parser.add_argument('--triplet_use_best_positives', action='store_true',
                     help='If present, use best positives, otherwise use hardest positives')
 parser.add_argument('--resume', action='store_true',
                     help='If present, restore checkpoint and resume training')
-parser.add_argument('--dataset_folder', default='../../dataset/',
+parser.add_argument('--dataset_folder', default='/mnt/NAS/home/cc/data/habitat_5',
                     help='PointNetVlad Dataset Folder')
 
 FLAGS = parser.parse_args()
 #cfg.EVAL_BATCH_SIZE = 12
 cfg.GRID_X = 1080
 cfg.GRID_Y = 1920
-cfg.MAX_EPOCH = FLAGS.max_epoch
+cfg.MAX_EPOCH = cfg.MAX_EPOCH
 cfg.BASE_LEARNING_RATE = FLAGS.learning_rate
 cfg.MOMENTUM = FLAGS.momentum
 cfg.OPTIMIZER = FLAGS.optimizer
@@ -85,9 +89,9 @@ cfg.TRIPLET_USE_BEST_POSITIVES = FLAGS.triplet_use_best_positives
 cfg.LOSS_LAZY = FLAGS.loss_not_lazy
 cfg.LOSS_IGNORE_ZERO_BATCH = FLAGS.loss_ignore_zero_batch
 
-cfg.TRAIN_FILE = 'generating_queries/training_queries_baseline.pickle'
-cfg.TEST_FILE = 'generating_queries/test_queries_baseline.pickle'
-cfg.DB_FILE = 'generating_queries/db_queries_baseline.pickle'
+cfg.TRAIN_FILE = 'generating_queries/train_pickle/training_queries_baseline_0.pickle'
+cfg.TEST_FILE = 'generating_queries/train_pickle/test_queries_baseline_0.pickle'
+cfg.DB_FILE = 'generating_queries/train_pickle/db_queries_baseline_0.pickle'
 
 cfg.LOG_DIR = FLAGS.log_dir
 if not os.path.exists(cfg.LOG_DIR):
@@ -98,7 +102,6 @@ LOG_FOUT.write(str(FLAGS) + '\n')
 cfg.RESULTS_FOLDER = FLAGS.results_dir
 print("cfg.RESULTS_FOLDER:"+str(cfg.RESULTS_FOLDER))
 
-cfg.DATASET_FOLDER = FLAGS.dataset_folder
 
 # Load dictionary of training queries
 TRAINING_QUERIES = get_queries_dict(cfg.TRAIN_FILE)
@@ -118,6 +121,8 @@ TOTAL_ITERATIONS = 0
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 cfg.margin = 0.1
 
+#scene_list = ["Micanopy", "Nimmons", "Reyno", "Spotswood", "Springhill", "Stilwell"]
+
 def get_bn_decay(batch):
     bn_momentum = cfg.BN_INIT_DECAY * \
         (cfg.BN_DECAY_DECAY_RATE **
@@ -132,21 +137,32 @@ def log_string(out_str):
 
 # learning rate halfed every 5 epoch
 
-
 def get_learning_rate(epoch):
     learning_rate = cfg.BASE_LEARNING_RATE * ((0.9) ** (epoch // 5))
     learning_rate = max(learning_rate, 0.00001)  # CLIP THE LEARNING RATE!
     return learning_rate
 
 
-def train():
-    global HARD_NEGATIVES, TOTAL_ITERATIONS
+def train(scene_index):
+    train_start = datetime.datetime.now()
+    global HARD_NEGATIVES, TOTAL_ITERATIONS, TRAINING_QUERIES
     bn_decay = get_bn_decay(0)
     #tf.summary.scalar('bn_decay', bn_decay)
+    generate_dataset_tt.generate(scene_index, 0, inside=False)
+    generate_dataset_eval.generate(scene_index, False, inside=False)
+    generate_dataset_eval.generate(scene_index, True, inside=False)
+    TRAINING_QUERIES = get_queries_dict(cfg.TRAIN_FILE)
+    TEST_QUERIES = get_queries_dict(cfg.TEST_FILE)
+    DB_QUERIES = get_queries_dict(cfg.DB_FILE)
 
+    cfg.RESULTS_FOLDER = os.path.join("results/", cfg.scene_list[scene_index])
+    if not os.path.isdir(cfg.RESULTS_FOLDER):
+        os.mkdir(cfg.RESULTS_FOLDER)
     #loss = lazy_quadruplet_loss(q_vec, pos_vecs, neg_vecs, other_neg_vec, MARGIN1, MARGIN2)
     if cfg.LOSS_FUNCTION == 'quadruplet':
         loss_function = PNV_loss.quadruplet_loss
+    elif cfg.LOSS_FUNCTION == 'triplet_RI':
+        loss_function = PNV_loss.triplet_loss_RI
     else:
         loss_function = PNV_loss.triplet_loss
     learning_rate = get_learning_rate(0)
@@ -175,10 +191,16 @@ def train():
         checkpoint = torch.load(resume_filename)
         saved_state_dict = checkpoint['state_dict']
         starting_epoch = checkpoint['epoch']
+        print("starting_epoch:"+str(starting_epoch))
+        #starting_epoch = starting_epoch +1
         TOTAL_ITERATIONS = starting_epoch * len(TRAINING_QUERIES)
-
+        starting_epoch = starting_epoch +1
         model.load_state_dict(saved_state_dict)
         optimizer.load_state_dict(checkpoint['optimizer'])
+        #trusted_positives = sio.loadmat("results/trusted_positives_folder/trusted_positives_"+str(starting_epoch)+".mat")['data']
+        #potential_positives = sio.loadmat("results/trusted_positives_folder/potential_positives_"+str(starting_epoch)+".mat")['data']
+        #potential_distributions = sio.loadmat("results/trusted_positives_folder/potential_distributions_"+str(starting_epoch)+".mat")['data']
+        
     else:
         starting_epoch = 0
 
@@ -187,6 +209,13 @@ def train():
     LOG_FOUT.write(cfg.cfg_str())
     LOG_FOUT.write("\n")
     LOG_FOUT.flush()
+
+    try:
+        potential_positives
+    except NameError:
+        potential_positives = None
+        potential_distributions = None
+        trusted_positives = None
     
     #criterion = nn.TripletMarginLoss(margin=cfg.margin**0.5, 
     #                        p=2, reduction='sum').to(device)
@@ -194,22 +223,96 @@ def train():
     for epoch in range(starting_epoch, cfg.MAX_EPOCH):
         print(epoch)
         print()
+        '''
+        if trusted_positives is not None:
+            sio.savemat("results/trusted_positives_folder/trusted_positives_"+str(epoch)+".mat",{'data':trusted_positives})
+            sio.savemat("results/trusted_positives_folder/potential_positives_"+str(epoch)+".mat",{'data':potential_positives})
+            sio.savemat("results/trusted_positives_folder/potential_distributions_"+str(epoch)+".mat",{'data':potential_distributions})
+        '''
+        #generate_dataset_tt.generate(scene_index, epoch, definite_positives=trusted_positives, inside=False)
+        #TRAIN_FILE = 'generating_queries/train_pickle/training_queries_baseline_'+str(epoch)+'.pickle'
+        #TEST_FILE = 'generating_queries/train_pickle/test_queries_baseline_'+str(epoch)+'.pickle'
+        #DB_FILE = 'generating_queries/train_pickle/db_queries_baseline_'+str(epoch)+'.pickle'
+
+        #TRAINING_QUERIES = get_queries_dict(TRAIN_FILE)
+        #TEST_QUERIES = get_queries_dict(TEST_FILE)
+        #DB_QUERIES = get_queries_dict(DB_FILE)
+
         log_string('**** EPOCH %03d ****' % (epoch))
         sys.stdout.flush()
         
-        train_one_epoch(model, optimizer, train_writer, loss_function, epoch)
-
+        train_one_epoch(model, optimizer, train_writer, loss_function, epoch, scene_index, TRAINING_QUERIES, TEST_QUERIES, DB_QUERIES)
+        '''
         log_string('EVALUATING...')
-        cfg.OUTPUT_FILE = cfg.RESULTS_FOLDER + 'results_' + str(epoch) + '.txt'
+        cfg.OUTPUT_FILE = os.path.join(cfg.RESULTS_FOLDER, 'results_' + str(epoch) + '.txt')
+        
+        db_vec = evaluate.evaluate_model(model,optimizer,epoch,scene_index,True,True)
+        
+        db_vec = np.array(db_vec)
+        print("db_vec:"+str(db_vec.shape))
 
-        evaluate.evaluate_model(model,epoch,True)
-        #eval_recall = evaluate.evaluate_model(model,epoch,True)
-        #log_string('EVAL RECALL: %s' % str(eval_recall))
+        db_vec_all = db_vec.reshape(-1,db_vec.shape[-1])
+        print("db_vec_all:"+str(db_vec_all.shape))
 
-        #train_writer.add_scalar("Val Recall", eval_recall, epoch)
+        nbrs = NearestNeighbors(n_neighbors=cfg.INIT_TRUST, algorithm='ball_tree', n_jobs =18).fit(db_vec_all)
+        distance, indice = nbrs.kneighbors(db_vec_all)
+
+        weight = np.exp(-distance*10)
+        indice = indice.tolist()
+        weight = weight.tolist()
+        print("weight:"+str(np.array(weight).shape))
+        # assert(0)
+
+        if potential_positives is None:
+            potential_positives = []
+            potential_distributions = []
+            trusted_positives = []
+            
+            potential_positives = indice
+            potential_distributions = weight
+
+            # pool = Pool(processes=db_vec.shape[0])
+            # inputs = [(True, db_vec, rank, [], [], None, folders, thresholds, all_files_reshape, weight, indice, epoch) for rank in range(db_vec.shape[0])]
+            _, _, trusted_positives = VFC.Compute_positive(True, db_vec, [], [], None, weight, indice, epoch)
+            
+
+        else:
+            new_potential_positives = []
+            new_potential_distributions = []
+            new_trusted_positives = []
+
+            # pool = Pool(processes=db_vec.shape[0])
+            # inputs = [(False, db_vec, rank, potential_positives, potential_distributions, trusted_positives, thresholds, all_files_reshape, weight, indice, epoch) for rank in range(db_vec.shape[0])]
+            potential_positives, potential_distributions, trusted_positives = VFC.Compute_positive(False, db_vec, potential_positives, potential_distributions, trusted_positives, weight, indice, epoch)
+
+            # new_potential_positives.append(potential_positive)
+            # new_potential_distributions.append(potential_distribution)
+            # new_trusted_positives.append(trusted_positive)
+        
+            # potential_positives = new_potential_positives
+            # potential_distributions = new_potential_distributions
+            # trusted_positives = new_trusted_positives
+        
+        # asdasdasd
+        # 
+        '''
+        log_string('EVALUATING...')
+        cfg.OUTPUT_FILE = os.path.join(cfg.RESULTS_FOLDER , 'results_' + str(epoch) + '.txt')
+        
+        train_end = datetime.datetime.now()
+        eval_start = datetime.datetime.now()
+        eval_recall_1, eval_recall_5, eval_recall_10 = evaluate.evaluate_model(model,optimizer,epoch,scene_index,True)
+        eval_end = datetime.datetime.now()
+        print("train_time:"+str(train_end-train_start))
+        print("eval_time:"+str(eval_end-eval_start))
+        assert(0)
+
+        log_string('EVAL RECALL_1: %s' % str(eval_recall_1))
+        log_string('EVAL RECALL_5: %s' % str(eval_recall_5))
+        log_string('EVAL RECALL_10: %s' % str(eval_recall_10))
 
 
-def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
+def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, scene_index, TRAINING_QUERIES, TEST_QUERIES, DB_QUERIES):
     global HARD_NEGATIVES
     global TRAINING_LATENT_VECTORS, TOTAL_ITERATIONS
 
@@ -224,7 +327,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
     np.random.shuffle(train_file_idxs)
     
     for i in range(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES):
-    #for i in range(1):
+    #for i in range(3):
         batch_keys = train_file_idxs[i *
                                      cfg.BATCH_NUM_QUERIES:(i+1)*cfg.BATCH_NUM_QUERIES]
         q_tuples = []
@@ -235,6 +338,9 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
             #print("positives:"+str(TRAINING_QUERIES[batch_keys[j]]['positives']))
             #print("negatives:"+str(TRAINING_QUERIES[batch_keys[j]]['negatives']))
             if (len(TRAINING_QUERIES[batch_keys[j]]["positives"]) < cfg.TRAIN_POSITIVES_PER_QUERY):
+                print("len(TRAINING_QUERIES[batch_keys[j]][positives]:"+str(len(TRAINING_QUERIES[batch_keys[j]]["positives"])))
+                print("cfg.TRAIN_POSITIVES_PER_QUERY:"+str(cfg.TRAIN_POSITIVES_PER_QUERY))
+                assert(0)
                 faulty_tuple = True
                 break
 
@@ -306,7 +412,6 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
         other_neg = np.expand_dims(other_neg, axis=1)
         positives = np.array(positives, dtype=np.float32)
         negatives = np.array(negatives, dtype=np.float32)
-
         log_string('----' + str(i) + '-----')
         if (len(queries.shape) != 5):
             log_string('----' + 'FAULTY QUERY' + '-----')
@@ -326,9 +431,8 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
         #print("other_neg:"+str(other_neg.shape))
         #print("queries:"+str(queries.shape))
         
-        #loss = loss_function(output_queries, output_positives, output_negatives,  0.1,  use_min=cfg.TRIPLET_USE_BEST_POSITIVES, lazy=cfg.LOSS_LAZY, ignore_zero_loss=cfg.LOSS_IGNORE_ZERO_BATCH)
-        loss = loss_function(output_queries, output_positives, output_negatives,  0.1,  use_min=cfg.TRIPLET_USE_BEST_POSITIVES, lazy=False, ignore_zero_loss=cfg.LOSS_IGNORE_ZERO_BATCH)
-
+        loss = loss_function(output_queries, output_positives, output_negatives,  0.1,  use_min=cfg.TRIPLET_USE_BEST_POSITIVES, lazy=cfg.LOSS_LAZY, ignore_zero_loss=cfg.LOSS_IGNORE_ZERO_BATCH)
+        #loss = loss_function(output_queries, output_positives, output_negatives,  rot_output_queries, rot_output_positives, rot_output_negatives, 0.1,  use_min=cfg.TRIPLET_USE_BEST_POSITIVES, lazy=False, ignore_zero_loss=cfg.LOSS_IGNORE_ZERO_BATCH)
         loss.backward()
         optimizer.step()
 
@@ -337,6 +441,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
         TOTAL_ITERATIONS += cfg.BATCH_NUM_QUERIES
 
         # EVALLLL
+        '''
         if (epoch > 5 and i % (1400 // cfg.BATCH_NUM_QUERIES) == 29):
             TRAINING_LATENT_VECTORS = get_latent_vectors(
                 model, TRAINING_QUERIES)
@@ -356,11 +461,11 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
             },
                 save_name)
             print("Model Saved As " + save_name)
-
+        '''
 
 def get_feature_representation(filename, model):
     model.eval()
-    queries = load_pc_files([filename])
+    queries = load_image_files([filename],False)
     queries = np.expand_dims(queries, axis=1)
     # if(BATCH_NUM_QUERIES-1>0):
     #    fake_queries=np.zeros((BATCH_NUM_QUERIES-1,1,NUM_POINTS,3))
@@ -407,7 +512,7 @@ def get_latent_vectors(model, dict_to_process):
         file_names = []
         for index in file_indices:
             file_names.append(dict_to_process[index]["query"])
-        queries = load_pc_files(file_names,True)
+        queries = load_image_files(file_names,False)
 
         feed_tensor = torch.from_numpy(queries).float()
         feed_tensor = feed_tensor.unsqueeze(1)
@@ -427,7 +532,7 @@ def get_latent_vectors(model, dict_to_process):
     # handle edge case
     for q_index in range((len(train_file_idxs) // batch_num * batch_num), len(dict_to_process.keys())):
         index = train_file_idxs[q_index]
-        queries = load_pc_files([dict_to_process[index]["query"]])
+        queries = load_image_files([dict_to_process[index]["query"]],False)
         queries = np.expand_dims(queries, axis=1)
 
         # if (BATCH_NUM_QUERIES - 1 > 0):
@@ -442,7 +547,7 @@ def get_latent_vectors(model, dict_to_process):
         #o1, o2, o3, o4 = run_model(model, q, fake_pos, fake_neg, fake_other_neg)
         with torch.no_grad():
             queries_tensor = torch.from_numpy(queries).float()
-            o1 = model(queries_tensor)
+            o1 = model(queries_tensor.to(device))
 
         output = o1.detach().cpu().numpy()
         output = np.squeeze(output)
@@ -466,17 +571,23 @@ def run_model(model, queries, positives, negatives, other_neg, require_grad=True
     
     feed_tensor.requires_grad_(require_grad)
     feed_tensor = feed_tensor.to(device)
+    #print("feed_tensor:"+str(feed_tensor.shape))
     if require_grad:
         output = model(feed_tensor)
     else:
         with torch.no_grad():
             output = model(feed_tensor)
-    output = output.view(cfg.BATCH_NUM_QUERIES, -1, cfg.FEATURE_OUTPUT_DIM)
+    # print("output:"+str(output.shape))
+
+    output = output.view(cfg.BATCH_NUM_QUERIES, -1, output.shape[-1])
+    #rot_output = rot_output.view(cfg.BATCH_NUM_QUERIES, -1, rot_output.shape[-1])
     o1, o2, o3, o4 = torch.split(
         output, [1, cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY, 1], dim=1)
-
-    return o1, o2, o3, o4
+    #ro1, ro2, ro3, ro4 = torch.split(
+    #    rot_output, [1, cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY, 1], dim=1)
+    return o1, o2, o3, o4#, ro1, ro2, ro3, ro4 
 
 
 if __name__ == "__main__":
-    train()
+    for i in range(len(cfg.scene_list)):
+        train(i)

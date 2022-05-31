@@ -120,6 +120,7 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
         # return list [query,positives,negatives]
     #print("query:"+str(dict_value["query"]))
     query = load_image_file(dict_value["query"])  # Nx3
+    #print("query:"+str(dict_value["query"]))
     #cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/query.jpg', query)
     random.shuffle(dict_value["positives"])
     pos_files = []
