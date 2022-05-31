@@ -415,24 +415,7 @@ class ImageNetfeat(nn.Module):
         super(ImageNetfeat, self).__init__()
         encoder = models.vgg16(pretrained=True)
         layers = list(encoder.features.children())[:-2]
-        '''
-        self.base_model = nn.Sequential(
-                        encoder.conv1,
-                        encoder.bn1,
-                        encoder.relu,
-                        encoder.maxpool,
-                        encoder.layer1,
-                        encoder.layer2,
-                        encoder.layer3,
-                        encoder.layer4,
-                    )
-        
-        if pretrained:
-            # if using pretrained then only train conv5_1, conv5_2, and conv5_3
-            for l in layers[:-5]: 
-                for p in l.parameters():
-                    p.requires_grad = False
-        '''
+
         self.base_model = nn.Sequential(*layers)
 
     def forward(self, x):

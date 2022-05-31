@@ -54,45 +54,19 @@ def evaluate_model(model,optimizer,epoch,scene_index,save=False,full_pickle=Fals
             }, cfg.LOG_DIR + "checkpoint.pth.tar")
     
     print("epoch:"+str(epoch))
-    #checkpoint = torch.load(cfg.LOG_DIR + "checkpoint.pth.tar")
-    #saved_state_dict = checkpoint['state_dict']
-    #model.load_state_dict(saved_state_dict)
+
     if full_pickle:
         DATABASE_SETS = get_sets_dict('generating_queries/evaluation_database_full.pickle')
         QUERY_SETS = get_sets_dict('generating_queries/evaluation_query_full.pickle')
     else:
         DATABASE_SETS = get_sets_dict(cfg.EVAL_DATABASE_FILE)
         QUERY_SETS = get_sets_dict(cfg.EVAL_QUERY_FILE)
-    # print("cfg.EVAL_DATABASE_FILE:"+str(cfg.EVAL_DATABASE_FILE))
-    # print("cfg.EVAL_QUERY_FILE:"+str(cfg.EVAL_QUERY_FILE))
-    # print("QUERY_SETS:"+str(QUERY_SETS))
-    '''
-    QUERY_SETS = []
-    for i in range(4):
-        QUERY = {}
-        for j in range(len(QUERY_SETS_temp)//4):
-            #QUERY[len(QUERY.keys())] = {"query":QUERY_SETS_temp[i][j]['query'],
-            #                                "x":float(QUERY_SETS_temp[i][j]['x']),
-            #                                "y":float(QUERY_SETS_temp[i][j]['y']),
-            #                                }
-            QUERY[len(QUERY.keys())] = QUERY_SETS_temp[i][j]
-        QUERY_SETS.append(QUERY)
-    '''
+
     cfg.RESULTS_FOLDER = os.path.join("results/", cfg.scene_list[scene_index])
 
     if not os.path.exists(cfg.RESULTS_FOLDER):
         os.mkdir(cfg.RESULTS_FOLDER)
 
-    #count = 0
-    '''
-    similarity_1 = []
-    similarity_5 = []
-    similarity_10 = []
-
-    one_percent_recall = []
-    five_percent_recall = []
-    ten_percent_recall = []
-    '''
     DATABASE_VECTORS = []
     QUERY_VECTORS = []
 
@@ -102,28 +76,20 @@ def evaluate_model(model,optimizer,epoch,scene_index,save=False,full_pickle=Fals
     for j in range(len(QUERY_SETS)):
         QUERY_VECTORS.append(get_latent_vectors(model, QUERY_SETS[j]))
 
-    #len_tr = np.array(DATABASE_VECTORS).shape[1]
     recall_1 = 0#np.zeros(int(round(len_tr/1000)))
     recall_5 = 0#np.zeros(int(round(len_tr/200)))
     recall_10 = 0#np.zeros(int(round(len_tr/100)))
         ### Save Evaluate vectors
     if full_pickle:
         return DATABASE_VECTORS
-        #file_name = os.path.join(cfg.RESULTS_FOLDER, "database"+str(epoch)+".npy")
-        #np.save(file_name, np.array(DATABASE_VECTORS))
-        #print("saving for DATABASE_VECTORS to "+str(file_name))
+
     else:
         file_name = os.path.join(cfg.RESULTS_FOLDER, "database"+str(epoch)+".npy")
         np.save(file_name, np.array(DATABASE_VECTORS))
         print("saving for DATABASE_VECTORS to "+str(file_name))
 
     #############
-    #for m in range(len(QUERY_SETS)):
-    #    for n in range(len(QUERY_SETS)):
-    #        if m == n:
-    #           continue
-    #pair_recall_1, pair_recall_5, pair_recall_10, pair_similarity_1, pair_similarity_5, pair_similarity_10, pair_opr_1, pair_opr_5, pair_opr_10 = get_recall(
-    #    0, 0, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS)
+
     pair_recall_1, pair_recall_5, pair_recall_10= get_recall(
         0, 0, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS)
     recall_1 = np.array(pair_recall_1)
@@ -131,40 +97,13 @@ def evaluate_model(model,optimizer,epoch,scene_index,save=False,full_pickle=Fals
     recall_10 = np.array(pair_recall_10)
     
     print("recall_1:"+str(recall_1))
-    #count = 1
-    '''
-    one_percent_recall.append(pair_opr_1)
-    five_percent_recall.append(pair_opr_5)
-    ten_percent_recall.append(pair_opr_10)
 
-    for x in pair_similarity_1:
-        similarity_1.append(x)
-    for x in pair_similarity_5:
-        similarity_5.append(x)
-    for x in pair_similarity_10:
-        similarity_10.append(x)
-    '''
     #########
     
     ave_recall_1 = recall_1 #/ count
     ave_recall_5 = recall_5 #/ count
     ave_recall_10 = recall_10 #/ count
-    # print(ave_recall)
 
-    # print(similarity)
-    '''
-    average_similarity_1 = np.mean(similarity_1)
-    average_similarity_5 = np.mean(similarity_5)
-    average_similarity_10 = np.mean(similarity_10)
-    # print(average_similarity)
-
-    ave_one_percent_recall = np.mean(one_percent_recall)
-    ave_five_percent_recall = np.mean(five_percent_recall)
-    ave_ten_percent_recall = np.mean(ten_percent_recall)
-    # print(ave_one_percent_recall)
-    '''
-    #print("os.path.join(/home/cc/PointNet-torch2,cfg.OUTPUT_FILE,log.txt):"+str(os.path.join("/home/cc/PointNet-torch2",cfg.OUTPUT_FILE,"log.txt")))
-    #assert(0)
     with open(os.path.join(cfg.OUTPUT_FILE), "w") as output:
         output.write("Average Recall @1:\n")
         output.write(str(ave_recall_1)+"\n")
@@ -173,21 +112,7 @@ def evaluate_model(model,optimizer,epoch,scene_index,save=False,full_pickle=Fals
         output.write("Average Recall @10:\n")
         output.write(str(ave_recall_10)+"\n")
         output.write("\n\n")
-        '''
-        output.write("Average Similarity_1:\n")
-        output.write(str(average_similarity_1)+"\n")
-        output.write("Average Similarity_5:\n")
-        output.write(str(average_similarity_5)+"\n")
-        output.write("Average Similarity_10:\n")
-        output.write(str(average_similarity_10)+"\n")
-        output.write("\n\n")
-        output.write("Average Top 1% Recall:\n")
-        output.write(str(ave_one_percent_recall)+"\n")
-        output.write("Average Top 5% Recall:\n")
-        output.write(str(ave_five_percent_recall)+"\n")
-        output.write("Average Top 10% Recall:\n")
-        output.write(str(ave_ten_percent_recall)+"\n")
-        '''
+
     return ave_recall_1, ave_recall_5, ave_recall_10
 
 
@@ -257,8 +182,7 @@ def get_recall(m, n, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS):
     database_output = DATABASE_VECTORS[m]  #2048*256
     queries_output = QUERY_VECTORS[n]      #10*256
     
-    # print("database_output:"+str(database_output.shape))
-    # print("queries_output:"+str(queries_output.shape))
+
     database_nbrs = KDTree(database_output)
     num_neighbors = 25
 
@@ -266,22 +190,13 @@ def get_recall(m, n, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS):
     similarity_scores = []
     N_percent_recalls = []
 
-    #percent_array = [1000, 200, 100]
     n_values = [1,5,10,20]
     for value in n_values:
-        #threshold = max(int(round(len(database_output)/percent)), 1)
-        #recall_N = 0
-        #topN_similarity_score = []
-        #N_percent_retrieved = 0
 
         num_evaluated = 0
         recall_N_per = 0
         for i in range(len(queries_output)):
-            # print("n:"+str(n))
-            # print("m:"+str(m))
-            # print("len(QUERY_SETS):"+str(len(QUERY_SETS)))
-            # print("len(QUERY_SETS[n]):"+str(len(QUERY_SETS[n])))
-            # print("len(QUERY_SETS[n][i]):"+str((QUERY_SETS[n][i])))
+
             true_neighbors = QUERY_SETS[n][i][m]
             
             if(len(true_neighbors) == 0):
@@ -290,24 +205,7 @@ def get_recall(m, n, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS):
             distances, indices = database_nbrs.query(
                 np.array([queries_output[i]]),k=value+11)
             
-            #indices = indices + n*2048
-            '''
-            for j in range(len(indices[0])):
-                if indices[0][j] in true_neighbors:
-                    if(j == 0):
-                        similarity = np.dot(
-                            queries_output[i], database_output[indices[0][j]])
-                        topN_similarity_score.append(similarity)
-                    recall_N[j] += 1
-                    break
-            '''
-            '''
-            print("true_neighbors:"+str(true_neighbors))
-            print("set(indices[0][0:threshold]:"+str(set(indices[0][0:threshold])))
-            #assert(0)
-            print("len(list(set(indices[0][0:threshold]).intersection(set(true_neighbors)))):"+str(len(list(set(indices[0][0:threshold]).intersection(set(true_neighbors))))))
-            assert(0)
-            '''
+
             compare_a = indices[0][0:50].tolist()
             k_nearest = 10
             pos_index_range = list(range(-k_nearest//2, (k_nearest//2)+1))
@@ -316,39 +214,27 @@ def get_recall(m, n, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS):
                     compare_a.remove(pos_index+i)
                 except:
                     pass
-            #print("compare_a:"+str(compare_a))
             compare_a = compare_a[:(value)]
-            #print("compare_a_after:"+str(compare_a))
-            #assert(0)
+
             compare_b = true_neighbors
-            #compare_a.remove(i)
             try:
                 compare_b.remove(i)
             except:
                 pass
             compare_a = set(compare_a)
-            #print("value:"+str(value))
-            #print("compare_a:"+str(compare_a))
+
             compare_b = set(compare_b)
-            #if len(list(set(indices[0][0:threshold]).intersection(set(true_neighbors)))) > 0:
             if len(list(compare_a.intersection(compare_b))) > 0:
                 recall_N_per += 1
         
         if float(num_evaluated)!=0:
-            #N_percent_recall = (N_percent_retrieved/float(num_evaluated))*100
             recall_N = (recall_N_per/float(num_evaluated))*100
-            #print("N_percent_recall:"+str(N_percent_recall))
-            #print("recall_N:"+str(recall_N))
-            #assert(0)
+
         else:
-            #N_percent_recall = 0
             recall_N = 0
         recalls.append(recall_N)
-        #similarity_scores.append(topN_similarity_score)
-        #N_percent_recalls.append(N_percent_recall)
+
     recall_1, recall_5, recall_10 = recalls[0], recalls[1], recalls[2] 
-    #top1_similarity_score, top5_similarity_score, top10_similarity_score = similarity_scores[0], similarity_scores[1], similarity_scores[2] 
-    #one_percent_recall, five_percent_recall, ten_percent_recall = N_percent_recalls[0], N_percent_recalls[1], N_percent_recalls[2] 
 
     return recall_1, recall_5, recall_10#, top1_similarity_score, top5_similarity_score, top10_similarity_score, one_percent_recall, five_percent_recall, ten_percent_recall
 
@@ -373,8 +259,6 @@ if __name__ == "__main__":
                         help='PointNetVlad Dataset Folder')
     FLAGS = parser.parse_args()
 
-    #BATCH_SIZE = FLAGS.batch_size
-    #cfg.EVAL_BATCH_SIZE = FLAGS.eval_batch_size
     cfg.NUM_POINTS = 4096
     cfg.FEATURE_OUTPUT_DIM = 256
     cfg.EVAL_POSITIVES_PER_QUERY = FLAGS.positives_per_query
