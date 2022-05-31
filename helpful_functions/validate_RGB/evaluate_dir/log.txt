@@ -1,0 +1,4506 @@
+Use GPU: 0 for training
+=> creating model 'resnet50'
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.48993916705662144
+The Recall_5: 0.41881141787552645
+The Recall_1: 0.24567150210575572
+indices_10_std:0.34630584192439856
+indices_5_std:0.2897766323024055
+indices_1_std:0.1618556701030928
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 1 ... 0 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47215722976134766
+The Recall_5: 0.42021525503041646
+The Recall_1: 0.2522227421619092
+indices_10_std:0.3312714776632303
+indices_5_std:0.2895189003436426
+indices_1_std:0.16735395189003435
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[1 0 1 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.486195601310248
+The Recall_5: 0.4174075807206364
+The Recall_1: 0.2611137108095461
+indices_10_std:0.34089347079037796
+indices_5_std:0.2822164948453608
+indices_1_std:0.17010309278350516
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 1 ... 0 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4637342068320075
+The Recall_5: 0.3940102948058025
+The Recall_1: 0.2377164248947122
+indices_10_std:0.32766323024054983
+indices_5_std:0.2721649484536082
+indices_1_std:0.15420962199312713
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 0 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4838558727187646
+The Recall_5: 0.42489471221338326
+The Recall_1: 0.25549836218998595
+indices_10_std:0.35094501718213056
+indices_5_std:0.30163230240549826
+indices_1_std:0.17242268041237113
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.46233036967711744
+The Recall_5: 0.4057089377632195
+The Recall_1: 0.24473561066916238
+indices_10_std:0.32766323024054983
+indices_5_std:0.2813573883161512
+indices_1_std:0.16271477663230238
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 2 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4599906410856341
+The Recall_5: 0.3968179691155826
+The Recall_1: 0.23490875058493216
+indices_10_std:0.32276632302405495
+indices_5_std:0.2748281786941581
+indices_1_std:0.1577319587628866
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 0 ... 1 1 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.46420215255030417
+The Recall_5: 0.40383715489003275
+The Recall_1: 0.23490875058493216
+indices_10_std:0.32517182130584193
+indices_5_std:0.2767182130584192
+indices_1_std:0.15189003436426116
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[1 0 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4740290126345344
+The Recall_5: 0.4108563406644829
+The Recall_1: 0.25315863359850255
+indices_10_std:0.33728522336769756
+indices_5_std:0.2842783505154639
+indices_1_std:0.165893470790378
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[1 0 0 ... 1 2 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.44969583528310714
+The Recall_5: 0.39354234908750585
+The Recall_1: 0.2358446420215255
+indices_10_std:0.31563573883161505
+indices_5_std:0.26606529209621993
+indices_1_std:0.1529209621993127
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4627983153954141
+The Recall_5: 0.39354234908750585
+The Recall_1: 0.24052409920449228
+indices_10_std:0.33213058419243985
+indices_5_std:0.27310996563573886
+indices_1_std:0.15704467353951887
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4777725783809078
+The Recall_5: 0.4089845577912962
+The Recall_1: 0.24286382779597568
+indices_10_std:0.33771477663230237
+indices_5_std:0.27835051546391754
+indices_1_std:0.15506872852233675
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 0 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47496490407112774
+The Recall_5: 0.40992044922788956
+The Recall_1: 0.25035095928872253
+indices_10_std:0.33797250859106526
+indices_5_std:0.2876288659793814
+indices_1_std:0.16847079037800686
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[1 0 0 ... 0 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.46420215255030417
+The Recall_5: 0.4071127749181095
+The Recall_1: 0.24520355638745905
+indices_10_std:0.3266323024054983
+indices_5_std:0.2793814432989691
+indices_1_std:0.1571305841924399
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 2 ... 0 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47964436125409454
+The Recall_5: 0.4113242863827796
+The Recall_1: 0.2526906878802059
+indices_10_std:0.3313573883161512
+indices_5_std:0.2787800687285223
+indices_1_std:0.16374570446735393
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[1 1 1 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4688816097332709
+The Recall_5: 0.4047730463266261
+The Recall_1: 0.25409452503509594
+indices_10_std:0.32766323024054983
+indices_5_std:0.2715635738831615
+indices_1_std:0.1642611683848797
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.471689284043051
+The Recall_5: 0.40196537201684607
+The Recall_1: 0.2508189050070192
+indices_10_std:0.33298969072164947
+indices_5_std:0.2780068728522337
+indices_1_std:0.1646048109965636
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 1 ... 1 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4576509124941507
+The Recall_5: 0.3940102948058025
+The Recall_1: 0.24894712213383247
+indices_10_std:0.3229381443298969
+indices_5_std:0.2719931271477663
+indices_1_std:0.16228522336769757
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 1 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47590079550772113
+The Recall_5: 0.40851661207299955
+The Recall_1: 0.25035095928872253
+indices_10_std:0.33943298969072166
+indices_5_std:0.2851374570446735
+indices_1_std:0.16297250859106527
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4791764155357979
+The Recall_5: 0.4160037435657464
+The Recall_1: 0.24801123069723913
+indices_10_std:0.34355670103092784
+indices_5_std:0.290979381443299
+indices_1_std:0.16537800687285223
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[1 0 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.45203556387459054
+The Recall_5: 0.3865231633130557
+The Recall_1: 0.2363125877398222
+indices_10_std:0.32001718213058417
+indices_5_std:0.2668384879725086
+indices_1_std:0.1574742268041237
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 0 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4740290126345344
+The Recall_5: 0.41647168928404305
+The Recall_1: 0.2484791764155358
+indices_10_std:0.33359106529209626
+indices_5_std:0.2842783505154639
+indices_1_std:0.16271477663230238
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 1 ... 1 1 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.48759943846513804
+The Recall_5: 0.41881141787552645
+The Recall_1: 0.25924192793635936
+indices_10_std:0.35197594501718216
+indices_5_std:0.2937285223367697
+indices_1_std:0.17079037800687288
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47964436125409454
+The Recall_5: 0.40149742629854934
+The Recall_1: 0.23210107627515209
+indices_10_std:0.33831615120274916
+indices_5_std:0.2768041237113402
+indices_1_std:0.15317869415807558
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.46700982686008424
+The Recall_5: 0.4057089377632195
+The Recall_1: 0.24286382779597568
+indices_10_std:0.33591065292096217
+indices_5_std:0.2833333333333334
+indices_1_std:0.16391752577319588
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 0 0 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4548432381843706
+The Recall_5: 0.3926064576509125
+The Recall_1: 0.2466073935423491
+indices_10_std:0.3219931271477663
+indices_5_std:0.27422680412371137
+indices_1_std:0.16099656357388317
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 1 ... 1 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47449695835283107
+The Recall_5: 0.400561534861956
+The Recall_1: 0.24801123069723913
+indices_10_std:0.3378006872852234
+indices_5_std:0.2740549828178694
+indices_1_std:0.16134020618556702
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4754328497894244
+The Recall_5: 0.40992044922788956
+The Recall_1: 0.25315863359850255
+indices_10_std:0.3391752577319588
+indices_5_std:0.28384879725085915
+indices_1_std:0.16855670103092785
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4754328497894244
+The Recall_5: 0.41459990641085637
+The Recall_1: 0.25035095928872253
+indices_10_std:0.33608247422680415
+indices_5_std:0.2870274914089347
+indices_1_std:0.16563573883161511
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4599906410856341
+The Recall_5: 0.399157697707066
+The Recall_1: 0.23350491343004212
+indices_10_std:0.3299828178694158
+indices_5_std:0.27749140893470786
+indices_1_std:0.15317869415807558
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[1 1 0 ... 0 0 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47309312119794106
+The Recall_5: 0.40992044922788956
+The Recall_1: 0.2611137108095461
+indices_10_std:0.33238831615120273
+indices_5_std:0.27929553264604806
+indices_1_std:0.16743986254295531
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 1 ... 1 1 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4674777725783809
+The Recall_5: 0.40992044922788956
+The Recall_1: 0.25128685072531587
+indices_10_std:0.3294673539518901
+indices_5_std:0.2823024054982818
+indices_1_std:0.16606529209621992
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 1 ... 0 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4698175011698643
+The Recall_5: 0.41647168928404305
+The Recall_1: 0.2695367337388863
+indices_10_std:0.3304123711340206
+indices_5_std:0.2865120274914089
+indices_1_std:0.1788659793814433
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 0 ... 0 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4819840898455779
+The Recall_5: 0.41881141787552645
+The Recall_1: 0.25549836218998595
+indices_10_std:0.3391752577319588
+indices_5_std:0.28685567010309276
+indices_1_std:0.17036082474226805
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 0 ... 1 1 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4890032756200281
+The Recall_5: 0.4286382779597567
+The Recall_1: 0.256902199344876
+indices_10_std:0.34604810996563573
+indices_5_std:0.29467353951890035
+indices_1_std:0.17259450171821306
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 0 ... 1 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4688816097332709
+The Recall_5: 0.40149742629854934
+The Recall_1: 0.24707533926064576
+indices_10_std:0.32809278350515464
+indices_5_std:0.27328178694158073
+indices_1_std:0.16151202749140892
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 1 ... 1 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.46420215255030417
+The Recall_5: 0.4089845577912962
+The Recall_1: 0.25175479644361254
+indices_10_std:0.32611683848797257
+indices_5_std:0.28281786941580755
+indices_1_std:0.16804123711340208
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4613944782405241
+The Recall_5: 0.39588207767898925
+The Recall_1: 0.2358446420215255
+indices_10_std:0.32182130584192437
+indices_5_std:0.2729381443298969
+indices_1_std:0.15609965635738834
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.46467009826860084
+The Recall_5: 0.41272812353766963
+The Recall_1: 0.2466073935423491
+indices_10_std:0.3286082474226804
+indices_5_std:0.2828178694158076
+indices_1_std:0.15970790378006874
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 0 ... 1 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.48104819840898455
+The Recall_5: 0.41881141787552645
+The Recall_1: 0.2484791764155358
+indices_10_std:0.33969072164948455
+indices_5_std:0.28934707903780066
+indices_1_std:0.15850515463917525
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47075339260645765
+The Recall_5: 0.41413196069255964
+The Recall_1: 0.25783809078146935
+indices_10_std:0.33341924398625433
+indices_5_std:0.2853951890034364
+indices_1_std:0.16941580756013744
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4735610669162377
+The Recall_5: 0.40617688348151615
+The Recall_1: 0.2377164248947122
+indices_10_std:0.3371134020618557
+indices_5_std:0.2797250859106529
+indices_1_std:0.15146048109965635
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[1 0 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47496490407112774
+The Recall_5: 0.4080486663547028
+The Recall_1: 0.25128685072531587
+indices_10_std:0.334106529209622
+indices_5_std:0.28324742268041236
+indices_1_std:0.16915807560137458
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4885353299017314
+The Recall_5: 0.42770238652316334
+The Recall_1: 0.26438933083762284
+indices_10_std:0.3425257731958763
+indices_5_std:0.29140893470790374
+indices_1_std:0.1701890034364261
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 1 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47870846981750115
+The Recall_5: 0.4131960692559663
+The Recall_1: 0.26298549368273283
+indices_10_std:0.33960481099656353
+indices_5_std:0.28711340206185565
+indices_1_std:0.17577319587628865
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[1 0 0 ... 1 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4637342068320075
+The Recall_5: 0.39494618624239586
+The Recall_1: 0.24379971923256902
+indices_10_std:0.32689003436426123
+indices_5_std:0.27319587628865977
+indices_1_std:0.16091065292096218
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 1 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4459522695367337
+The Recall_5: 0.38933083762283577
+The Recall_1: 0.23490875058493216
+indices_10_std:0.3158075601374571
+indices_5_std:0.27096219931271476
+indices_1_std:0.15214776632302404
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[1 0 0 ... 1 1 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47309312119794106
+The Recall_5: 0.40196537201684607
+The Recall_1: 0.24567150210575572
+indices_10_std:0.33608247422680415
+indices_5_std:0.28135738831615115
+indices_1_std:0.16151202749140892
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 0 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4599906410856341
+The Recall_5: 0.4047730463266261
+The Recall_1: 0.2400561534861956
+indices_10_std:0.3246563573883161
+indices_5_std:0.27895189003436427
+indices_1_std:0.16194158075601373
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4726251754796444
+The Recall_5: 0.41506785212915304
+The Recall_1: 0.24333177351427235
+indices_10_std:0.3389175257731959
+indices_5_std:0.29080756013745707
+indices_1_std:0.16099656357388317
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[1 0 0 ... 0 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4927468413664015
+The Recall_5: 0.42817033224146
+The Recall_1: 0.26672905942910624
+indices_10_std:0.34914089347079036
+indices_5_std:0.3002577319587629
+indices_1_std:0.17749140893470788
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 0 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.48713149274684137
+The Recall_5: 0.4178755264389331
+The Recall_1: 0.270004679457183
+indices_10_std:0.34484536082474226
+indices_5_std:0.2893470790378007
+indices_1_std:0.1782646048109966
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 1 ... 1 1 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.46420215255030417
+The Recall_5: 0.40758072063640616
+The Recall_1: 0.24520355638745905
+indices_10_std:0.3263745704467354
+indices_5_std:0.27835051546391754
+indices_1_std:0.161340206185567
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[1 0 0 ... 1 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.46467009826860084
+The Recall_5: 0.40758072063640616
+The Recall_1: 0.24613944782405242
+indices_10_std:0.32577319587628867
+indices_5_std:0.2808419243986254
+indices_1_std:0.15970790378006872
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 1 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47730463266261114
+The Recall_5: 0.40758072063640616
+The Recall_1: 0.24473561066916238
+indices_10_std:0.33281786941580754
+indices_5_std:0.28161512027491403
+indices_1_std:0.15704467353951887
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 0 1 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4599906410856341
+The Recall_5: 0.3940102948058025
+The Recall_1: 0.24286382779597568
+indices_10_std:0.32628865979381444
+indices_5_std:0.272852233676976
+indices_1_std:0.16323024054982815
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 1 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4824520355638746
+The Recall_5: 0.41226017781937296
+The Recall_1: 0.2597098736546561
+indices_10_std:0.3451890034364261
+indices_5_std:0.2854810996563574
+indices_1_std:0.16984536082474228
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 0 1 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4866635470285447
+The Recall_5: 0.4244267664950866
+The Recall_1: 0.2573701450631727
+indices_10_std:0.3442439862542955
+indices_5_std:0.29381443298969073
+indices_1_std:0.17096219931271475
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.45671502105755735
+The Recall_5: 0.4033692091717361
+The Recall_1: 0.23022929340196538
+indices_10_std:0.3259450171821306
+indices_5_std:0.28015463917525774
+indices_1_std:0.15025773195876288
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 1 ... 0 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4763687412260178
+The Recall_5: 0.4155357978474497
+The Recall_1: 0.26017781937295276
+indices_10_std:0.33823024054982814
+indices_5_std:0.28539518900343647
+indices_1_std:0.16752577319587628
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[1 0 0 ... 1 0 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4679457182966776
+The Recall_5: 0.40758072063640616
+The Recall_1: 0.26158165652784277
+indices_10_std:0.3327319587628866
+indices_5_std:0.2815292096219931
+indices_1_std:0.17328178694158072
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 1 ... 0 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4698175011698643
+The Recall_5: 0.40617688348151615
+The Recall_1: 0.2508189050070192
+indices_10_std:0.33505154639175255
+indices_5_std:0.28341924398625423
+indices_1_std:0.16151202749140892
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 0 ... 0 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4656059897051942
+The Recall_5: 0.40383715489003275
+The Recall_1: 0.24754328497894243
+indices_10_std:0.33170103092783504
+indices_5_std:0.2810996563573883
+indices_1_std:0.16288659793814433
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47075339260645765
+The Recall_5: 0.41413196069255964
+The Recall_1: 0.2508189050070192
+indices_10_std:0.3327319587628866
+indices_5_std:0.28823024054982815
+indices_1_std:0.16503436426116835
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 1 ... 0 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4740290126345344
+The Recall_5: 0.41038839494618623
+The Recall_1: 0.25035095928872253
+indices_10_std:0.33505154639175255
+indices_5_std:0.27903780068728523
+indices_1_std:0.1640893470790378
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 1 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47449695835283107
+The Recall_5: 0.4052409920449228
+The Recall_1: 0.23350491343004212
+indices_10_std:0.33187285223367696
+indices_5_std:0.27663230240549824
+indices_1_std:0.15395189003436424
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4740290126345344
+The Recall_5: 0.4183434721572298
+The Recall_1: 0.25362657931679927
+indices_10_std:0.3374570446735395
+indices_5_std:0.2905498281786942
+indices_1_std:0.16331615120274917
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4791764155357979
+The Recall_5: 0.41038839494618623
+The Recall_1: 0.2442676649508657
+indices_10_std:0.340807560137457
+indices_5_std:0.2827319587628866
+indices_1_std:0.1559278350515464
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 0 ... 0 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4712213383247543
+The Recall_5: 0.4047730463266261
+The Recall_1: 0.24145999064108564
+indices_10_std:0.33479381443298967
+indices_5_std:0.27963917525773196
+indices_1_std:0.1575601374570447
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 0 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4590547496490407
+The Recall_5: 0.4029012634534394
+The Recall_1: 0.24473561066916238
+indices_10_std:0.3268041237113402
+indices_5_std:0.2785223367697594
+indices_1_std:0.15790378006872852
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47309312119794106
+The Recall_5: 0.41272812353766963
+The Recall_1: 0.24520355638745905
+indices_10_std:0.3330756013745705
+indices_5_std:0.2836769759450171
+indices_1_std:0.15945017182130583
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 0 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47683668694431447
+The Recall_5: 0.41413196069255964
+The Recall_1: 0.25362657931679927
+indices_10_std:0.33934707903780065
+indices_5_std:0.28960481099656354
+indices_1_std:0.16975945017182126
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4838558727187646
+The Recall_5: 0.42021525503041646
+The Recall_1: 0.256902199344876
+indices_10_std:0.34484536082474226
+indices_5_std:0.2905498281786941
+indices_1_std:0.16615120274914086
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 1 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4637342068320075
+The Recall_5: 0.4071127749181095
+The Recall_1: 0.2526906878802059
+indices_10_std:0.3261168384879725
+indices_5_std:0.27869415807560133
+indices_1_std:0.16408934707903783
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 0 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4613944782405241
+The Recall_5: 0.39588207767898925
+The Recall_1: 0.23865231633130557
+indices_10_std:0.3261168384879725
+indices_5_std:0.27310996563573886
+indices_1_std:0.1562714776632302
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 1 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.46841366401497425
+The Recall_5: 0.41413196069255964
+The Recall_1: 0.2484791764155358
+indices_10_std:0.3329037800687285
+indices_5_std:0.28848797250859104
+indices_1_std:0.16305841924398626
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 1 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.46467009826860084
+The Recall_5: 0.4113242863827796
+The Recall_1: 0.24567150210575572
+indices_10_std:0.3329037800687285
+indices_5_std:0.2860824742268041
+indices_1_std:0.16211340206185568
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[1 1 1 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47075339260645765
+The Recall_5: 0.4169396350023397
+The Recall_1: 0.26672905942910624
+indices_10_std:0.33410652920962197
+indices_5_std:0.28668384879725084
+indices_1_std:0.17216494845360825
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 0 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4805802526906879
+The Recall_5: 0.40758072063640616
+The Recall_1: 0.24754328497894243
+indices_10_std:0.3422680412371134
+indices_5_std:0.2804982817869416
+indices_1_std:0.1640893470790378
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 1 ... 0 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4740290126345344
+The Recall_5: 0.4108563406644829
+The Recall_1: 0.25035095928872253
+indices_10_std:0.33599656357388313
+indices_5_std:0.28668384879725084
+indices_1_std:0.16872852233676974
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[1 1 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.48104819840898455
+The Recall_5: 0.40851661207299955
+The Recall_1: 0.2550304164716893
+indices_10_std:0.3438144329896907
+indices_5_std:0.28393470790378
+indices_1_std:0.16890034364261167
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 1 ... 1 0 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4726251754796444
+The Recall_5: 0.41459990641085637
+The Recall_1: 0.26298549368273283
+indices_10_std:0.3337628865979381
+indices_5_std:0.284020618556701
+indices_1_std:0.17147766323024055
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 1 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4693495554515676
+The Recall_5: 0.41272812353766963
+The Recall_1: 0.24333177351427235
+indices_10_std:0.33238831615120273
+indices_5_std:0.28616838487972507
+indices_1_std:0.15670103092783505
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 0 0 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4726251754796444
+The Recall_5: 0.4094525035095929
+The Recall_1: 0.2625175479644361
+indices_10_std:0.33118556701030927
+indices_5_std:0.2800687285223368
+indices_1_std:0.17173539518900344
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 1 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4843238184370613
+The Recall_5: 0.41647168928404305
+The Recall_1: 0.2597098736546561
+indices_10_std:0.3422680412371134
+indices_5_std:0.29080756013745707
+indices_1_std:0.17542955326460483
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 2 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47590079550772113
+The Recall_5: 0.41226017781937296
+The Recall_1: 0.258306036499766
+indices_10_std:0.3371134020618557
+indices_5_std:0.2827319587628866
+indices_1_std:0.16778350515463916
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 0 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.46607393542349085
+The Recall_5: 0.4047730463266261
+The Recall_1: 0.25175479644361254
+indices_10_std:0.33384879725085914
+indices_5_std:0.28127147766323024
+indices_1_std:0.1654639175257732
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4510996724379972
+The Recall_5: 0.39354234908750585
+The Recall_1: 0.2381843706130089
+indices_10_std:0.3256872852233677
+indices_5_std:0.27809278350515465
+indices_1_std:0.15824742268041236
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 1 ... 0 1 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4754328497894244
+The Recall_5: 0.4113242863827796
+The Recall_1: 0.23865231633130557
+indices_10_std:0.3387457044673539
+indices_5_std:0.2859965635738832
+indices_1_std:0.15498281786941578
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 2 ... 1 1 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4866635470285447
+The Recall_5: 0.4169396350023397
+The Recall_1: 0.25362657931679927
+indices_10_std:0.34647766323024054
+indices_5_std:0.28891752577319585
+indices_1_std:0.16778350515463916
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[1 1 1 ... 0 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47683668694431447
+The Recall_5: 0.41226017781937296
+The Recall_1: 0.24894712213383247
+indices_10_std:0.3382302405498282
+indices_5_std:0.28668384879725084
+indices_1_std:0.1620274914089347
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 2 ... 0 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4805802526906879
+The Recall_5: 0.40851661207299955
+The Recall_1: 0.24239588207767898
+indices_10_std:0.3402920962199313
+indices_5_std:0.28170103092783505
+indices_1_std:0.16099656357388314
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.458586803930744
+The Recall_5: 0.399157697707066
+The Recall_1: 0.24145999064108564
+indices_10_std:0.3287800687285223
+indices_5_std:0.2804123711340206
+indices_1_std:0.1584192439862543
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47496490407112774
+The Recall_5: 0.4080486663547028
+The Recall_1: 0.25783809078146935
+indices_10_std:0.3358247422680412
+indices_5_std:0.2827319587628866
+indices_1_std:0.16907216494845362
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 0 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4712213383247543
+The Recall_5: 0.4066448291998128
+The Recall_1: 0.25924192793635936
+indices_10_std:0.3288659793814433
+indices_5_std:0.2823024054982818
+indices_1_std:0.16941580756013747
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 0 0 ... 1 2 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.470285446888161
+The Recall_5: 0.4029012634534394
+The Recall_1: 0.26017781937295276
+indices_10_std:0.33599656357388313
+indices_5_std:0.28032646048109966
+indices_1_std:0.17310996563573883
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[1 1 0 ... 0 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4763687412260178
+The Recall_5: 0.4089845577912962
+The Recall_1: 0.2400561534861956
+indices_10_std:0.3365120274914089
+indices_5_std:0.28084192439862543
+indices_1_std:0.15764604810996563
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[1 0 1 ... 1 2 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4656059897051942
+The Recall_5: 0.40243331773514274
+The Recall_1: 0.24754328497894243
+indices_10_std:0.3345360824742268
+indices_5_std:0.281786941580756
+indices_1_std:0.16314432989690722
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 0 ... 1 1 0]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.4698175011698643
+The Recall_5: 0.4033692091717361
+The Recall_1: 0.2466073935423491
+indices_10_std:0.3345360824742268
+indices_5_std:0.2811855670103093
+indices_1_std:0.16606529209621992
+################################################
+gt_files_2:torch.Size([7, 2137, 7])
+Computing features...
+indices_gt_std_per:[2 1 2 ... 1 2 1]
+indices_10_std_per:[0 1 0 ... 1 1 1]
+len(indices_gt_std_per):1940
+len(indices_10_std_per):1940
+################################################
+Scene:Goffs
+The Recall_10: 0.47075339260645765
+The Recall_5: 0.41459990641085637
+The Recall_1: 0.24379971923256902
+indices_10_std:0.3393470790378007
+indices_5_std:0.29175257731958765
+indices_1_std:0.1615979381443299
+################################################
+Use GPU: 0 for training
+=> creating model 'resnet50'
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 0 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.6027272727272728
+The Recall_5: 0.5418181818181819
+The Recall_1: 0.3654545454545455
+indices_10_std:0.36111111111111105
+indices_5_std:0.3073166826769132
+indices_1_std:0.18764008965738072
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 2 1 ... 1 0 0]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.59
+The Recall_5: 0.5281818181818182
+The Recall_1: 0.3490909090909091
+indices_10_std:0.34870317002881845
+indices_5_std:0.3001921229586936
+indices_1_std:0.1849983989753442
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5836363636363636
+The Recall_5: 0.5227272727272727
+The Recall_1: 0.35863636363636364
+indices_10_std:0.3503041946845981
+indices_5_std:0.30235350624399615
+indices_1_std:0.18756003842459174
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[0 2 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5704545454545454
+The Recall_5: 0.5131818181818182
+The Recall_1: 0.3418181818181818
+indices_10_std:0.3386967659301953
+indices_5_std:0.29042587255843744
+indices_1_std:0.1819564521293628
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 1 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5831818181818181
+The Recall_5: 0.509090909090909
+The Recall_1: 0.3463636363636364
+indices_10_std:0.34918347742555234
+indices_5_std:0.2945885366634646
+indices_1_std:0.1812359910342619
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[0 0 0 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5759090909090909
+The Recall_5: 0.5168181818181818
+The Recall_1: 0.3659090909090909
+indices_10_std:0.3441402497598463
+indices_5_std:0.29338776817162987
+indices_1_std:0.19180275376240793
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 0 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5790909090909091
+The Recall_5: 0.5104545454545455
+The Recall_1: 0.3418181818181818
+indices_10_std:0.34069804674992
+indices_5_std:0.2879442843419789
+indices_1_std:0.17731348062760166
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[0 1 1 ... 0 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5831818181818181
+The Recall_5: 0.5109090909090909
+The Recall_1: 0.35045454545454546
+indices_10_std:0.3446205571565802
+indices_5_std:0.28786423310918985
+indices_1_std:0.1813960934998399
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 2 1 ... 2 0 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5836363636363636
+The Recall_5: 0.5231818181818182
+The Recall_1: 0.3709090909090909
+indices_10_std:0.34774255523535064
+indices_5_std:0.3008325328210054
+indices_1_std:0.19388408581492153
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 2 1 ... 1 0 2]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5831818181818181
+The Recall_5: 0.5272727272727272
+The Recall_1: 0.3518181818181818
+indices_10_std:0.34622158181235985
+indices_5_std:0.3009926352865834
+indices_1_std:0.18323727185398656
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[0 0 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.58
+The Recall_5: 0.5218181818181818
+The Recall_1: 0.3468181818181818
+indices_10_std:0.3467819404418828
+indices_5_std:0.2997918667947487
+indices_1_std:0.18171629843099582
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 1 1 0]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5981818181818181
+The Recall_5: 0.5277272727272727
+The Recall_1: 0.3472727272727273
+indices_10_std:0.35926993275696445
+indices_5_std:0.302993916106308
+indices_1_std:0.18411783541466537
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 0 ... 0 0 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5786363636363636
+The Recall_5: 0.524090909090909
+The Recall_1: 0.3527272727272727
+indices_10_std:0.3427793788024336
+indices_5_std:0.2970701248799231
+indices_1_std:0.18187640089657378
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 2 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.6036363636363636
+The Recall_5: 0.5395454545454546
+The Recall_1: 0.37136363636363634
+indices_10_std:0.3608709574127441
+indices_5_std:0.30915786103105986
+indices_1_std:0.19588536663464617
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[0 2 1 ... 0 0 2]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5840909090909091
+The Recall_5: 0.5295454545454545
+The Recall_1: 0.36863636363636365
+indices_10_std:0.3478226064681397
+indices_5_std:0.2966698687159783
+indices_1_std:0.18603906500160103
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[0 0 1 ... 1 1 0]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.6004545454545455
+The Recall_5: 0.5368181818181819
+The Recall_1: 0.36863636363636365
+indices_10_std:0.3595100864553314
+indices_5_std:0.30739673390970224
+indices_1_std:0.19060198527057318
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 0 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5827272727272728
+The Recall_5: 0.5231818181818182
+The Recall_1: 0.3572727272727273
+indices_10_std:0.35086455331412103
+indices_5_std:0.3004322766570605
+indices_1_std:0.18555875760486712
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 1 0 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5859090909090909
+The Recall_5: 0.5218181818181818
+The Recall_1: 0.34454545454545454
+indices_10_std:0.3467018892090938
+indices_5_std:0.2917066922830611
+indices_1_std:0.17539225104066603
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5981818181818181
+The Recall_5: 0.54
+The Recall_1: 0.365
+indices_10_std:0.35070445084854307
+indices_5_std:0.3020333013128402
+indices_1_std:0.19068203650336216
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 0 0 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5813636363636364
+The Recall_5: 0.5204545454545455
+The Recall_1: 0.35954545454545456
+indices_10_std:0.3443003522254242
+indices_5_std:0.2968299711815562
+indices_1_std:0.18764008965738072
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[0 0 1 ... 0 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5722727272727273
+The Recall_5: 0.5131818181818182
+The Recall_1: 0.3463636363636364
+indices_10_std:0.3446205571565802
+indices_5_std:0.29626961255203327
+indices_1_std:0.17891450528338138
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 0 1 0]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5695454545454546
+The Recall_5: 0.5068181818181818
+The Recall_1: 0.3409090909090909
+indices_10_std:0.33645533141210376
+indices_5_std:0.28714377201408897
+indices_1_std:0.17827409542106948
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 2 0 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5736363636363636
+The Recall_5: 0.5086363636363637
+The Recall_1: 0.3477272727272727
+indices_10_std:0.34598142811399296
+indices_5_std:0.29306756324047395
+indices_1_std:0.18227665706051874
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 1 1 ... 1 1 0]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5781818181818181
+The Recall_5: 0.514090909090909
+The Recall_1: 0.3490909090909091
+indices_10_std:0.3445405059237912
+indices_5_std:0.2937079731027858
+indices_1_std:0.18043547870637205
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[0 2 1 ... 0 0 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5895454545454546
+The Recall_5: 0.5222727272727272
+The Recall_1: 0.3563636363636364
+indices_10_std:0.3517451168747998
+indices_5_std:0.2963496637848223
+indices_1_std:0.18603906500160103
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 0 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5840909090909091
+The Recall_5: 0.5168181818181818
+The Recall_1: 0.3368181818181818
+indices_10_std:0.34622158181235985
+indices_5_std:0.29250720461095103
+indices_1_std:0.17595260967018894
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 0 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5827272727272728
+The Recall_5: 0.5136363636363637
+The Recall_1: 0.32227272727272727
+indices_10_std:0.34870317002881845
+indices_5_std:0.29434838296509763
+indices_1_std:0.16762728146013448
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 1 0 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5786363636363636
+The Recall_5: 0.5104545454545455
+The Recall_1: 0.3409090909090909
+indices_10_std:0.34293948126801155
+indices_5_std:0.2877041306436119
+indices_1_std:0.1766730707652898
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 2 1 ... 1 0 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5795454545454546
+The Recall_5: 0.5186363636363637
+The Recall_1: 0.34045454545454545
+indices_10_std:0.3423791226384886
+indices_5_std:0.2953890489913545
+indices_1_std:0.17611271213576687
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 1 1 ... 0 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5768181818181818
+The Recall_5: 0.5222727272727272
+The Recall_1: 0.3563636363636364
+indices_10_std:0.3503041946845981
+indices_5_std:0.2990714056996478
+indices_1_std:0.18603906500160106
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 2 0 ... 0 1 0]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5859090909090909
+The Recall_5: 0.5177272727272727
+The Recall_1: 0.35045454545454546
+indices_10_std:0.3483829650976625
+indices_5_std:0.2935478706372078
+indices_1_std:0.18323727185398656
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[0 0 1 ... 2 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5922727272727273
+The Recall_5: 0.5277272727272727
+The Recall_1: 0.3563636363636364
+indices_10_std:0.3484630163304515
+indices_5_std:0.29658981748318924
+indices_1_std:0.18163624719820684
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 0 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5940909090909091
+The Recall_5: 0.5354545454545454
+The Recall_1: 0.34863636363636363
+indices_10_std:0.35166506564201094
+indices_5_std:0.30091258405379445
+indices_1_std:0.18155619596541786
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 2 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5763636363636364
+The Recall_5: 0.5131818181818182
+The Recall_1: 0.3322727272727273
+indices_10_std:0.34277937880243353
+indices_5_std:0.2919468459814281
+indices_1_std:0.17483189241114314
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 2 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5890909090909091
+The Recall_5: 0.5204545454545455
+The Recall_1: 0.35
+indices_10_std:0.3484630163304515
+indices_5_std:0.2940281780339417
+indices_1_std:0.1798751200768492
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 2 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5854545454545454
+The Recall_5: 0.5209090909090909
+The Recall_1: 0.3568181818181818
+indices_10_std:0.3445405059237912
+indices_5_std:0.2942683317323087
+indices_1_std:0.1844380403458213
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 0 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5772727272727273
+The Recall_5: 0.519090909090909
+The Recall_1: 0.3522727272727273
+indices_10_std:0.3423791226384886
+indices_5_std:0.2971501761127121
+indices_1_std:0.18659942363112392
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 1 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5886363636363636
+The Recall_5: 0.524090909090909
+The Recall_1: 0.3563636363636364
+indices_10_std:0.3499039385206532
+indices_5_std:0.3009926352865834
+indices_1_std:0.18371757925072044
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[0 1 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.58
+The Recall_5: 0.5213636363636364
+The Recall_1: 0.3572727272727273
+indices_10_std:0.3431796349663785
+indices_5_std:0.29691002241434516
+indices_1_std:0.18780019212295868
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 1 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5863636363636363
+The Recall_5: 0.5213636363636364
+The Recall_1: 0.3609090909090909
+indices_10_std:0.34606147934678194
+indices_5_std:0.2963496637848223
+indices_1_std:0.19068203650336216
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 2 0 ... 1 0 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5904545454545455
+The Recall_5: 0.5227272727272727
+The Recall_1: 0.3613636363636364
+indices_10_std:0.3504642971501761
+indices_5_std:0.2965097662504002
+indices_1_std:0.19020172910662825
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 2 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.57
+The Recall_5: 0.5040909090909091
+The Recall_1: 0.3490909090909091
+indices_10_std:0.3400576368876081
+indices_5_std:0.29122638488632724
+indices_1_std:0.1830771693884086
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 2 1 ... 2 1 0]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5831818181818181
+The Recall_5: 0.5254545454545455
+The Recall_1: 0.3609090909090909
+indices_10_std:0.3455011207172591
+indices_5_std:0.29546910022414347
+indices_1_std:0.18691962856227984
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 1 0 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.59
+The Recall_5: 0.5272727272727272
+The Recall_1: 0.3659090909090909
+indices_10_std:0.3537463976945245
+indices_5_std:0.2981908421389689
+indices_1_std:0.19116234390009604
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 0 1 2]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5845454545454546
+The Recall_5: 0.5186363636363637
+The Recall_1: 0.34363636363636363
+indices_10_std:0.34526096701889203
+indices_5_std:0.292827409542107
+indices_1_std:0.1758725584373999
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[0 1 1 ... 1 1 0]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5931818181818181
+The Recall_5: 0.525
+The Recall_1: 0.3577272727272727
+indices_10_std:0.35094460454691
+indices_5_std:0.30027217419148255
+indices_1_std:0.1888408581492155
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 2 1 ... 1 1 0]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5745454545454546
+The Recall_5: 0.5013636363636363
+The Recall_1: 0.3236363636363636
+indices_10_std:0.3384566122318283
+indices_5_std:0.28418187640089654
+indices_1_std:0.17002881844380402
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 0 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5777272727272728
+The Recall_5: 0.5127272727272727
+The Recall_1: 0.3440909090909091
+indices_10_std:0.33429394812680113
+indices_5_std:0.28634325968619917
+indices_1_std:0.17611271213576687
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 0 1 ... 0 0 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5754545454545454
+The Recall_5: 0.5136363636363637
+The Recall_1: 0.36
+indices_10_std:0.34165866154338775
+indices_5_std:0.29250720461095103
+indices_1_std:0.19212295869356388
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5709090909090909
+The Recall_5: 0.5154545454545455
+The Recall_1: 0.33136363636363636
+indices_10_std:0.33317323086775535
+indices_5_std:0.2855427473583093
+indices_1_std:0.16970861351264813
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 2 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5781818181818181
+The Recall_5: 0.5127272727272727
+The Recall_1: 0.34136363636363637
+indices_10_std:0.34213896894012163
+indices_5_std:0.2930675632404739
+indices_1_std:0.1797150176112712
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 2 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5890909090909091
+The Recall_5: 0.5268181818181819
+The Recall_1: 0.35454545454545455
+indices_10_std:0.3530259365994236
+indices_5_std:0.30027217419148255
+indices_1_std:0.1839577329490874
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5881818181818181
+The Recall_5: 0.5177272727272727
+The Recall_1: 0.34045454545454545
+indices_10_std:0.34790265770092854
+indices_5_std:0.29442843419788667
+indices_1_std:0.17323086775536342
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 2 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5672727272727273
+The Recall_5: 0.5027272727272727
+The Recall_1: 0.32727272727272727
+indices_10_std:0.3327729747038104
+indices_5_std:0.28089977585654813
+indices_1_std:0.17387127761767532
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 2 1 ... 2 0 0]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5795454545454546
+The Recall_5: 0.524090909090909
+The Recall_1: 0.3527272727272727
+indices_10_std:0.3392571245597182
+indices_5_std:0.2938680755683637
+indices_1_std:0.180755683637528
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 0 0 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5736363636363636
+The Recall_5: 0.5063636363636363
+The Recall_1: 0.34454545454545454
+indices_10_std:0.33725584373999357
+indices_5_std:0.28450208133205246
+indices_1_std:0.18203650336215177
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[0 1 1 ... 0 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5936363636363636
+The Recall_5: 0.5168181818181818
+The Recall_1: 0.3336363636363636
+indices_10_std:0.35086455331412103
+indices_5_std:0.292427153378162
+indices_1_std:0.17419148254883124
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[0 2 1 ... 1 0 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5781818181818181
+The Recall_5: 0.5213636363636364
+The Recall_1: 0.34545454545454546
+indices_10_std:0.3414985590778098
+indices_5_std:0.2930675632404739
+indices_1_std:0.17747358309317965
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 1 0 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5872727272727273
+The Recall_5: 0.5218181818181818
+The Recall_1: 0.345
+indices_10_std:0.34438040345821325
+indices_5_std:0.29650976625040026
+indices_1_std:0.18003522254242715
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 0 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5722727272727273
+The Recall_5: 0.5127272727272727
+The Recall_1: 0.3527272727272727
+indices_10_std:0.3411783541466538
+indices_5_std:0.29010566762728146
+indices_1_std:0.18764008965738072
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 1 1 ... 1 1 0]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5822727272727273
+The Recall_5: 0.5131818181818182
+The Recall_1: 0.3459090909090909
+indices_10_std:0.3500640409862312
+indices_5_std:0.2914665385846942
+indices_1_std:0.18219660582772973
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 2 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5804545454545454
+The Recall_5: 0.5195454545454545
+The Recall_1: 0.3386363636363636
+indices_10_std:0.34910342619276336
+indices_5_std:0.2946685878962536
+indices_1_std:0.17555235350624399
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 0 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5840909090909091
+The Recall_5: 0.5254545454545455
+The Recall_1: 0.35454545454545455
+indices_10_std:0.34293948126801155
+indices_5_std:0.29626961255203327
+indices_1_std:0.18571886007044508
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5863636363636363
+The Recall_5: 0.5186363636363637
+The Recall_1: 0.36863636363636365
+indices_10_std:0.34910342619276336
+indices_5_std:0.29803073967339094
+indices_1_std:0.19380403458213258
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 2 0 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5977272727272728
+The Recall_5: 0.5295454545454545
+The Recall_1: 0.345
+indices_10_std:0.35686839577329493
+indices_5_std:0.30219340377841825
+indices_1_std:0.1803554274735831
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 1 1 ... 2 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.58
+The Recall_5: 0.5222727272727272
+The Recall_1: 0.36227272727272725
+indices_10_std:0.34702209414024976
+indices_5_std:0.29987191802753765
+indices_1_std:0.19116234390009607
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 2 0 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5709090909090909
+The Recall_5: 0.5109090909090909
+The Recall_1: 0.3377272727272727
+indices_10_std:0.34213896894012163
+indices_5_std:0.29258725584373996
+indices_1_std:0.17851424911943642
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[0 0 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5809090909090909
+The Recall_5: 0.5163636363636364
+The Recall_1: 0.34136363636363637
+indices_10_std:0.34406019852705727
+indices_5_std:0.2935478706372078
+indices_1_std:0.17779378802433557
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 0 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5786363636363636
+The Recall_5: 0.5236363636363637
+The Recall_1: 0.36363636363636365
+indices_10_std:0.3439801472942683
+indices_5_std:0.2994716618635927
+indices_1_std:0.18852065321805955
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 2 0 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5831818181818181
+The Recall_5: 0.5304545454545454
+The Recall_1: 0.35
+indices_10_std:0.34478065962215815
+indices_5_std:0.30139289145052833
+indices_1_std:0.18483829650976624
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[0 1 1 ... 0 0 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5863636363636363
+The Recall_5: 0.5290909090909091
+The Recall_1: 0.345
+indices_10_std:0.35014409221902015
+indices_5_std:0.3022734550112071
+indices_1_std:0.18147614473262888
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 0 0 ... 1 1 2]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5827272727272728
+The Recall_5: 0.5263636363636364
+The Recall_1: 0.3568181818181818
+indices_10_std:0.34325968619916747
+indices_5_std:0.2945885366634646
+indices_1_std:0.1849983989753442
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 1 0 ... 1 1 2]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5840909090909091
+The Recall_5: 0.525
+The Recall_1: 0.35045454545454546
+indices_10_std:0.3444604546910022
+indices_5_std:0.29795068844060196
+indices_1_std:0.18219660582772973
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 2 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5886363636363636
+The Recall_5: 0.5268181818181819
+The Recall_1: 0.3572727272727273
+indices_10_std:0.3483829650976625
+indices_5_std:0.29939161063080366
+indices_1_std:0.18355747678514248
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 1 1 ... 2 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5731818181818182
+The Recall_5: 0.51
+The Recall_1: 0.3481818181818182
+indices_10_std:0.3418187640089657
+indices_5_std:0.2940281780339417
+indices_1_std:0.18243675952609667
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 1 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5913636363636363
+The Recall_5: 0.53
+The Recall_1: 0.36
+indices_10_std:0.3467819404418828
+indices_5_std:0.2983509446045469
+indices_1_std:0.18756003842459174
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[0 2 0 ... 0 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5772727272727273
+The Recall_5: 0.5186363636363637
+The Recall_1: 0.3481818181818182
+indices_10_std:0.34438040345821325
+indices_5_std:0.2929074607748959
+indices_1_std:0.18323727185398653
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 2 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5959090909090909
+The Recall_5: 0.5336363636363637
+The Recall_1: 0.3422727272727273
+indices_10_std:0.3498238872878642
+indices_5_std:0.3022734550112071
+indices_1_std:0.17787383925712455
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 2 1 ... 1 0 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5777272727272728
+The Recall_5: 0.5127272727272727
+The Recall_1: 0.34
+indices_10_std:0.34349983989753446
+indices_5_std:0.2938680755683637
+indices_1_std:0.17691322446365673
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[0 0 1 ... 0 0 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5940909090909091
+The Recall_5: 0.5318181818181819
+The Recall_1: 0.3372727272727273
+indices_10_std:0.35830931796349663
+indices_5_std:0.30547550432276654
+indices_1_std:0.17363112391930835
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 0 0 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5922727272727273
+The Recall_5: 0.524090909090909
+The Recall_1: 0.3522727272727273
+indices_10_std:0.34958373358949724
+indices_5_std:0.2957092539225104
+indices_1_std:0.18115593980147293
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5890909090909091
+The Recall_5: 0.5245454545454545
+The Recall_1: 0.35363636363636364
+indices_10_std:0.35126480947806593
+indices_5_std:0.30075248158821644
+indices_1_std:0.18371757925072046
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 0 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5777272727272728
+The Recall_5: 0.5072727272727273
+The Recall_1: 0.3286363636363636
+indices_10_std:0.340537944284342
+indices_5_std:0.2846621837976305
+indices_1_std:0.170268972142171
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[0 1 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5881818181818181
+The Recall_5: 0.52
+The Recall_1: 0.3490909090909091
+indices_10_std:0.35086455331412103
+indices_5_std:0.2951488952929875
+indices_1_std:0.18099583733589497
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 0 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.59
+The Recall_5: 0.5231818181818182
+The Recall_1: 0.3522727272727273
+indices_10_std:0.345581171950048
+indices_5_std:0.2946685878962536
+indices_1_std:0.18099583733589497
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 2 1 ... 2 1 0]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5781818181818181
+The Recall_5: 0.5054545454545455
+The Recall_1: 0.3431818181818182
+indices_10_std:0.3443003522254242
+indices_5_std:0.2897054114633365
+indices_1_std:0.17979506884406019
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 1 1 ... 1 1 0]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5909090909090909
+The Recall_5: 0.5345454545454545
+The Recall_1: 0.3527272727272727
+indices_10_std:0.35214537303874477
+indices_5_std:0.3049151456932436
+indices_1_std:0.18339737431956452
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.6004545454545455
+The Recall_5: 0.5345454545454545
+The Recall_1: 0.35
+indices_10_std:0.35686839577329493
+indices_5_std:0.3038744796669869
+indices_1_std:0.1851585014409222
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 0 1 ... 0 1 0]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5904545454545455
+The Recall_5: 0.5304545454545454
+The Recall_1: 0.36363636363636365
+indices_10_std:0.35350624399615754
+indices_5_std:0.30179314761447323
+indices_1_std:0.19172270252961893
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 1 0 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5868181818181818
+The Recall_5: 0.5204545454545455
+The Recall_1: 0.3613636363636364
+indices_10_std:0.3469420429074608
+indices_5_std:0.297390329811079
+indices_1_std:0.18948126801152737
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 0 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.6
+The Recall_5: 0.5395454545454546
+The Recall_1: 0.37727272727272726
+indices_10_std:0.35967018892090935
+indices_5_std:0.30643611911623436
+indices_1_std:0.20044828690361832
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 2 1 ... 2 1 0]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5763636363636364
+The Recall_5: 0.51
+The Recall_1: 0.3390909090909091
+indices_10_std:0.34349983989753446
+indices_5_std:0.28946525776496956
+indices_1_std:0.17635286583413382
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5881818181818181
+The Recall_5: 0.53
+The Recall_1: 0.355
+indices_10_std:0.34790265770092854
+indices_5_std:0.3021133525456292
+indices_1_std:0.18323727185398656
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 2 1 ... 1 0 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5822727272727273
+The Recall_5: 0.5286363636363637
+The Recall_1: 0.36818181818181817
+indices_10_std:0.3449407620877361
+indices_5_std:0.30091258405379445
+indices_1_std:0.1924431636247198
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 1 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5795454545454546
+The Recall_5: 0.515
+The Recall_1: 0.3409090909090909
+indices_10_std:0.33997758565481906
+indices_5_std:0.2917066922830611
+indices_1_std:0.18147614473262888
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 2 1 ... 1 1 2]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5918181818181818
+The Recall_5: 0.5272727272727272
+The Recall_1: 0.3509090909090909
+indices_10_std:0.34646173551072684
+indices_5_std:0.2953890489913545
+indices_1_std:0.18203650336215177
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5818181818181818
+The Recall_5: 0.5177272727272727
+The Recall_1: 0.3427272727272727
+indices_10_std:0.3410182516810759
+indices_5_std:0.29050592379122636
+indices_1_std:0.1776336855587576
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 1 1 ... 1 1 0]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5959090909090909
+The Recall_5: 0.535
+The Recall_1: 0.35863636363636364
+indices_10_std:0.3523855267371117
+indices_5_std:0.30587576048671145
+indices_1_std:0.18764008965738072
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[1 1 1 ... 1 1 1]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.5813636363636364
+The Recall_5: 0.519090909090909
+The Recall_1: 0.35045454545454546
+indices_10_std:0.34574127441562597
+indices_5_std:0.29482869036183157
+indices_1_std:0.18251681075888565
+################################################
+gt_files_2:torch.Size([4, 2200, 7])
+Computing features...
+indices_gt_std_per:[3 3 2 ... 3 2 2]
+indices_10_std_per:[2 1 1 ... 0 1 0]
+len(indices_gt_std_per):2082
+len(indices_10_std_per):2082
+################################################
+Scene:Micanopy
+The Recall_10: 0.565
+The Recall_5: 0.5031818181818182
+The Recall_1: 0.3386363636363636
+indices_10_std:0.33485430675632405
+indices_5_std:0.2857028498238873
+indices_1_std:0.17843419788664747
+################################################
+Use GPU: 0 for training
+=> creating model 'resnet50'
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5539314516129032
+The Recall_5: 0.48689516129032256
+The Recall_1: 0.31451612903225806
+indices_10_std:0.3831577001294139
+indices_5_std:0.31872804584951003
+indices_1_std:0.18728045849510075
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 1 0 ... 1 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5574596774193549
+The Recall_5: 0.5020161290322581
+The Recall_1: 0.3311491935483871
+indices_10_std:0.3755777408023664
+indices_5_std:0.33037530042521723
+indices_1_std:0.2057681641708264
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5428427419354839
+The Recall_5: 0.4884072580645161
+The Recall_1: 0.3064516129032258
+indices_10_std:0.3752079866888519
+indices_5_std:0.32325753374006283
+indices_1_std:0.19162506932889628
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5504032258064516
+The Recall_5: 0.49243951612903225
+The Recall_1: 0.3326612903225806
+indices_10_std:0.37151044555370677
+indices_5_std:0.32233314845627653
+indices_1_std:0.2075244962100203
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5579637096774194
+The Recall_5: 0.5025201612903226
+The Recall_1: 0.3215725806451613
+indices_10_std:0.3769643187280458
+indices_5_std:0.3266777592900721
+indices_1_std:0.19883527454242927
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5594758064516129
+The Recall_5: 0.501008064516129
+The Recall_1: 0.3341733870967742
+indices_10_std:0.3838972083564429
+indices_5_std:0.3253836198927712
+indices_1_std:0.20456646330190426
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5569556451612904
+The Recall_5: 0.4964717741935484
+The Recall_1: 0.34122983870967744
+indices_10_std:0.38380476982806433
+indices_5_std:0.3297282307265668
+indices_1_std:0.21168422998705858
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5529233870967742
+The Recall_5: 0.49243951612903225
+The Recall_1: 0.32006048387096775
+indices_10_std:0.3827879460158994
+indices_5_std:0.32677019781845074
+indices_1_std:0.19689406544647808
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5559475806451613
+The Recall_5: 0.4994959677419355
+The Recall_1: 0.3316532258064516
+indices_10_std:0.37603993344425957
+indices_5_std:0.32566093547790714
+indices_1_std:0.20308744684784616
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5569556451612904
+The Recall_5: 0.5075604838709677
+The Recall_1: 0.3331653225806452
+indices_10_std:0.37798114254021076
+indices_5_std:0.3306526160103531
+indices_1_std:0.20660011092623407
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 1 0 ... 1 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5645161290322581
+The Recall_5: 0.5075604838709677
+The Recall_1: 0.32661290322580644
+indices_10_std:0.3870401183213163
+indices_5_std:0.3355518580144204
+indices_1_std:0.20197818450730265
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 1 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5403225806451613
+The Recall_5: 0.48689516129032256
+The Recall_1: 0.3432459677419355
+indices_10_std:0.36929192087261964
+indices_5_std:0.31937511554816045
+indices_1_std:0.21159179145867998
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5549395161290323
+The Recall_5: 0.5065524193548387
+The Recall_1: 0.3407258064516129
+indices_10_std:0.3805694213348123
+indices_5_std:0.33111480865224624
+indices_1_std:0.21159179145867998
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5408266129032258
+The Recall_5: 0.48185483870967744
+The Recall_1: 0.3316532258064516
+indices_10_std:0.36910704381586246
+indices_5_std:0.3127195415048992
+indices_1_std:0.20428914771676834
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 0 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5569556451612904
+The Recall_5: 0.5020161290322581
+The Recall_1: 0.3497983870967742
+indices_10_std:0.3896283971159179
+indices_5_std:0.3333333333333333
+indices_1_std:0.2149195784803106
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5559475806451613
+The Recall_5: 0.5045362903225806
+The Recall_1: 0.3392137096774194
+indices_10_std:0.378166019596968
+indices_5_std:0.32945091514143093
+indices_1_std:0.20817156590867075
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5418346774193549
+The Recall_5: 0.47631048387096775
+The Recall_1: 0.32006048387096775
+indices_10_std:0.36633388796450356
+indices_5_std:0.3048622665927158
+indices_1_std:0.194675540765391
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5650201612903226
+The Recall_5: 0.4934475806451613
+The Recall_1: 0.32560483870967744
+indices_10_std:0.390090589757811
+indices_5_std:0.32963579219818817
+indices_1_std:0.20345720096136072
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5625
+The Recall_5: 0.5120967741935484
+The Recall_1: 0.3533266129032258
+indices_10_std:0.3848215936402292
+indices_5_std:0.3340728415603623
+indices_1_std:0.21750785727491218
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5388104838709677
+The Recall_5: 0.4722782258064516
+The Recall_1: 0.30493951612903225
+indices_10_std:0.36642632649288226
+indices_5_std:0.3091144388981328
+indices_1_std:0.1844148641153633
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5625
+The Recall_5: 0.5020161290322581
+The Recall_1: 0.33568548387096775
+indices_10_std:0.3841745239415788
+indices_5_std:0.3306526160103531
+indices_1_std:0.20660011092623407
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[1 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5493951612903226
+The Recall_5: 0.4949596774193548
+The Recall_1: 0.31149193548387094
+indices_10_std:0.3739138472915511
+indices_5_std:0.31835829173599556
+indices_1_std:0.1860787576261786
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 0 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5483870967741935
+The Recall_5: 0.49243951612903225
+The Recall_1: 0.32711693548387094
+indices_10_std:0.37428360140506567
+indices_5_std:0.32436679608060637
+indices_1_std:0.20493621741541876
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.546875
+The Recall_5: 0.4884072580645161
+The Recall_1: 0.3331653225806452
+indices_10_std:0.37946015899426877
+indices_5_std:0.321223886115733
+indices_1_std:0.19763357367350706
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[1 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5579637096774194
+The Recall_5: 0.49747983870967744
+The Recall_1: 0.3321572580645161
+indices_10_std:0.38325013865779256
+indices_5_std:0.32677019781845074
+indices_1_std:0.200406729524866
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5594758064516129
+The Recall_5: 0.49848790322580644
+The Recall_1: 0.3251008064516129
+indices_10_std:0.3772416343131817
+indices_5_std:0.3261231281198003
+indices_1_std:0.20456646330190426
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[1 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5443548387096774
+The Recall_5: 0.48538306451612906
+The Recall_1: 0.3125
+indices_10_std:0.37400628581992973
+indices_5_std:0.3170641523386947
+indices_1_std:0.18959142170456642
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[1 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5675403225806451
+The Recall_5: 0.49899193548387094
+The Recall_1: 0.328125
+indices_10_std:0.38944352005916066
+indices_5_std:0.3266777592900721
+indices_1_std:0.19661674986134217
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[1 0 0 ... 1 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5534274193548387
+The Recall_5: 0.49747983870967744
+The Recall_1: 0.33518145161290325
+indices_10_std:0.3765021260861527
+indices_5_std:0.32399704196709184
+indices_1_std:0.20197818450730262
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 0 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5529233870967742
+The Recall_5: 0.4894153225806452
+The Recall_1: 0.3220766129032258
+indices_10_std:0.377426511369939
+indices_5_std:0.32057681641708263
+indices_1_std:0.198650397485672
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5569556451612904
+The Recall_5: 0.5065524193548387
+The Recall_1: 0.34375
+indices_10_std:0.3837123312996857
+indices_5_std:0.3361989277130708
+indices_1_std:0.20992789794786468
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5448588709677419
+The Recall_5: 0.4813508064516129
+The Recall_1: 0.3215725806451613
+indices_10_std:0.37086337585505635
+indices_5_std:0.3139212423738214
+indices_1_std:0.19975965982621555
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[1 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5524193548387096
+The Recall_5: 0.4939516129032258
+The Recall_1: 0.32913306451612906
+indices_10_std:0.37659456461453134
+indices_5_std:0.32371972638195595
+indices_1_std:0.19938990571270104
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5559475806451613
+The Recall_5: 0.4848790322580645
+The Recall_1: 0.3235887096774194
+indices_10_std:0.3840820854132002
+indices_5_std:0.3227953410981697
+indices_1_std:0.20142355333703085
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5443548387096774
+The Recall_5: 0.4838709677419355
+The Recall_1: 0.3190524193548387
+indices_10_std:0.368737289702348
+indices_5_std:0.3146607506008504
+indices_1_std:0.19578480310593455
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5418346774193549
+The Recall_5: 0.4848790322580645
+The Recall_1: 0.31098790322580644
+indices_10_std:0.3735440931780366
+indices_5_std:0.3206692549454612
+indices_1_std:0.1930116472545757
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5443548387096774
+The Recall_5: 0.48286290322580644
+The Recall_1: 0.3155241935483871
+indices_10_std:0.37308190053614343
+indices_5_std:0.3170641523386948
+indices_1_std:0.19060824551673136
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[1 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5584677419354839
+The Recall_5: 0.5005040322580645
+The Recall_1: 0.30997983870967744
+indices_10_std:0.3793677204658902
+indices_5_std:0.325198742836014
+indices_1_std:0.18765021260861525
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5448588709677419
+The Recall_5: 0.48639112903225806
+The Recall_1: 0.31048387096774194
+indices_10_std:0.37151044555370677
+indices_5_std:0.3156775744130153
+indices_1_std:0.18635607321131448
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[1 0 0 ... 1 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5640120967741935
+The Recall_5: 0.501008064516129
+The Recall_1: 0.3387096774193548
+indices_10_std:0.3889813274172675
+indices_5_std:0.3271399519319652
+indices_1_std:0.20835644296542796
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[1 0 0 ... 0 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5504032258064516
+The Recall_5: 0.4884072580645161
+The Recall_1: 0.3245967741935484
+indices_10_std:0.3740062858199298
+indices_5_std:0.3170641523386947
+indices_1_std:0.19966722129783693
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 0 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5519153225806451
+The Recall_5: 0.5015120967741935
+The Recall_1: 0.3392137096774194
+indices_10_std:0.37927528193751153
+indices_5_std:0.3312072471806249
+indices_1_std:0.20974302089110738
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 0 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5504032258064516
+The Recall_5: 0.4939516129032258
+The Recall_1: 0.3341733870967742
+indices_10_std:0.3840820854132002
+indices_5_std:0.32843409132926604
+indices_1_std:0.20733961915326307
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5589717741935484
+The Recall_5: 0.4904233870967742
+The Recall_1: 0.32106854838709675
+indices_10_std:0.38195599926049173
+indices_5_std:0.3226104640414124
+indices_1_std:0.19347383989646888
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5564516129032258
+The Recall_5: 0.49798387096774194
+The Recall_1: 0.32106854838709675
+indices_10_std:0.385376224810501
+indices_5_std:0.32649288223331485
+indices_1_std:0.19938990571270104
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 0 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5554435483870968
+The Recall_5: 0.49747983870967744
+The Recall_1: 0.3382056451612903
+indices_10_std:0.383619892771307
+indices_5_std:0.3328711406914402
+indices_1_std:0.21029765206137918
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[1 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5433467741935484
+The Recall_5: 0.48639112903225806
+The Recall_1: 0.30997983870967744
+indices_10_std:0.3723423923091144
+indices_5_std:0.32436679608060637
+indices_1_std:0.19273433166943982
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5453629032258065
+The Recall_5: 0.48689516129032256
+The Recall_1: 0.3286290322580645
+indices_10_std:0.3762248105010168
+indices_5_std:0.32298021815492695
+indices_1_std:0.19929746718432242
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5640120967741935
+The Recall_5: 0.5045362903225806
+The Recall_1: 0.34475806451612906
+indices_10_std:0.3876871880199667
+indices_5_std:0.3349972268441486
+indices_1_std:0.21630615640599002
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[1 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5650201612903226
+The Recall_5: 0.4994959677419355
+The Recall_1: 0.3235887096774194
+indices_10_std:0.38685524126455906
+indices_5_std:0.3285265298576447
+indices_1_std:0.19643187280458493
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5539314516129032
+The Recall_5: 0.4949596774193548
+The Recall_1: 0.3251008064516129
+indices_10_std:0.3826955074875208
+indices_5_std:0.3277870216306156
+indices_1_std:0.19606211869107043
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[1 0 0 ... 0 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5443548387096774
+The Recall_5: 0.49193548387096775
+The Recall_1: 0.32106854838709675
+indices_10_std:0.3722499537807358
+indices_5_std:0.3231650952116842
+indices_1_std:0.1930116472545757
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[1 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5504032258064516
+The Recall_5: 0.4949596774193548
+The Recall_1: 0.3311491935483871
+indices_10_std:0.37622481050101686
+indices_5_std:0.3266777592900721
+indices_1_std:0.2067849879829913
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5645161290322581
+The Recall_5: 0.5015120967741935
+The Recall_1: 0.34223790322580644
+indices_10_std:0.38713255684969494
+indices_5_std:0.32963579219818817
+indices_1_std:0.21371787761138844
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.546875
+The Recall_5: 0.4934475806451613
+The Recall_1: 0.3245967741935484
+indices_10_std:0.37668700314291
+indices_5_std:0.3290811610279164
+indices_1_std:0.20271769273433166
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5504032258064516
+The Recall_5: 0.48588709677419356
+The Recall_1: 0.3215725806451613
+indices_10_std:0.37151044555370677
+indices_5_std:0.3091144388981327
+indices_1_std:0.18996117581808097
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[1 0 0 ... 0 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5544354838709677
+The Recall_5: 0.4964717741935484
+The Recall_1: 0.3240927419354839
+indices_10_std:0.3810316139767055
+indices_5_std:0.3264004437049362
+indices_1_std:0.20114623775189497
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.546875
+The Recall_5: 0.49193548387096775
+The Recall_1: 0.31955645161290325
+indices_10_std:0.36707339619153256
+indices_5_std:0.31660195969680166
+indices_1_std:0.19569236457755593
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5569556451612904
+The Recall_5: 0.4954637096774194
+The Recall_1: 0.3382056451612903
+indices_10_std:0.3804769828064337
+indices_5_std:0.3270475134035866
+indices_1_std:0.204381586245147
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5544354838709677
+The Recall_5: 0.4873991935483871
+The Recall_1: 0.3170362903225806
+indices_10_std:0.38398964688482157
+indices_5_std:0.32298021815492695
+indices_1_std:0.19633943427620631
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[1 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5539314516129032
+The Recall_5: 0.4889112903225806
+The Recall_1: 0.3245967741935484
+indices_10_std:0.37567017933074504
+indices_5_std:0.32224070992789794
+indices_1_std:0.19541504899242004
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5554435483870968
+The Recall_5: 0.4879032258064516
+The Recall_1: 0.3125
+indices_10_std:0.3829728230726567
+indices_5_std:0.32196339434276205
+indices_1_std:0.18718801996672213
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[1 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5554435483870968
+The Recall_5: 0.4949596774193548
+The Recall_1: 0.3165322580645161
+indices_10_std:0.3817711222037345
+indices_5_std:0.3234424107968202
+indices_1_std:0.19282677019781844
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5534274193548387
+The Recall_5: 0.4848790322580645
+The Recall_1: 0.3019153225806452
+indices_10_std:0.3752079866888519
+indices_5_std:0.3161397670549085
+indices_1_std:0.18386023294509152
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.547883064516129
+The Recall_5: 0.49243951612903225
+The Recall_1: 0.3230846774193548
+indices_10_std:0.37872065076723976
+indices_5_std:0.32824921427250875
+indices_1_std:0.19902015159918654
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5529233870967742
+The Recall_5: 0.48538306451612906
+The Recall_1: 0.32560483870967744
+indices_10_std:0.37465335551858014
+indices_5_std:0.3142909964873359
+indices_1_std:0.1945831022370124
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 1 0 ... 0 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5584677419354839
+The Recall_5: 0.4954637096774194
+The Recall_1: 0.32106854838709675
+indices_10_std:0.37696431872804587
+indices_5_std:0.3218709558143834
+indices_1_std:0.19938990571270104
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5529233870967742
+The Recall_5: 0.49294354838709675
+The Recall_1: 0.3316532258064516
+indices_10_std:0.3824181919023849
+indices_5_std:0.3278794601589943
+indices_1_std:0.20650767239785542
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5574596774193549
+The Recall_5: 0.5075604838709677
+The Recall_1: 0.3311491935483871
+indices_10_std:0.3771491957848031
+indices_5_std:0.3275097060454797
+indices_1_std:0.20317988537622483
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5367943548387096
+The Recall_5: 0.47731854838709675
+The Recall_1: 0.3180443548387097
+indices_10_std:0.36365317064152336
+indices_5_std:0.3101312627102976
+indices_1_std:0.19365871695322612
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5695564516129032
+The Recall_5: 0.5055443548387096
+The Recall_1: 0.3286290322580645
+indices_10_std:0.39360325383619893
+indices_5_std:0.33416528008874097
+indices_1_std:0.20179330745054538
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[1 0 0 ... 1 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5665322580645161
+The Recall_5: 0.5060483870967742
+The Recall_1: 0.32963709677419356
+indices_10_std:0.39175448326862633
+indices_5_std:0.33545941948604174
+indices_1_std:0.2070623035681272
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5448588709677419
+The Recall_5: 0.4783266129032258
+The Recall_1: 0.3215725806451613
+indices_10_std:0.37456091699020155
+indices_5_std:0.3155851358846367
+indices_1_std:0.2034572009613607
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5529233870967742
+The Recall_5: 0.4934475806451613
+The Recall_1: 0.3165322580645161
+indices_10_std:0.3805694213348124
+indices_5_std:0.32658532076169344
+indices_1_std:0.19291920872619706
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5720766129032258
+The Recall_5: 0.516633064516129
+The Recall_1: 0.3402217741935484
+indices_10_std:0.3991495655389166
+indices_5_std:0.346829358476613
+indices_1_std:0.21020521353300056
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5645161290322581
+The Recall_5: 0.5120967741935484
+The Recall_1: 0.35181451612903225
+indices_10_std:0.3866703642078019
+indices_5_std:0.33324089480495467
+indices_1_std:0.21223886115733034
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5438508064516129
+The Recall_5: 0.4873991935483871
+The Recall_1: 0.30544354838709675
+indices_10_std:0.369476797929377
+indices_5_std:0.3161397670549085
+indices_1_std:0.18515437234239232
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 0 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5690524193548387
+The Recall_5: 0.49747983870967744
+The Recall_1: 0.3286290322580645
+indices_10_std:0.391846921797005
+indices_5_std:0.327694583102237
+indices_1_std:0.20170086892216674
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[1 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5735887096774194
+The Recall_5: 0.5075604838709677
+The Recall_1: 0.3240927419354839
+indices_10_std:0.3873174339064522
+indices_5_std:0.33037530042521723
+indices_1_std:0.19698650397485673
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 2 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5362903225806451
+The Recall_5: 0.47681451612903225
+The Recall_1: 0.31451612903225806
+indices_10_std:0.36707339619153256
+indices_5_std:0.31188759474949157
+indices_1_std:0.1932889628397116
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5418346774193549
+The Recall_5: 0.48286290322580644
+The Recall_1: 0.3316532258064516
+indices_10_std:0.3614346459604363
+indices_5_std:0.3110556479940839
+indices_1_std:0.20354963948973934
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[1 0 0 ... 2 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5569556451612904
+The Recall_5: 0.4954637096774194
+The Recall_1: 0.3371975806451613
+indices_10_std:0.382140876317249
+indices_5_std:0.3240894804954705
+indices_1_std:0.20003697541135143
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.547883064516129
+The Recall_5: 0.4899193548387097
+The Recall_1: 0.32610887096774194
+indices_10_std:0.37345165464965796
+indices_5_std:0.3230726566833056
+indices_1_std:0.19966722129783693
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5539314516129032
+The Recall_5: 0.49747983870967744
+The Recall_1: 0.3392137096774194
+indices_10_std:0.3785357737104825
+indices_5_std:0.331669439822518
+indices_1_std:0.20761693473839893
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 0 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5680443548387096
+The Recall_5: 0.5131048387096774
+The Recall_1: 0.34475806451612906
+indices_10_std:0.3934183767794417
+indices_5_std:0.34165280088740985
+indices_1_std:0.21381031613976706
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5443548387096774
+The Recall_5: 0.4788306451612903
+The Recall_1: 0.32661290322580644
+indices_10_std:0.37631724902939545
+indices_5_std:0.3142909964873359
+indices_1_std:0.19707894250323538
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5438508064516129
+The Recall_5: 0.4783266129032258
+The Recall_1: 0.33014112903225806
+indices_10_std:0.37058606026992047
+indices_5_std:0.31124052505084115
+indices_1_std:0.20336476243298204
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5630040322580645
+The Recall_5: 0.4959677419354839
+The Recall_1: 0.3311491935483871
+indices_10_std:0.38158624514697725
+indices_5_std:0.32362728785357736
+indices_1_std:0.20040672952486596
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5539314516129032
+The Recall_5: 0.49747983870967744
+The Recall_1: 0.3397177419354839
+indices_10_std:0.38038454427805507
+indices_5_std:0.3273248289887225
+indices_1_std:0.20992789794786468
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 1 0 ... 0 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5554435483870968
+The Recall_5: 0.4964717741935484
+The Recall_1: 0.3336693548387097
+indices_10_std:0.3811240525050841
+indices_5_std:0.3264004437049362
+indices_1_std:0.2075244962100203
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5408266129032258
+The Recall_5: 0.48689516129032256
+The Recall_1: 0.3382056451612903
+indices_10_std:0.3716028840820854
+indices_5_std:0.32168607875762617
+indices_1_std:0.21353300055463115
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5408266129032258
+The Recall_5: 0.4737903225806452
+The Recall_1: 0.3079637096774194
+indices_10_std:0.37335921612127937
+indices_5_std:0.31188759474949157
+indices_1_std:0.18912922906267332
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 0 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5473790322580645
+The Recall_5: 0.4848790322580645
+The Recall_1: 0.31149193548387094
+indices_10_std:0.3706784987982991
+indices_5_std:0.31530782029950083
+indices_1_std:0.19393603253836197
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 1 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5549395161290323
+The Recall_5: 0.4889112903225806
+The Recall_1: 0.32610887096774194
+indices_10_std:0.3769643187280458
+indices_5_std:0.3207616934738399
+indices_1_std:0.20003697541135143
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5549395161290323
+The Recall_5: 0.4934475806451613
+The Recall_1: 0.3180443548387097
+indices_10_std:0.37751894989831764
+indices_5_std:0.32427435755222783
+indices_1_std:0.1949528563505269
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5463709677419355
+The Recall_5: 0.4798387096774194
+The Recall_1: 0.3074596774193548
+indices_10_std:0.3722499537807358
+indices_5_std:0.3139212423738214
+indices_1_std:0.18931410611943056
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5594758064516129
+The Recall_5: 0.49899193548387094
+The Recall_1: 0.3094758064516129
+indices_10_std:0.3848215936402292
+indices_5_std:0.3302828618968386
+indices_1_std:0.1920872619707894
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5534274193548387
+The Recall_5: 0.49798387096774194
+The Recall_1: 0.3235887096774194
+indices_10_std:0.3768718801996672
+indices_5_std:0.32945091514143093
+indices_1_std:0.20133111480865223
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 0 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5514112903225806
+The Recall_5: 0.48639112903225806
+The Recall_1: 0.3130040322580645
+indices_10_std:0.38325013865779256
+indices_5_std:0.32196339434276205
+indices_1_std:0.19116287668700313
+################################################
+gt_files_2:torch.Size([5, 1984, 7])
+Computing features...
+indices_gt_std_per:[2 1 1 ... 3 2 1]
+indices_10_std_per:[0 0 0 ... 2 1 0]
+len(indices_gt_std_per):1803
+len(indices_10_std_per):1803
+################################################
+Scene:Spotswood
+The Recall_10: 0.5584677419354839
+The Recall_5: 0.4959677419354839
+The Recall_1: 0.3346774193548387
+indices_10_std:0.3802921057496764
+indices_5_std:0.32621556664817897
+indices_1_std:0.20789425032353484
+##############################################
