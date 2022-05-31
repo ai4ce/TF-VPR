@@ -32,7 +32,7 @@ folders = []
 if evaluate_all:
     index_list = list(range(18))
 else:
-    index_list = [5,6,7,9]#,11,14,18,19,29,31,32,34,36,40,44,46,49,51,53,54,57,59,61,63,65,68,69,72,75,77,79,83,85,88,91,93,94]
+    index_list = [5,6,7,9]
 print("Number of runs: "+str(len(index_list)))
 for index in index_list:
     folders.append(all_folders[index])
@@ -144,7 +144,6 @@ print("Number of training submaps: "+str(len(df_train['file'])))
 print("Number of non-disjoint test submaps: "+str(len(df_test['file'])))
 
 print("df_train:"+str(len(df_train)))
-print("len(folders):"+str(len(folders)))
 
 #construct_query_dict(df_train,len(folders),"evaluation_database.pickle",False)
 if not evaluate_all:

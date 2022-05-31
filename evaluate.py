@@ -4,7 +4,7 @@ import numpy as np
 import socket
 import importlib
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 import sys
 import torch
 import torch.nn as nn
@@ -74,6 +74,9 @@ def evaluate_model(model,optimizer,epoch,save=False):
     if not os.path.exists(cfg.RESULTS_FOLDER):
         os.mkdir(cfg.RESULTS_FOLDER)
 
+    recall_1 = np.zeros(20)
+    recall_5 = np.zeros(102)
+    recall_10 = np.zeros(205)
     count = 0
 
     similarity_1 = []
