@@ -69,11 +69,11 @@ def load_pc_files(filenames,full_path):
 def load_image_file(filename, full_path=False):
     if full_path:
         image = cv2.imread(filename)
-        dim = (64*4,64)
+        dim = (cfg.SIZED_GRID_X,cfg.SIZED_GRID_Y)
         image = cv2.resize(image, dim,interpolation = cv2.INTER_AREA)
     else:
-        image = cv2.imread(os.path.join("/mnt/NAS/home/yuhang/videomap_v2/Adrian/", filename))
-        dim = (64*4,64)
+        image = cv2.imread(os.path.join("/mnt/NAS/home/cc/data/habitat_4/train/", filename))
+        dim = (cfg.SIZED_GRID_X,cfg.SIZED_GRID_Y)
         image = cv2.resize(image, dim,interpolation = cv2.INTER_AREA)
         # print("image2:"+str(image.shape))
         # assert(0)
@@ -144,7 +144,6 @@ def jitter_point_cloud(batch_data, sigma=0.005, clip=0.05):
 def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other_neg=False):
         # get query tuple for dictionary entry
         # return list [query,positives,negatives]
-    #print("query:"+str(dict_value["query"]))
     query = load_image_file(dict_value["query"], full_path=False)  # Nx3
     #cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/query.jpg', query)
     random.shuffle(dict_value["positives"])
