@@ -18,14 +18,17 @@ This implementation achieved an average top 1% recall on oxford baseline of 84.8
 cd generating_queries/
 
 # For training tuples in our baseline network
-python generate_training_tuples_baseline.py
-
-# For training tuples in our refined network
-python generate_training_tuples_refine.py
+python generate_training_tuples_cc_baseline_batch.py
 
 # For network evaluation
-python generate_test_sets.py
+python generate_test_cc_sets.py
 ```
+
+```
+# To generate max_thresholds.mat and min_thresholds.mat for dynamic threshold from temporal neighborhood
+python models/Verification.py
+```
+
 
 ### Train
 ```
