@@ -94,11 +94,11 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
         # return list [query,positives,negatives]
 
     query = load_pc_file(dict_value["query"])  # Nx3
-
     random.shuffle(dict_value["positives"])
     pos_files = []
-
+    
     for i in range(num_pos):
+        #print("dict_value[positives][i]:"+str(QUERY_DICT[dict_value["positives"][i]]))
         pos_files.append(QUERY_DICT[dict_value["positives"][i]]["query"])
     #positives= load_pc_files(dict_value["positives"][0:num_pos])
     positives = load_pc_files(pos_files,full_path=True)

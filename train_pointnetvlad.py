@@ -1,5 +1,6 @@
 #import torch
 #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+import datetime
 import argparse
 import importlib
 import math
@@ -21,7 +22,7 @@ from tensorboardX import SummaryWriter
 from torch.autograd import Variable
 from torch.backends import cudnn
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+#os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -39,8 +40,8 @@ parser.add_argument('--positives_per_query', type=int, default=2,
                     help='Number of potential positives in each training tuple [default: 2]')
 parser.add_argument('--negatives_per_query', type=int, default=18,
                     help='Number of definite negatives in each training tuple [default: 18]')
-parser.add_argument('--max_epoch', type=int, default=20,
-                    help='Epoch to run [default: 20]')
+parser.add_argument('--max_epoch', type=int, default=100,
+                    help='Epoch to run [default: 100]')
 parser.add_argument('--batch_num_queries', type=int, default=2,
                     help='Batch Size during training [default: 2]')
 parser.add_argument('--learning_rate', type=float, default=0.000005,
@@ -143,6 +144,7 @@ def get_learning_rate(epoch):
 
 
 def train():
+    train_start = datetime.datetime.now()
     global HARD_NEGATIVES, TOTAL_ITERATIONS
     bn_decay = get_bn_decay(0)
     #tf.summary.scalar('bn_decay', bn_decay)
@@ -201,13 +203,18 @@ def train():
 
         log_string('EVALUATING...')
         cfg.OUTPUT_FILE = cfg.RESULTS_FOLDER + 'results_' + str(epoch) + '.txt'
-
+        
+        train_end = datetime.datetime.now()
+        eval_start = datetime.datetime.now()
         eval_recall_1, eval_recall_5, eval_recall_10 = evaluate.evaluate_model(model,optimizer,epoch,True)
+        eval_end = datetime.datetime.now()
+
+        print("train_time:"+str(train_end-train_start))
+        print("eval_time:"+str(eval_end-eval_start))
+        assert(0)
         log_string('EVAL RECALL_1: %s' % str(eval_recall_1))
         log_string('EVAL RECALL_5: %s' % str(eval_recall_5))
         log_string('EVAL RECALL_10: %s' % str(eval_recall_10))
-
-        train_writer.add_scalar("Val Recall", eval_recall_1, eval_recall_5, eval_recall_10, epoch)
 
 
 def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
@@ -224,7 +231,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
     train_file_idxs = np.arange(0, len(TRAINING_QUERIES.keys()))
     np.random.shuffle(train_file_idxs)
     for i in range(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES):
-    #for i in range(40):
+    #for i in range(1):
         # for i in range (5):
         batch_keys = train_file_idxs[i *
                                      cfg.BATCH_NUM_QUERIES:(i+1)*cfg.BATCH_NUM_QUERIES]
@@ -357,7 +364,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
 
 def get_feature_representation(filename, model):
     model.eval()
-    queries = load_pc_files([filename])
+    queries = load_pc_files([filename],True)
     queries = np.expand_dims(queries, axis=1)
     # if(BATCH_NUM_QUERIES-1>0):
     #    fake_queries=np.zeros((BATCH_NUM_QUERIES-1,1,NUM_POINTS,3))
@@ -424,7 +431,7 @@ def get_latent_vectors(model, dict_to_process):
     # handle edge case
     for q_index in range((len(train_file_idxs) // batch_num * batch_num), len(dict_to_process.keys())):
         index = train_file_idxs[q_index]
-        queries = load_pc_files([dict_to_process[index]["query"]])
+        queries = load_pc_files([dict_to_process[index]["query"]],True)
         queries = np.expand_dims(queries, axis=1)
 
         # if (BATCH_NUM_QUERIES - 1 > 0):
@@ -439,7 +446,7 @@ def get_latent_vectors(model, dict_to_process):
         #o1, o2, o3, o4 = run_model(model, q, fake_pos, fake_neg, fake_other_neg)
         with torch.no_grad():
             queries_tensor = torch.from_numpy(queries).float()
-            o1 = model(queries_tensor)
+            o1 = model.to(device)(queries_tensor.to(device))
 
         output = o1.detach().cpu().numpy()
         output = np.squeeze(output)
@@ -449,7 +456,6 @@ def get_latent_vectors(model, dict_to_process):
             q_output = output
 
     model.train()
-    print(q_output.shape)
     return q_output
 
 
@@ -463,7 +469,6 @@ def run_model(model, queries, positives, negatives, other_neg, require_grad=True
     feed_tensor = feed_tensor.view((-1, 1, cfg.NUM_POINTS, 3))
     feed_tensor.requires_grad_(require_grad)
     feed_tensor = feed_tensor.to(device)
-    #print("feed_tensor:"+str(feed_tensor))
     if require_grad:
         output = model(feed_tensor)
     else:

@@ -74,9 +74,6 @@ def evaluate_model(model,optimizer,epoch,save=False):
     if not os.path.exists(cfg.RESULTS_FOLDER):
         os.mkdir(cfg.RESULTS_FOLDER)
 
-    recall_1 = np.zeros(25)
-    recall_5 = np.zeros(25)
-    recall_10 = np.zeros(25)
     count = 0
 
     similarity_1 = []
@@ -96,6 +93,10 @@ def evaluate_model(model,optimizer,epoch,save=False):
     for j in range(len(QUERY_SETS)):
         QUERY_VECTORS.append(get_latent_vectors(model, QUERY_SETS[j]))
 
+    len_tr = np.array(DATABASE_VECTORS).shape[1]
+    recall_1 = np.zeros(int(round(len_tr/100)))
+    recall_5 = np.zeros(int(round(len_tr/20)))
+    recall_10 = np.zeros(int(round(len_tr/10)))
     #############
     for m in range(len(QUERY_SETS)):
         for n in range(len(QUERY_SETS)):
@@ -242,12 +243,11 @@ def get_recall(m, n, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS):
 
     percent_array = [100, 20, 10]
     for percent in percent_array:
-        recall_N = [0] * num_neighbors
+        threshold = max(int(round(len(database_output)/percent)), 1)
+        recall_N = [0] * threshold
         topN_similarity_score = []
         N_percent_retrieved = 0
 
-        threshold = max(int(round(len(database_output)/percent)), 1)
-        
         num_evaluated = 0
         for i in range(len(queries_output)):
             true_neighbors = QUERY_SETS[n][i][m]
@@ -255,7 +255,7 @@ def get_recall(m, n, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS):
                 continue
             num_evaluated += 1
             distances, indices = database_nbrs.query(
-                np.array([queries_output[i]]),k=num_neighbors)
+                np.array([queries_output[i]]),k=threshold)
             
             #indices = indices + n*2048
             for j in range(len(indices[0])):
@@ -270,8 +270,12 @@ def get_recall(m, n, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS):
             if len(list(set(indices[0][0:threshold]).intersection(set(true_neighbors)))) > 0:
                 N_percent_retrieved += 1
         
-        N_percent_recall = (N_percent_retrieved/float(num_evaluated))*100
-        recall_N = (np.cumsum(recall_N)/float(num_evaluated))*100
+        if float(num_evaluated)!=0:
+            N_percent_recall = (N_percent_retrieved/float(num_evaluated))*100
+            recall_N = (np.cumsum(recall_N)/float(num_evaluated))*100
+        else:
+            N_percent_recall = 0
+            recall_N = 0
         recalls.append(recall_N)
         similarity_scores.append(topN_similarity_score)
         N_percent_recalls.append(N_percent_recall)

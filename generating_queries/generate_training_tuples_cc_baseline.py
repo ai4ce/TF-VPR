@@ -36,23 +36,16 @@ print(folders)
 
 #####For training and test data split#####
 
-def check_in_test_set(northing, easting, points, x_width, y_width):
-    in_test_set = False
-    for point in points:
-        if(point[0]-x_width < northing and northing < point[0]+x_width and point[1]-y_width < easting and easting < point[1]+y_width):
-            in_test_set = True
-            break
-    return in_test_set
-##########################################
 
-
-def construct_query_dict(df_centroids, filename):
+def construct_query_dict(df_centroids, train_index, test_index,  filename_train, filename_test):
     tree = KDTree(df_centroids[['x','y']])
     ind_nn = tree.query_radius(df_centroids[['x','y']],r=15)
     ind_r = tree.query_radius(df_centroids[['x','y']], r=50)
     queries = {}
+    queries_test = {}
     
-    for i in range(len(ind_nn)):
+    #for i in range(len(ind_nn)):
+    for i in train_index:
         query = df_centroids.iloc[i]["file"]
         positives = np.setdiff1d(ind_nn[i],[i]).tolist()
         negatives = np.setdiff1d(
@@ -60,25 +53,46 @@ def construct_query_dict(df_centroids, filename):
         random.shuffle(negatives)
         queries[i] = {"query":df_centroids.iloc[i]['file'],
                       "positives":positives,"negatives":negatives}
-
-    with open(filename, 'wb') as handle:
+    
+    for i in test_index:
+        query = df_centroids.iloc[i]["file"]
+        positives = np.setdiff1d(ind_nn[i],[i]).tolist()
+        negatives = np.setdiff1d(
+            df_centroids.index.values.tolist(),ind_r[i]).tolist()
+        random.shuffle(negatives)
+        queries_test[i] = {"query":df_centroids.iloc[i]['file'],
+                      "positives":positives,"negatives":negatives}
+    
+    with open(filename_train, 'wb') as handle:                                  
         pickle.dump(queries, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    with open(filename_test, 'wb') as handle:
+        pickle.dump(queries_test, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-    print("Done ", filename)
+    print("Done ", filename_train)
+    print("Done ", filename_test)
 
 
 # Initialize pandas DataFrame
 df_train = pd.DataFrame(columns=['file','x','y'])
 df_test = pd.DataFrame(columns=['file','x','y'])
+df_file = pd.DataFrame(columns=['file','x','y'])
 
 df_files_test = []
 df_files_train =[]
+df_files = []
+
+df_indice_test = []
+df_indice_train = []
+df_indice = []
 
 df_locations_tr_x = []
 df_locations_tr_y = []
 df_locations_ts_x = []
 df_locations_ts_y = []
+df_locations_db_x = []
+df_locations_db_y = []
 
+count = 0
 for folder in folders:
     df_locations = sio.loadmat(os.path.join(
         cc_dir,runs_folder,folder,filename))
@@ -88,7 +102,11 @@ for folder in folders:
 
     #2038 Training 10 testing
     test_index = random.sample(range(len(df_locations)), k=10)
+    df_indice_test.extend(np.array(test_index)+count*2048)
     train_index = list(range(df_locations.shape[0]))
+    df_indice_train.extend(np.array(train_index)+count*2048)
+    db_index = list(range(df_locations.shape[0]))
+    count=count+1
     for i in test_index:
         train_index.remove(i)
     
@@ -96,7 +114,8 @@ for folder in folders:
     df_locations_tr_y.extend(list(df_locations[train_index,1]))
     df_locations_ts_x.extend(list(df_locations[test_index,0]))
     df_locations_ts_y.extend(list(df_locations[test_index,1]))
-
+    df_locations_db_x.extend(list(df_locations[db_index,0]))
+    df_locations_db_y.extend(list(df_locations[db_index,1]))
     
     all_files = list(sorted(os.listdir(os.path.join(cc_dir,runs_folder,folder))))
     all_files.remove('gt_pose.mat')
@@ -107,6 +126,8 @@ for folder in folders:
             df_files_test.append(os.path.join(cc_dir,runs_folder,folder,file_))
         else:
             df_files_train.append(os.path.join(cc_dir,runs_folder,folder,file_))
+        df_files.append(os.path.join(cc_dir,runs_folder,folder,file_))
+
 
 print("df_locations_tr_x:"+str(len(df_locations_tr_x)))
 print("df_files_test:"+str(len(df_files_test)))
@@ -115,14 +136,12 @@ df_train = pd.DataFrame(list(zip(df_files_train, df_locations_tr_x, df_locations
                                                columns =['file','x', 'y'])
 df_test = pd.DataFrame(list(zip(df_files_test, df_locations_ts_x, df_locations_ts_y)),
                                                columns =['file','x', 'y'])
-
+df_file = pd.DataFrame(list(zip(df_files, df_locations_db_x, df_locations_db_y)),
+                                               columns =['file','x', 'y'])
 
 
 print("Number of training submaps: "+str(len(df_train['file'])))
 print("Number of non-disjoint test submaps: "+str(len(df_test['file'])))
 
-print("df_train:"+str(len(df_train)))
-print("df_test:"+str(len(df_test)))
-
-construct_query_dict(df_train,"training_queries_baseline.pickle")
-construct_query_dict(df_test,"test_queries_baseline.pickle")
+construct_query_dict(df_file, df_indice_train, df_indice_test, "training_queries_baseline.pickle", "test_queries_baseline.pickle")
+#construct_query_dict(df_test,"test_queries_baseline.pickle")
