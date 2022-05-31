@@ -4,7 +4,7 @@ import numpy as np
 import socket
 import importlib
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 import sys
 import torch
 import torch.nn as nn
@@ -78,7 +78,7 @@ def evaluate_model(model,optimizer,epoch,scene_index,save=False,full_pickle=Fals
             QUERY[len(QUERY.keys())] = QUERY_SETS_temp[i][j]
         QUERY_SETS.append(QUERY)
     '''
-    cfg.RESULTS_FOLDER = os.path.join("results/", "Goffs")
+    cfg.RESULTS_FOLDER = os.path.join("results/", cfg.scene_list[scene_index])
 
     if not os.path.exists(cfg.RESULTS_FOLDER):
         os.mkdir(cfg.RESULTS_FOLDER)
@@ -309,15 +309,11 @@ def get_recall(m, n, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS):
             assert(0)
             '''
             compare_a = indices[0][0:50].tolist()
-            k_nearest = 10
-            pos_index_range = list(range(-k_nearest//2, (k_nearest//2)+1))
-            for pos_index in pos_index_range:
-                try:
-                    compare_a.remove(pos_index+i)
-                except:
-                    pass
+            #k_nearest = 10
+            #pos_index_range = list(range(-k_nearest//2, (k_nearest//2)+1))
+            #for pos_index in pos_index_range:
             #print("compare_a:"+str(compare_a))
-            compare_a = compare_a[:(value)]
+            compare_a = compare_a[:(value+1)]
             #print("compare_a_after:"+str(compare_a))
             #assert(0)
             compare_b = true_neighbors

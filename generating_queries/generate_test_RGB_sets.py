@@ -90,9 +90,9 @@ def construct_query_dict(df_centroids, df_database, folder_num, traj_len,  filen
     output_to_file(database_sets, filename_train)
 
 def generate(scene_index, evaluate_all = False, inside=True):
-    base_path = "/mnt/NAS/home/yiming/habitat_4/train"
-    #runs_folder = cfg.scene_names[scene_index]
-    runs_folder = "Goffs"
+    base_path = "/mnt/NAS/home/cc/data/habitat_4/train"
+    runs_folder = cfg.scene_list[scene_index]
+    #runs_folder = "Goffs"
     pre_dir = os.path.join(base_path, runs_folder)
 
     nn_ind = 0.2
@@ -103,7 +103,7 @@ def generate(scene_index, evaluate_all = False, inside=True):
 
     folders = list(sorted(os.listdir(pre_dir)))
     if evaluate_all == False:
-        index_list = [0,1,2,3,4,5,6]
+        index_list = list(range(len(folders)))
     else:
         index_list = list(range(len(folders)))
 

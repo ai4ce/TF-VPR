@@ -1,3 +1,4 @@
+import datetime
 #import torch
 #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 import argparse
@@ -40,7 +41,7 @@ parser.add_argument('--positives_per_query', type=int, default=2,
                     help='Number of potential positives in each training tuple [default: 2]')
 parser.add_argument('--negatives_per_query', type=int, default=18,
                     help='Number of definite negatives in each training tuple [default: 18]')
-parser.add_argument('--max_epoch', type=int, default=100,
+parser.add_argument('--max_epoch', type=int, default=30,
                     help='Epoch to run [default: 100]')
 parser.add_argument('--batch_num_queries', type=int, default=2,
                     help='Batch Size during training [default: 2]')
@@ -68,14 +69,13 @@ parser.add_argument('--triplet_use_best_positives', action='store_true',
                     help='If present, use best positives, otherwise use hardest positives')
 parser.add_argument('--resume', action='store_true',
                     help='If present, restore checkpoint and resume training')
-parser.add_argument('--dataset_folder', default='/mnt/NAS/home/yiming/habitat_5',
+parser.add_argument('--dataset_folder', default='/mnt/NAS/home/cc/data/habitat_5',
                     help='PointNetVlad Dataset Folder')
 
 FLAGS = parser.parse_args()
 #cfg.EVAL_BATCH_SIZE = 12
 cfg.GRID_X = 1080
 cfg.GRID_Y = 1920
-cfg.MAX_EPOCH = FLAGS.max_epoch
 cfg.BASE_LEARNING_RATE = FLAGS.learning_rate
 cfg.MOMENTUM = FLAGS.momentum
 cfg.OPTIMIZER = FLAGS.optimizer
@@ -100,8 +100,6 @@ LOG_FOUT.write(str(FLAGS) + '\n')
 
 cfg.RESULTS_FOLDER = FLAGS.results_dir
 print("cfg.RESULTS_FOLDER:"+str(cfg.RESULTS_FOLDER))
-
-#cfg.DATASET_FOLDER = '/mnt/NAS/home/yiming/habitat/Springhill'
 
 # Load dictionary of training queries
 TRAINING_QUERIES = get_queries_dict(cfg.TRAIN_FILE)
@@ -142,18 +140,19 @@ def get_learning_rate(epoch):
 
 
 def train(scene_index):
+    train_start = datetime.datetime.now()
     global HARD_NEGATIVES, TOTAL_ITERATIONS, TRAINING_QUERIES
     bn_decay = get_bn_decay(0)
     #tf.summary.scalar('bn_decay', bn_decay)
     generate_dataset_tt.generate(scene_index, 0, inside=False)
     generate_dataset_eval.generate(scene_index, False, inside=False)
     generate_dataset_eval.generate(scene_index, True, inside=False)
-
+    
     TRAINING_QUERIES = get_queries_dict(cfg.TRAIN_FILE)
     TEST_QUERIES = get_queries_dict(cfg.TEST_FILE)
     DB_QUERIES = get_queries_dict(cfg.DB_FILE)
 
-    cfg.RESULTS_FOLDER = os.path.join("results/", "Goffs")
+    cfg.RESULTS_FOLDER = os.path.join("results/", cfg.scene_list[scene_index])
     if not os.path.isdir(cfg.RESULTS_FOLDER):
         os.mkdir(cfg.RESULTS_FOLDER)
     #loss = lazy_quadruplet_loss(q_vec, pos_vecs, neg_vecs, other_neg_vec, MARGIN1, MARGIN2)
@@ -221,20 +220,23 @@ def train(scene_index):
     for epoch in range(starting_epoch, cfg.MAX_EPOCH):
         print(epoch)
         print()
+        '''
         if trusted_positives is not None:
             sio.savemat("results/trusted_positives_folder/trusted_positives_"+str(epoch)+".mat",{'data':trusted_positives})
             sio.savemat("results/trusted_positives_folder/potential_positives_"+str(epoch)+".mat",{'data':potential_positives})
             sio.savemat("results/trusted_positives_folder/potential_distributions_"+str(epoch)+".mat",{'data':potential_distributions})
-       
-        generate_dataset_tt.generate(scene_index, epoch, definite_positives=trusted_positives, inside=False)
-        TRAIN_FILE = 'generating_queries/train_pickle/training_queries_baseline_'+str(epoch)+'.pickle'
-        TEST_FILE = 'generating_queries/train_pickle/test_queries_baseline_'+str(epoch)+'.pickle'
-        DB_FILE = 'generating_queries/train_pickle/db_queries_baseline_'+str(epoch)+'.pickle'
+        
+        '''
+        #generate_dataset_tt.generate(scene_index, epoch, definite_positives=trusted_positives, inside=False)
+        '''
+        TRAIN_FILE = 'generating_queries/train_pickle/training_queries_baseline_'+str(0)+'.pickle'
+        TEST_FILE = 'generating_queries/train_pickle/test_queries_baseline_'+str(0)+'.pickle'
+        DB_FILE = 'generating_queries/train_pickle/db_queries_baseline_'+str(0)+'.pickle'
 
         TRAINING_QUERIES = get_queries_dict(TRAIN_FILE)
         TEST_QUERIES = get_queries_dict(TEST_FILE)
         DB_QUERIES = get_queries_dict(DB_FILE)
-
+        '''
         log_string('**** EPOCH %03d ****' % (epoch))
         sys.stdout.flush()
         
@@ -295,8 +297,15 @@ def train(scene_index):
         '''
         log_string('EVALUATING...')
         cfg.OUTPUT_FILE = os.path.join(cfg.RESULTS_FOLDER , 'results_' + str(epoch) + '.txt')
-
+        train_end = datetime.datetime.now()
+        eval_start = datetime.datetime.now()
         eval_recall_1, eval_recall_5, eval_recall_10 = evaluate.evaluate_model(model,optimizer,epoch,scene_index,True)
+        eval_end = datetime.datetime.now()
+        
+        print("Train_time:"+str(train_end-train_start))
+        print("Eval_time:"+str(eval_end-eval_start))
+        assert(0)
+
         log_string('EVAL RECALL_1: %s' % str(eval_recall_1))
         log_string('EVAL RECALL_5: %s' % str(eval_recall_5))
         log_string('EVAL RECALL_10: %s' % str(eval_recall_10))
@@ -317,7 +326,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, scene_
     np.random.shuffle(train_file_idxs)
     
     for i in range(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES):
-    #for i in range(30):
+    #for i in range(100):
         batch_keys = train_file_idxs[i *
                                      cfg.BATCH_NUM_QUERIES:(i+1)*cfg.BATCH_NUM_QUERIES]
         q_tuples = []
@@ -325,52 +334,40 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, scene_
         faulty_tuple = False
         no_other_neg = False
         for j in range(cfg.BATCH_NUM_QUERIES):
-            #print("positives:"+str(TRAINING_QUERIES[batch_keys[j]]['positives']))
-            #print("negatives:"+str(TRAINING_QUERIES[batch_keys[j]]['negatives']))
-            if (len(TRAINING_QUERIES[batch_keys[j]]["positives"]) < cfg.TRAIN_POSITIVES_PER_QUERY):
-                print("len(TRAINING_QUERIES[batch_keys[j]][positives]:"+str(len(TRAINING_QUERIES[batch_keys[j]]["positives"])))
-                print("cfg.TRAIN_POSITIVES_PER_QUERY:"+str(cfg.TRAIN_POSITIVES_PER_QUERY))
-                assert(0)
+            if (len(DB_QUERIES[batch_keys[j]]["positives"]) < cfg.TRAIN_POSITIVES_PER_QUERY):
                 faulty_tuple = True
                 break
-
             # no cached feature vectors
             if (len(TRAINING_LATENT_VECTORS) == 0):
                 q_tuples.append(
-                    get_query_tuple(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
+                    get_query_tuple(DB_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
                                     DB_QUERIES, hard_neg=[], other_neg=True))
                 #print("q_tuples:"+str(q_tuples))
-                # q_tuples.append(get_rotated_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_neg=[], other_neg=True))
-                # q_tuples.append(get_jittered_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_neg=[], other_neg=True))
 
             elif (len(HARD_NEGATIVES.keys()) == 0):
                 query = get_feature_representation(
-                    TRAINING_QUERIES[batch_keys[j]]['query'], model)
-                random.shuffle(TRAINING_QUERIES[batch_keys[j]]['negatives'])
-                negatives = TRAINING_QUERIES[batch_keys[j]
+                    DB_QUERIES[batch_keys[j]]['query'], model)
+                random.shuffle(DB_QUERIES[batch_keys[j]]['negatives'])
+                negatives = DB_QUERIES[batch_keys[j]
                                              ]['negatives'][0:sampled_neg]
                 hard_negs = get_random_hard_negatives(
                     query, negatives, num_to_take)
                 q_tuples.append(
-                    get_query_tuple(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
+                    get_query_tuple(DB_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
                                     DB_QUERIES, hard_negs, other_neg=True))
-                # q_tuples.append(get_rotated_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
-                # q_tuples.append(get_jittered_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
             else:
                 query = get_feature_representation(
-                    TRAINING_QUERIES[batch_keys[j]]['query'], model)
-                random.shuffle(TRAINING_QUERIES[batch_keys[j]]['negatives'])
-                negatives = TRAINING_QUERIES[batch_keys[j]
+                    DB_QUERIES[batch_keys[j]]['query'], model)
+                random.shuffle(DB_QUERIES[batch_keys[j]]['negatives'])
+                negatives = DB_QUERIES[batch_keys[j]
                                              ]['negatives'][0:sampled_neg]
                 hard_negs = get_random_hard_negatives(
                     query, negatives, num_to_take)
                 hard_negs = list(set().union(
                     HARD_NEGATIVES[batch_keys[j]], hard_negs))
                 q_tuples.append(
-                    get_query_tuple(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
+                    get_query_tuple(DB_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
                                     DB_QUERIES, hard_negs, other_neg=True))
-                # q_tuples.append(get_rotated_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
-                # q_tuples.append(get_jittered_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
             
             if (q_tuples[j][3].shape[2] != 3):
                 no_other_neg = True
@@ -580,5 +577,5 @@ def run_model(model, queries, positives, negatives, other_neg, require_grad=True
 
 
 if __name__ == "__main__":
-    for i in range(1):
+    for i in range(len(cfg.scene_list)):
         train(i)
