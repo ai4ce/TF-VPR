@@ -8,4 +8,4 @@ For Habitat RGB: We just need RGB images and x,y,theta as input(for validation)
 
 For Habitat RGB: We just need RGB_real images and x,y,theta as input(for validation)
 
-                 Our real-world dataset will be available later
+Note that Our real-world dataset will be available later
