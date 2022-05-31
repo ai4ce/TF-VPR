@@ -1,6 +1,5 @@
 import torch
-#device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-#print("device:"+str(device))
+import datetime
 import argparse
 import importlib
 import math
@@ -24,7 +23,7 @@ from tensorboardX import SummaryWriter
 from torch.autograd import Variable
 from torch.backends import cudnn
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -70,7 +69,7 @@ parser.add_argument('--triplet_use_best_positives', action='store_true',
                     help='If present, use best positives, otherwise use hardest positives')
 parser.add_argument('--resume', action='store_true',
                     help='If present, restore checkpoint and resume training')
-parser.add_argument('--dataset_folder', default='../../dataset/',
+parser.add_argument('--dataset_folder', default='/home/cc/dm_data',
                     help='PointNetVlad Dataset Folder')
 
 FLAGS = parser.parse_args()
@@ -94,8 +93,8 @@ cfg.TRIPLET_USE_BEST_POSITIVES = FLAGS.triplet_use_best_positives
 cfg.LOSS_LAZY = FLAGS.loss_not_lazy
 cfg.LOSS_IGNORE_ZERO_BATCH = FLAGS.loss_ignore_zero_batch
 
-cfg.TRAIN_FILE = 'generating_queries/training_queries_baseline.pickle'
-cfg.TEST_FILE = 'generating_queries/test_queries_baseline.pickle'
+cfg.TRAIN_FILE = 'generating_queries/train_pickle/training_queries_baseline_0.pickle'
+cfg.TEST_FILE = 'generating_queries/train_pickle/test_queries_baseline_0.pickle'
 
 cfg.LOG_DIR = FLAGS.log_dir
 if not os.path.exists(cfg.LOG_DIR):
@@ -148,12 +147,11 @@ def get_learning_rate(epoch):
 
 
 def train():
+    train_start = datetime.datetime.now()
     global HARD_NEGATIVES, TOTAL_ITERATIONS
     global TRAINING_QUERIES, TEST_QUERIES
     bn_decay = get_bn_decay(0)
-    #tf.summary.scalar('bn_decay', bn_decay)
 
-    #loss = lazy_quadruplet_loss(q_vec, pos_vecs, neg_vecs, other_neg_vec, MARGIN1, MARGIN2)
     if cfg.LOSS_FUNCTION == 'quadruplet':
         loss_function = PNV_loss.quadruplet_loss
     else:
@@ -188,6 +186,13 @@ def train():
 
         model.load_state_dict(saved_state_dict)
         optimizer.load_state_dict(checkpoint['optimizer'])
+        
+        print("starting_epoch:"+str(starting_epoch))
+        trusted_positives = sio.loadmat("results/trusted_positives_folder/trusted_positives_"+str(starting_epoch)+".mat")['data']
+        # print("trusted_positives:"+str(trusted_positives))
+        potential_positives = sio.loadmat("results/trusted_positives_folder/potential_positives_"+str(starting_epoch)+".mat")['data']
+        potential_distributions = sio.loadmat("results/trusted_positives_folder/potential_distributions_"+str(starting_epoch)+".mat")['data']
+        starting_epoch = starting_epoch+1
     else:
         starting_epoch = 0
 
@@ -197,14 +202,38 @@ def train():
     LOG_FOUT.write("\n")
     LOG_FOUT.flush()
 
-    data_index = 0
+    # data_index = 0
+    try:
+        potential_positives
+    except NameError:
+        potential_positives = None
+        potential_distributions = None
+        trusted_positives = None
+
+    all_folders = sorted(os.listdir(cfg.DATASET_FOLDER))
+    
+    folders = []
+    # All runs are used for training (both full and partial)
+    index_list = range(len(all_folders))
+    for index in index_list:
+        folders.append(all_folders[index])
+
+    all_files_reshape = []
+    for folder in folders:
+        all_files = list(sorted(os.listdir(os.path.join(cfg.DATASET_FOLDER,folder))))
+        all_files.remove('gt_pose.mat')
+        #all_files.remove('gt_pose.png')
+        for all_file in all_files:
+            all_files_reshape.append(os.path.join(cfg.DATASET_FOLDER,folder,all_file))
+    
     for epoch in range(starting_epoch, cfg.MAX_EPOCH):
         print(epoch)
         print()
-        #generate_dataset.generate()
-        TRAIN_FILE = 'generating_queries/train_pickle/training_queries_baseline_'+str(data_index)+'.pickle'
-        TEST_FILE = 'generating_queries/train_pickle/test_queries_baseline_'+str(data_index)+'.pickle'
-        data_index = data_index+1
+        
+        TRAIN_FILE = 'generating_queries/train_pickle/training_queries_baseline_'+str(0)+'.pickle'
+        TEST_FILE = 'generating_queries/train_pickle/test_queries_baseline_'+str(0)+'.pickle'
+        #DB_FILE = 'generating_queries/train_pickle/db_queries_baseline_'+str(epoch)+'.pickle'
+
         # Load dictionary of training queries
         TRAINING_QUERIES = get_queries_dict(TRAIN_FILE)
         TEST_QUERIES = get_queries_dict(TEST_FILE)
@@ -215,12 +244,15 @@ def train():
         train_one_epoch(model, optimizer, train_writer, loss_function, epoch)
 
         log_string('EVALUATING...')
+
         cfg.OUTPUT_FILE = cfg.RESULTS_FOLDER + 'results_' + str(epoch) + '.txt'
+        
+        eval_recall_1, eval_recall_5, eval_recall_10 = evaluate.evaluate_model(model,optimizer,epoch,True)
+        
+        log_string('EVAL RECALL_1: %s' % str(eval_recall_1))
+        log_string('EVAL RECALL_5: %s' % str(eval_recall_5))
+        log_string('EVAL RECALL_10: %s' % str(eval_recall_10))
 
-        eval_recall = evaluate.evaluate_model(model, epoch, True)
-        log_string('EVAL RECALL: %s' % str(eval_recall))
-
-        train_writer.add_scalar("Val Recall", eval_recall, epoch)
 
 
 def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
@@ -234,12 +266,9 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
     num_to_take = 10
 
     # Shuffle train files
-    #print("TRAINING_QUERIES:"+str(TRAINING_QUERIES))
     train_file_idxs = np.arange(0, len(TRAINING_QUERIES.keys()))
     np.random.shuffle(train_file_idxs)
     for i in range(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES):
-    #for i in range(1):
-        # for i in range (5):
         batch_keys = train_file_idxs[i *
                                      cfg.BATCH_NUM_QUERIES:(i+1)*cfg.BATCH_NUM_QUERIES]
         q_tuples = []
@@ -256,9 +285,6 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
                 q_tuples.append(
                     get_query_tuple(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
                                     TRAINING_QUERIES, hard_neg=[], other_neg=True))
-                #print("q_tuples:"+str(q_tuples))
-                # q_tuples.append(get_rotated_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_neg=[], other_neg=True))
-                # q_tuples.append(get_jittered_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_neg=[], other_neg=True))
 
             elif (len(HARD_NEGATIVES.keys()) == 0):
                 query = get_feature_representation(
@@ -271,8 +297,6 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
                 q_tuples.append(
                     get_query_tuple(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
                                     TRAINING_QUERIES, hard_negs, other_neg=True))
-                # q_tuples.append(get_rotated_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
-                # q_tuples.append(get_jittered_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
             else:
                 query = get_feature_representation(
                     TRAINING_QUERIES[batch_keys[j]]['query'], model)
@@ -286,8 +310,6 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
                 q_tuples.append(
                     get_query_tuple(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
                                     TRAINING_QUERIES, hard_negs, other_neg=True))
-                # q_tuples.append(get_rotated_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
-                # q_tuples.append(get_jittered_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
             
             if (q_tuples[j][3].shape[0] != cfg.NUM_POINTS):
                 no_other_neg = True
@@ -330,14 +352,6 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
         
         output_queries, output_positives, output_negatives, output_other_neg = run_model(
             model, queries, positives, negatives, other_neg)
-        #print("output_queries:"+str(output_queries))
-        #print("output_positives:"+str(output_positives))
-        #print("output_negatives:"+str(output_negatives))
-        #print("output_other_neg:"+str(output_other_neg))
-
-        #print("negatives:"+str(negatives))
-        #print("other_neg:"+str(other_neg))
-        #print("queries:"+str(queries))
 
         loss = loss_function(output_queries, output_positives, output_negatives, output_other_neg, cfg.MARGIN_1, cfg.MARGIN_2, use_min=cfg.TRIPLET_USE_BEST_POSITIVES, lazy=cfg.LOSS_LAZY, ignore_zero_loss=cfg.LOSS_IGNORE_ZERO_BATCH)
         loss.backward()
@@ -346,27 +360,6 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
         log_string('batch loss: %f' % loss)
         train_writer.add_scalar("Loss", loss.cpu().item(), TOTAL_ITERATIONS)
         TOTAL_ITERATIONS += cfg.BATCH_NUM_QUERIES
-
-        # EVALLLL
-        if (epoch > 5 and i % (1400 // cfg.BATCH_NUM_QUERIES) == 29):
-            TRAINING_LATENT_VECTORS = get_latent_vectors(
-                model, TRAINING_QUERIES)
-            print("Updated cached feature vectors")
-
-        if (i % (6000 // cfg.BATCH_NUM_QUERIES) == 101):
-            if isinstance(model, nn.DataParallel):
-                model_to_save = model.module
-            else:
-                model_to_save = model
-            save_name = cfg.LOG_DIR + cfg.MODEL_FILENAME
-            torch.save({
-                'epoch': epoch,
-                'iter': TOTAL_ITERATIONS,
-                'state_dict': model_to_save.state_dict(),
-                'optimizer': optimizer.state_dict(),
-            },
-                save_name)
-            print("Model Saved As " + save_name)
 
 
 def get_feature_representation(filename, model):

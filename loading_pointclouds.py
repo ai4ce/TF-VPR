@@ -86,17 +86,16 @@ def jitter_point_cloud(batch_data, sigma=0.005, clip=0.05):
     jittered_data += batch_data
     return jittered_data
 
-
 def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other_neg=False):
         # get query tuple for dictionary entry
         # return list [query,positives,negatives]
 
-    query = load_pc_file(dict_value["query"])  # Nx3
-
+    query = load_pc_file(dict_value["query"],True)  # Nx3
     random.shuffle(dict_value["positives"])
     pos_files = []
 
     for i in range(num_pos):
+        #pos_files.append(dict_value["query"])
         pos_files.append(QUERY_DICT[dict_value["positives"][i]]["query"])
     #positives= load_pc_files(dict_value["positives"][0:num_pos])
     positives = load_pc_files(pos_files,full_path=True)
@@ -123,7 +122,7 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
 
     else:
         random.shuffle(dict_value["negatives"])
-        for i in hard_neg:
+        for count, i in enumerate(hard_neg):
             neg_files.append(QUERY_DICT[i]["query"])
             neg_indices.append(i)
         j = 0

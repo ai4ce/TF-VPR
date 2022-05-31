@@ -15,91 +15,30 @@ import torch
 
 #####For training and test data split#####
 
-def check_in_test_set(northing, easting, points, x_width, y_width):
-    in_test_set = False
-    for point in points:
-        if(point[0]-x_width < northing and northing < point[0]+x_width and point[1]-y_width < easting and easting < point[1]+y_width):
-            in_test_set = True
-            break
-    return in_test_set
-##########################################
-
-
-def construct_query_dict(df_files, df_indice, filename):
-    queries = {}
-    
-    for i in range(len(ind_nn)):
-        query = df_centroids.iloc[i]["file"]
-        positives = np.setdiff1d(ind_nn[i],[i]).tolist()
-        negatives = np.setdiff1d(
-            df_centroids.index.values.tolist(),ind_r[i]).tolist()
-        random.shuffle(negatives)
-        queries[i] = {"query":df_centroids.iloc[i]['file'],
-                      "positives":positives,"negatives":negatives}
-
-    with open(filename, 'wb') as handle:
-        pickle.dump(queries, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-    print("Done ", filename)
-
-'''
-def check_negatives(negative_l, index, df_locations, mid_index_range):
-    count = 0
-    max_dis = 0
-    for mid_index in mid_index_range:
-        if (index + mid_index > 0) and (index + mid_index < 2048 -1):
-            norm_v = torch.norm(df_locations[index+mid_index,:2] - df_locations[index,:2])
-            if norm_v > max_dis:
-                max_dis = norm_v
-    for n_l in negative_l:
-        if(torch.norm(df_locations[n_l,:2] - df_locations[index,:2]) < max_dis):
-            count = count + 1
-            negative_l.remove(n_l)
-    
-    return negative_l, count
-'''
 
 def construct_dict(df_files, df_indices, filename, folder_size, folder_num, all_folders, pre_dir, k_nearest, k_furthest):
     pos_index_range = list(range(-k_nearest//2, (k_nearest//2)+1))
     mid_index_range = list(range(-k_nearest, (k_nearest)+1))
-    
+    pos_index_range.remove(0)
     replace_counts = 0
-    
     queries = {}
     for num in range(folder_num):
-        folder = os.path.join(pre_dir,all_folders[num])
-        gt_mat = os.path.join(folder, 'gt_pose.mat')
-        df_locations = sio.loadmat(gt_mat)
-        df_locations = df_locations['pose']
-        df_locations = torch.tensor(df_locations, dtype = torch.float).cpu()
-        
         for index in range(len(df_indices)//folder_num):
             df_indice = df_indices[num * (len(df_indices)//folder_num) + index]
             positive_l = []
-            negative_l = list(range(folder_size))
+            negative_l = list(range(num*folder_size,(num+1)*folder_size,1))
             for index_pos in pos_index_range:
                 if (index_pos + df_indice >= 0) and (index_pos + df_indice <= folder_size -1):
-                    positive_l.append(index_pos + df_indice)
+                    positive_l.append(index_pos + df_indice+folder_size*num)
             for index_pos in mid_index_range:
                 if (index_pos + df_indice >= 0) and (index_pos + df_indice <= folder_size -1):
-                    negative_l.remove(index_pos + df_indice)
-            
-            '''
-            negative_l_sampled = random.sample(negative_l, k=k_furthest)
-            negative_l_sampled, replace_count = check_negatives(negative_l_sampled, index, df_locations, mid_index_range)
-            while (replace_count!=0):
-                negative_l_sampled_new = random.sample(negative_l, k=replace_count)
-                negative_l_sampled_new, replace_count = check_negatives(negative_l_sampled_new, index, df_locations, mid_index_range)
-                negative_l_sampled.extend(negative_l_sampled_new)
-            
-            replace_counts = replace_counts + replace_count
-            '''
+                    negative_l.remove(index_pos + df_indice+folder_size*num)
             queries[num * (len(df_indices)//folder_num) + index] = {"query":df_files[num * (len(df_indices)//folder_num) + index],
                           "positives":positive_l,"negatives":negative_l}
+    
     #print("replace_counts:"+str(replace_counts))        
-    #print("queries:"+str(queries[0]))
     #print("queries:"+str(queries[0][0]))
-
+    
     with open(filename, 'wb') as handle:
         pickle.dump(queries, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
@@ -142,7 +81,7 @@ def generate(data_index):
         all_files.remove('gt_pose.png')
         
         folder_size = len(all_files)
-        test_index = random.sample(range(folder_size), k=10)
+        test_index = random.sample(range(folder_size), k=2)
         train_index = list(range(folder_size))
         for ts_ind in test_index:
             train_index.remove(ts_ind)
@@ -160,5 +99,5 @@ def generate(data_index):
     construct_dict(df_files_test, df_indices_test, "train_pickle/test_queries_baseline_"+str(data_index)+".pickle", folder_size, folder_num, all_folders, pre_dir, k_nearest, k_furthest)
 
 if __name__ == "__main__":
-    for i in range(20):
+    for i in range(1):
         generate(i)
