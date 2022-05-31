@@ -22,7 +22,6 @@ def rotate_image(image, save_image = False):
     return image
 
 def get_queries_dict(filename):
-    # key:{'query':file,'positives':[files],'negatives:[files], 'neighbors':[keys]}
     with open(filename, 'rb') as handle:
         print("filename:"+str(filename))
         queries = pickle.load(handle)
@@ -31,7 +30,6 @@ def get_queries_dict(filename):
 
 
 def get_sets_dict(filename):
-    #[key_dataset:{key_pointcloud:{'query':file,'northing':value,'easting':value}},key_dataset:{key_pointcloud:{'query':file,'northing':value,'easting':value}}, ...}
     with open(filename, 'rb') as handle:
         trajectories = pickle.load(handle)
         print("Trajectories Loaded.")
@@ -40,7 +38,6 @@ def get_sets_dict(filename):
 
 def load_pc_file(filename,full_path=False):
     # returns Nx3 matrix
-    #print("filename:"+str(filename))
     if full_path:
         pc = read_point_cloud(os.path.join(filename))
     else:
@@ -51,7 +48,6 @@ def load_pc_file(filename,full_path=False):
         print("Error in pointcloud shape")
         return np.array([])
 
-    #pc = np.reshape(pc,(pc.shape[0]//3, 3))
     return pc
 
 
@@ -69,20 +65,18 @@ def load_pc_files(filenames,full_path):
 def load_image_file(filename, full_path=False):
     if full_path:
         image = cv2.imread(filename)
-        dim = (64*4,64)
+        dim = (cfg.SIZED_GRID_X,cfg.SIZED_GRID_Y)
         image = cv2.resize(image, dim,interpolation = cv2.INTER_AREA)
     else:
-        image = cv2.imread(os.path.join("/mnt/NAS/home/yuhang/videomap_v2/Adrian/", filename))
-        dim = (64*4,64)
+        image = cv2.imread(os.path.join("/mnt/NAS/home/cc/data/habitat_4/train/", filename))
+        dim = (cfg.SIZED_GRID_X,cfg.SIZED_GRID_Y)
         image = cv2.resize(image, dim,interpolation = cv2.INTER_AREA)
-        # print("image2:"+str(image.shape))
-        # assert(0)
+
     image = np.asarray(image, dtype=np.float32)
 
     if(image.shape[2] != 3):
         print("Error in Image shape")
         return np.array([])
-    #pc = np.reshape(pc,(pc.shape[0]//3, 3))
     return image
 
 
@@ -144,27 +138,19 @@ def jitter_point_cloud(batch_data, sigma=0.005, clip=0.05):
 def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other_neg=False):
         # get query tuple for dictionary entry
         # return list [query,positives,negatives]
-    #print("query:"+str(dict_value["query"]))
     query = load_image_file(dict_value["query"], full_path=False)  # Nx3
-    #cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/query.jpg', query)
     random.shuffle(dict_value["positives"])
     pos_files = []
     
-    #print("dict_value[positives]:"+str(dict_value["positives"]))
     for i in range(num_pos):
         pos_files.append(QUERY_DICT[dict_value["positives"][i]]["query"])
     
-    #print("pos_files:"+str(pos_files))
     positives = load_pos_neg_image_files(pos_files,full_path=False)
-    '''
-    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/color_img1.jpg', positives[0])
-    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/color_img2.jpg', positives[1])
-    '''
+
     neg_files = []
     neg_indices = []
     if(len(hard_neg) == 0):
         random.shuffle(dict_value["negatives"])
-        #print("dict_value[negatives]:"+str(dict_value["negatives"]))
         for i in range(num_neg):
             neg_files.append(QUERY_DICT[dict_value["negatives"][i]]["query"])
             neg_indices.append(dict_value["negatives"][i])
@@ -183,14 +169,7 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
             j += 1
     
     negatives = load_image_files(neg_files,full_path=False)
-    '''
-    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img1.jpg', negatives[0])
-    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img2.jpg', negatives[1])
-    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img3.jpg', negatives[2])
-    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img4.jpg', negatives[3])
-    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img5.jpg', negatives[4])
-    assert(0)
-    '''
+
     if other_neg is False:
         return [query, positives, negatives]
     # For Quadruplet Loss
@@ -221,7 +200,6 @@ def get_rotated_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], oth
     pos_files = []
     for i in range(num_pos):
         pos_files.append(QUERY_DICT[dict_value["positives"][i]]["query"])
-    #positives= load_pc_files(dict_value["positives"][0:num_pos])
     positives = load_pc_files(pos_files)
     p_rot = rotate_point_cloud(positives)
 
@@ -274,7 +252,6 @@ def get_rotated_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], oth
 
 def get_jittered_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other_neg=False):
     query = load_pc_file(dict_value["query"])  # Nx3
-    #q_rot= rotate_point_cloud(np.expand_dims(query, axis=0))
     q_jit = jitter_point_cloud(np.expand_dims(query, axis=0))
     q_jit = np.squeeze(q_jit)
 
@@ -282,7 +259,6 @@ def get_jittered_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], ot
     pos_files = []
     for i in range(num_pos):
         pos_files.append(QUERY_DICT[dict_value["positives"][i]]["query"])
-    #positives= load_pc_files(dict_value["positives"][0:num_pos])
     positives = load_pc_files(pos_files)
     p_jit = jitter_point_cloud(positives)
 

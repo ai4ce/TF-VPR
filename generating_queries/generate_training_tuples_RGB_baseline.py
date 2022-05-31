@@ -114,10 +114,6 @@ def construct_dict(df_files, df_all, df_index, filename, folder_sizes, all_folde
             queries[ind+file_overhead] = {"query":df_centroids.iloc[i]['file'],
                           "positives":positives,"negatives":negatives}
     
-            #print("queries:"+str(i))
-            #print("positives:"+str((positives)))
-            #print("negatives_max:"+str(max(negatives)))
-            #print("negatives_min:"+str(min(negatives)))
     with open(filename, 'wb') as handle:
         pickle.dump(queries, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
