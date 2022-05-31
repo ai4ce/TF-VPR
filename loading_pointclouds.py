@@ -184,14 +184,7 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
             j += 1
     
     negatives = load_image_files(neg_files,full_path=False)
-    '''
-    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img1.jpg', negatives[0])
-    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img2.jpg', negatives[1])
-    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img3.jpg', negatives[2])
-    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img4.jpg', negatives[3])
-    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img5.jpg', negatives[4])
-    assert(0)
-    '''
+
     if other_neg is False:
         return [query, positives, negatives]
     # For Quadruplet Loss

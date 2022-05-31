@@ -22,29 +22,6 @@ def construct_dict(folder_num, df_f, df_all, df_files, df_files_all, df_indices,
     
     queries = {}
     count = 0
-    '''
-    print("df_indices_all:"+str(len(df_indices_all)))
-    print("df_files:"+str(len(df_files)))
-    print("df_files[0]:"+str(df_files[0]))
-    print("df_files_all:"+str(len(df_files_all)))
-    print("df_indices:"+str(len(df_indices)))
-    print("df_locations_x_all:"+str(np.array(df_locations_x_all).shape))
-    print("df_locations_x_all0:"+str(np.array(df_locations_x_all)[0]))
-    print("df_locations_y_all0:"+str(np.array(df_locations_y_all)[0]))
-    print("df_locations_z_all0:"+str(np.array(df_locations_z_all)[0]))
-    print("df_locations_x_all2137:"+str(np.array(df_locations_x_all)[2137]))
-    print("df_locations_y_all2137:"+str(np.array(df_locations_y_all)[2137]))
-    print("df_locations_z_all2137:"+str(np.array(df_locations_z_all)[2137]))
-    
-    print("df_locations_x:"+str(np.array(df_locations_x_all).shape))
-    print("df_locations_x_0:"+str(np.array(df_locations_x)[0]))
-    print("df_locations_y_0:"+str(np.array(df_locations_y)[0]))
-    print("df_locations_z_0:"+str(np.array(df_locations_z)[0]))
-    print("df_locations_x_2137:"+str(np.array(df_locations_x)[2137]))
-    print("df_locations_y_2137:"+str(np.array(df_locations_y)[2137]))
-    print("df_locations_z_2137:"+str(np.array(df_locations_z)[2137]))
-    assert(0)
-    '''
     
     df_centroids = df_all
     df_folder_index = df_indices
@@ -59,13 +36,7 @@ def construct_dict(folder_num, df_f, df_all, df_files, df_files_all, df_indices,
         negatives = np.setdiff1d(
                 df_centroids.index.values.tolist(),ind_r[i]).tolist()
         random.shuffle(negatives)
-        '''
-        if len(positives)<2:
-            positives = []
-            positives.append(i+1)
-            positives.append(i-1)
-            positives = np.array(positives)
-        '''
+
         if len(positives)<2:
             print("i:"+str(i))
             print("len(positives):"+str(len(positives)))
@@ -84,13 +55,7 @@ def generate(scene_index, data_index, definite_positives=None, inside=True):
     base_path = "/mnt/NAS/home/cc/data/habitat_4/train/"
     base_path = os.path.join(base_path, cfg.scene_list[scene_index])
     pre_dir = base_path
-    '''
-    runs_folder = cfg.scene_names[scene_index]
-    print("runs_folder2:"+str(runs_folder))
 
-    pre_dir = os.path.join(base_path, runs_folder)
-    print("pre_dir:"+str(pre_dir))
-    '''
     filename = "gt_pose.mat"
     
     # Initialize pandas DataFrame
@@ -125,14 +90,12 @@ def generate(scene_index, data_index, definite_positives=None, inside=True):
         files_ = []
         files = list(sorted(os.listdir(os.path.join(base_path, fold))))
         files.remove('gt_pose.mat')
-        # print("len(files):"+str(len(files)))
         for ind_f in range(len(files)):
             file_ = "panoimg_"+str(ind_f)+".png"
             files_.append(os.path.join(base_path, fold, file_))
         df_files.extend(files_)
         df_locations = sio.loadmat(os.path.join(base_path,fold,filename))
         df_locations = df_locations['pose']
-        #df_locations = torch.tensor(df_locations, dtype = torch.float).cpu()
         file_index = list(range(df_locations.shape[0]))
 
         df_locations_x.extend(list(df_locations[file_index,0]))

@@ -32,14 +32,11 @@ def construct_query_dict(df_centroids, df_database, folder_num, traj_len,  filen
     queries_sets = []
     database_sets = []
 
-    #for folder in range(folder_num):
     queries = {}
     for i in range(len(df_centroids)):
-        #temp_indx = folder*len(df_centroids)//folder_num + i
         temp_indx = i
         query = df_centroids.iloc[temp_indx]["file"]
-        #print("folder:"+str(folder))
-        #print("query:"+str(query))
+
         if not evaluate_all:
             queries[len(queries.keys())] = {"query":query,
                 "x":float(df_centroids.iloc[temp_indx]['x']),"y":float(df_centroids.iloc[temp_indx]['y'])}
@@ -52,10 +49,8 @@ def construct_query_dict(df_centroids, df_database, folder_num, traj_len,  filen
         test_trees.append(test_tree)
     
     ###############################
-    #for folder in range(folder_num):
     dataset = {}
     for i in range(len(df_database)):
-        #temp_indx = folder*len(df_database)//folder_num + i
         temp_indx = i
         data = df_database.iloc[temp_indx]["file"]
         if not evaluate_all:
@@ -70,13 +65,8 @@ def construct_query_dict(df_centroids, df_database, folder_num, traj_len,  filen
     ##################################
     if test:
         if not evaluate_all:
-            #for i in range(len(database_sets)):
             tree = database_trees[0]
-            #for j in range(len(queries_sets)):
-            #if(i == j):
-            #           continue
-            #print("len(queries_sets[j].keys():"+str(len(queries_sets[j].keys())))
-            #assert(0)
+
             for key in range(len(queries_sets[0].keys())):
                 coor = np.array(
                     [[queries_sets[0][key]["x"],queries_sets[0][key]["y"]]])
@@ -92,7 +82,6 @@ def construct_query_dict(df_centroids, df_database, folder_num, traj_len,  filen
 def generate(scene_index, evaluate_all = False, inside=True):
     base_path = "/mnt/NAS/home/cc/data/habitat_4/train"
     runs_folder = cfg.scene_list[scene_index]
-    #runs_folder = "Goffs"
     pre_dir = os.path.join(base_path, runs_folder)
 
     nn_ind = 0.2
@@ -121,8 +110,6 @@ def generate(scene_index, evaluate_all = False, inside=True):
             file_ = "panoimg_"+str(ind)+".png"
             files_.append(os.path.join(pre_dir, fold, file_))
         all_files.extend(files_)
-    # all_files.remove('trajectory.mp4')
-    # all_files = [i for i in all_files if not i.endswith(".npy")]
 
     traj_len = len(all_files)
     file_size = traj_len/len(fold_list)
@@ -145,15 +132,12 @@ def generate(scene_index, evaluate_all = False, inside=True):
         df_locations_ts_x = []
         df_locations_ts_y = []
 
-        # print("os.path.join(pre_dir,filename):"+str(os.path.join(pre_dir,filename)))
         df_locations = torch.zeros((traj_len, 3), dtype = torch.float)
         for count, fold in enumerate(fold_list):
             data = sio.loadmat(os.path.join(pre_dir,fold,filename))
             df_location = data['pose']
             df_locations[int(count*file_size):int((count+1)*file_size)] = torch.tensor(df_location, dtype = torch.float)
 
-        # df_locations = df_locations['pose']
-        # df_locations = torch.tensor(df_locations, dtype = torch.float).cpu()
     else:
         df_files_test = []
         df_files_train =[]
@@ -162,8 +146,6 @@ def generate(scene_index, evaluate_all = False, inside=True):
     test_sample = len(fold_list)*10
     test_index = random.choices(range(traj_len), k=test_sample)
     train_index = list(range(traj_len))
-    #for i in test_index:
-    #    train_index.pop(i)
     if not evaluate_all:
         df_locations_tr_x.extend(list(df_locations[train_index,0]))
         df_locations_tr_y.extend(list(df_locations[train_index,2]))
@@ -172,7 +154,6 @@ def generate(scene_index, evaluate_all = False, inside=True):
         df_locations_ts_y.extend(list(df_locations[test_index,2]))
 
     for indx in range(traj_len):
-        # file_ = 'panoimg_'+str(indx)+'.png'
         if indx in test_index:
             df_files_test.append(all_files[indx])
         df_files_train.append(all_files[indx])
@@ -191,7 +172,6 @@ def generate(scene_index, evaluate_all = False, inside=True):
     print("Number of non-disjoint test submaps: "+str(len(df_test['file'])))
 
 
-    #construct_query_dict(df_train,len(folders),"evaluation_database.pickle",False)
     if inside == False:
         if not evaluate_all:
             construct_query_dict(df_train, df_train, len(fold_list), traj_len,"generating_queries/evaluation_database.pickle", "generating_queries/evaluation_query.pickle", nn_ind, r_mid, r_ind, True, evaluate_all) 
