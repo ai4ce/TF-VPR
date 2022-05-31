@@ -63,18 +63,7 @@ def evaluate_model(model,optimizer,epoch,save=False,full_pickle=False):
     else:
         DATABASE_SETS = get_sets_dict(cfg.EVAL_DATABASE_FILE)
         QUERY_SETS = get_sets_dict(cfg.EVAL_QUERY_FILE)
-    '''
-    QUERY_SETS = []
-    for i in range(4):
-        QUERY = {}
-        for j in range(len(QUERY_SETS_temp)//4):
-            #QUERY[len(QUERY.keys())] = {"query":QUERY_SETS_temp[i][j]['query'],
-            #                                "x":float(QUERY_SETS_temp[i][j]['x']),
-            #                                "y":float(QUERY_SETS_temp[i][j]['y']),
-            #                                }
-            QUERY[len(QUERY.keys())] = QUERY_SETS_temp[i][j]
-        QUERY_SETS.append(QUERY)
-    '''
+
     if not os.path.exists(cfg.RESULTS_FOLDER):
         os.mkdir(cfg.RESULTS_FOLDER)
 
@@ -153,8 +142,6 @@ def evaluate_model(model,optimizer,epoch,save=False,full_pickle=False):
     ave_ten_percent_recall = np.mean(ten_percent_recall)
     # print(ave_one_percent_recall)
     
-    #print("os.path.join(/home/cc/PointNet-torch2,cfg.OUTPUT_FILE,log.txt):"+str(os.path.join("/home/cc/PointNet-torch2",cfg.OUTPUT_FILE,"log.txt")))
-    #assert(0)
     with open(os.path.join(cfg.OUTPUT_FILE), "w") as output:
         output.write("Average Recall @1:\n")
         output.write(str(ave_recall_1)+"\n")
