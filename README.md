@@ -3,6 +3,9 @@ The detailed step of running the code is included in each branch. This code incl
 
 # How to collect input
 For Pointcloud: Please refer to DeepMapping paper, https://github.com/ai4ce/PointCloudSimulator
+
 For Habitat RGB: We just need RGB images and x,y,theta as input(for validation)
+
 For Habitat RGB: We just need RGB_real images and x,y,theta as input(for validation)
+
                  Our real-world dataset will be available later
