@@ -8,7 +8,7 @@
 [![GitLab issues total](https://badgen.net/github/issues/ai4ce/V2X-Sim)](https://github.com/Joechencc/TF-VPR)
 [![GitHub stars](https://img.shields.io/github/stars/ai4ce/V2X-Sim.svg?style=social&label=Star&maxAge=2592000)](https://github.com/Joechencc/TF-VPR/stargazers/)
 <div align="center">
-    <img src="https://s2.loli.net/2022/06/15/cbs6hS2NHT7pDPL.png" height="300">
+    <img src="https://s2.loli.net/2022/07/30/ZldqmQGFhajCxRn.png" height="300">
 </div>
 <br>
 
