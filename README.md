@@ -44,11 +44,11 @@ TF-VPR
 |   ...
 ```
 
-https://github.com/Joechencc/Videos/raw/main/NSF_1.mp4
+![](NSF_1.gif)
 
-https://github.com/Joechencc/Videos/raw/main/NSF_2.mp4
+![](NSF_2.gif)
 
-https://github.com/Joechencc/Videos/raw/main/NSF_3.mp4
+![](NSF_3.gif)
 
 # PointNetVlad-Pytorch
 Unofficial PyTorch implementation of PointNetVlad (https://github.com/mikacuy/pointnetvlad)
