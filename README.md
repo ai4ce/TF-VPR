@@ -98,15 +98,15 @@ Take a look at train_pointnetvlad.py and evaluate.py for more parameters
 
 We implement SPTM, TF-VPR, and supervise version, please check the other branches for reference
 
-## Citation
+<!-- ## Citation
 
-If you find V2XSIM useful in your research, please cite:
+If you find TF-VPR useful in your research, please cite:
 
 ```bibtex
 @article{Chen_2022_RAL,
     title = {Self-Supervised Visual Place Recognition by Mining Temporal and Feature Neighborhoods},
     author = {Chen, Chao and Liu, Xinhao and Xu, Xuchu and Ding, Li and Li, Yiming and Wang, Ruoyu and Feng, Chen},
-<!--     booktitle = {IEEE Robotics and Automation Letters},
-    year = {2022} -->
+    booktitle = {IEEE Robotics and Automation Letters},
+    year = {2022} 
 }
-```
+``` -->
