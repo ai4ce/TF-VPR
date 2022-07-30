@@ -209,9 +209,6 @@ def train():
         eval_recall_1, eval_recall_5, eval_recall_10 = evaluate.evaluate_model(model,optimizer,epoch,True)
         eval_end = datetime.datetime.now()
 
-        print("train_time:"+str(train_end-train_start))
-        print("eval_time:"+str(eval_end-eval_start))
-        assert(0)
         log_string('EVAL RECALL_1: %s' % str(eval_recall_1))
         log_string('EVAL RECALL_5: %s' % str(eval_recall_5))
         log_string('EVAL RECALL_10: %s' % str(eval_recall_10))
