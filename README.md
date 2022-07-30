@@ -43,11 +43,11 @@ TF-VPR
 ├── train_pointnetvlad.py # Main file to train TF-VPR
 |   ...
 ```
-
+Point cloud VPR result:
 ![](NSF_1.gif)
-
+RGB VPR result:
 ![](NSF_2.gif)
-
+Real-world RGB VPR result:
 ![](NSF_3.gif)
 
 # PointNetVlad-Pytorch
