@@ -84,12 +84,12 @@ python generate_test_cc_sets.py
 
 ### Train
 ```
-python train_pointnetvlad.py --dataset_folder $DATASET_FOLDER
+python train_pointnetvlad.py
 ```
 
 ### Evaluate
 ```
-python evaluate.py --dataset_folder $DATASET_FOLDER
+python evaluate.py
 ```
 
 Take a look at train_pointnetvlad.py and evaluate.py for more parameters
