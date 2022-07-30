@@ -22,7 +22,7 @@ Download links:
 -  For Pointcloud: Please refer to DeepMapping paper, https://github.com/ai4ce/PointCloudSimulator
 -  For Real-world Panoramic RGB: https://drive.google.com/drive/u/0/folders/1ErXzIx0je5aGSRFbo5jP7oR8gPrdersO
 
-You could find more detailed documents on our [website](https://github.com/Joechencc/TF-VPR/edit/PCL_SPTM/README.md)!
+You could find more detailed documents on our [website](https://github.com/Joechencc/TF-VPR/edit/PCL_ours/README.md)!
 
 TF-VPR follows the same file structure as the [PointNetVLAD](https://github.com/mikacuy/pointnetvlad):
 ```
