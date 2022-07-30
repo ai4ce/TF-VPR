@@ -55,8 +55,7 @@ Real-world RGB VPR result:
 
 ![](NSF_3.gif)
 
-# PointNetVlad-Pytorch
-Unofficial PyTorch implementation of PointNetVlad (https://github.com/mikacuy/pointnetvlad)
+# Note
 
 I kept almost everything not related to tensorflow as the original implementation.
 The main differences are:
@@ -64,11 +63,13 @@ The main differences are:
 * Configuration file (config.py)
 * Evaluation on the eval dataset after every epochs
 
-This implementation achieved an average top 1% recall on oxford baseline of 84.81%
-
 ### Pre-Requisites
-* PyTorch 0.4.0
-* tensorboardX
+- PyTorch 0.4.0
+- tensorboardX
+- open3d-python 0.4
+- scipy
+- matplotlib
+- numpy
 
 ### Generate pickle files
 ```
@@ -92,3 +93,20 @@ python evaluate.py --dataset_folder $DATASET_FOLDER
 ```
 
 Take a look at train_pointnetvlad.py and evaluate.py for more parameters
+
+## Benchmark
+
+We implement SPTM, TF-VPR, and supervise version, please check the other branches for reference
+
+## Citation
+
+If you find V2XSIM useful in your research, please cite:
+
+```bibtex
+@article{Chen_2022_RAL,
+    title = {Self-Supervised Visual Place Recognition by Mining Temporal and Feature Neighborhoods},
+    author = {Chen, Chao and Liu, Xinhao and Xu, Xuchu and Ding, Li and Li, Yiming and Wang, Ruoyu and Feng, Chen},
+<!--     booktitle = {IEEE Robotics and Automation Letters},
+    year = {2022} -->
+}
+```
