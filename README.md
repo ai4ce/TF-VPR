@@ -76,7 +76,7 @@ The main differences are:
 ```
 cd generating_queries/
 
-# For training tuples in our baseline network
+# For training tuples in our baseline network, you may just create one pickle for the first epoch for initialization
 python generate_training_tuples_RGB_baseline_batch.py
 
 # For network evaluation
