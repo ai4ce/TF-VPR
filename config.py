@@ -1,6 +1,7 @@
 # GLOBAL
 NUM_POINTS = 256
 FEATURE_OUTPUT_DIM = 3839
+PICKLE_FOLDER = "train_pickle/"
 RESULTS_FOLDER = "results/"
 OUTPUT_FILE = "results/results.txt"
 
@@ -19,6 +20,7 @@ BASE_LEARNING_RATE = 0.000005
 MOMENTUM = 0.9
 OPTIMIZER = 'ADAM'
 MAX_EPOCH = 20
+FOLD_NUM = 128
 
 MARGIN_1 = 0.5
 MARGIN_2 = 0.2
@@ -28,6 +30,7 @@ BN_DECAY_DECAY_RATE = 0.5
 BN_DECAY_CLIP = 0.99
 
 RESUME = False
+ROT_NUM = 8
 
 TRAIN_FILE = 'generating_queries/training_queries_baseline.pickle'
 TEST_FILE = 'generating_queries/test_queries_baseline.pickle'

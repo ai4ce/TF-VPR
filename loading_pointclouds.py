@@ -53,27 +53,25 @@ def load_pc_files(filenames,full_path):
 
 def rotate_point_cloud(batch_data):
     """ Randomly rotate the point clouds to augument the dataset
-        rotation is per shape based along up direction
-        Input:
-          BxNx3 array, original batch of point clouds
-        Return:
-          BxNx3 array, rotated batch of point clouds
+    rotation is per shape based along up direction
+    Input:
+    BxNx2 array, original batch of point clouds
+    Return:
+    BxNx2 array, rotated batch of point clouds
     """
     rotated_data = np.zeros(batch_data.shape, dtype=np.float32)
+    rotation_angle = (np.random.uniform()*2*np.pi) - np.pi
+    cosval = np.cos(rotation_angle)
+    sinval = np.sin(rotation_angle)
+    rotation_matrix = np.array([[cosval, -sinval], 
+                                [sinval, cosval]])
     for k in range(batch_data.shape[0]):
         #rotation_angle = np.random.uniform() * 2 * np.pi
         #-90 to 90
-        rotation_angle = (np.random.uniform()*np.pi) - np.pi/2.0
-        cosval = np.cos(rotation_angle)
-        sinval = np.sin(rotation_angle)
-        rotation_matrix = np.array([[cosval, -sinval, 0],
-                                    [sinval, cosval, 0],
-                                    [0, 0, 1]])
         shape_pc = batch_data[k, ...]
         rotated_data[k, ...] = np.dot(
-            shape_pc.reshape((-1, 3)), rotation_matrix)
+                               shape_pc, rotation_matrix) 
     return rotated_data
-
 
 def jitter_point_cloud(batch_data, sigma=0.005, clip=0.05):
     """ Randomly jitter points. jittering is per point.
@@ -88,21 +86,32 @@ def jitter_point_cloud(batch_data, sigma=0.005, clip=0.05):
     jittered_data += batch_data
     return jittered_data
 
-
 def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other_neg=False):
         # get query tuple for dictionary entry
         # return list [query,positives,negatives]
 
-    query = load_pc_file(dict_value["query"])  # Nx3
-
+    query = load_pc_file(dict_value["query"],True)  # Nx3
     random.shuffle(dict_value["positives"])
     pos_files = []
 
     for i in range(num_pos):
+        #pos_files.append(dict_value["query"])
         pos_files.append(QUERY_DICT[dict_value["positives"][i]]["query"])
     #positives= load_pc_files(dict_value["positives"][0:num_pos])
     positives = load_pc_files(pos_files,full_path=True)
-
+    '''
+    B, P, _ = positives.shape
+    new_positives = np.zeros((B*(cfg.ROT_NUM+1),P,3), dtype = positives.dtype)
+    for pb in range(positives.shape[0]):
+        positve_pcl = positives[pb][:,:2]
+        new_positives[pb*(cfg.ROT_NUM+1),:,:2] = positve_pcl
+        for r_n in range(cfg.ROT_NUM):
+            rotated_positve_pcl = rotate_point_cloud(positve_pcl)
+            #print("rotated_positve_pcl:"+str(rotated_positve_pcl))
+            new_positives[pb*(cfg.ROT_NUM+1)+r_n+1,:,:2] = rotated_positve_pcl
+    new_positives = np.asarray(new_positives)
+    positives = new_positives
+    '''
     neg_files = []
     neg_indices = []
     if(len(hard_neg) == 0):
@@ -113,7 +122,7 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
 
     else:
         random.shuffle(dict_value["negatives"])
-        for i in hard_neg:
+        for count, i in enumerate(hard_neg):
             neg_files.append(QUERY_DICT[i]["query"])
             neg_indices.append(i)
         j = 0
