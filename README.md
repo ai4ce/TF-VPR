@@ -76,6 +76,7 @@ The main differences are:
 - numpy
 - pandas
 - scikit-learn
+- pickle5
 
 ### Generate pickle files
 ```
