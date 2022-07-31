@@ -123,12 +123,16 @@ The main differences are:
 * Evaluation on the eval dataset after every epochs
 
 ### Pre-Requisites
-- PyTorch 0.4.0
+- Python 3.6
+- PyTorch >=1.5.0
 - tensorboardX
 - open3d-python 0.4
 - scipy
 - matplotlib
 - numpy
+- pandas
+- scikit-learn
+- pickle5
 
 ### Generate pickle files
 ```
