@@ -74,6 +74,7 @@ The main differences are:
 - scipy
 - matplotlib
 - numpy
+- pandas
 
 ### Generate pickle files
 ```
