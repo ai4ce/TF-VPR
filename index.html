@@ -258,29 +258,6 @@
   </div>
 </section>
 
-<section class="section">
-  <div class="container is-max-desktop">
-    <!-- <br> -->
-    <!-- Abstract. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Contribution</h2>
-        <div class="content has-text-justified">
-          <li> 
-            We propose a novel self-supervised VPR solution termed TF-VPR that gets rid of pose-dependent supervision by mining temporal and feature neighborhoods.
-          </li>
-          <li> 
-            We develop a new evaluation metric to assess the orientation diversity of VPR-retrieved data.
-          </li>
-          <li>
-            We conduct comprehensive experiments in both simulation and real world to verify the superiority of our solution compared to other baseline methods.
-          </li>
-        </div>
-      </div>
-    </div>
-    <!--/ Abstract. -->
-  </div>
-</section>
 
 <section class="section">
   <div class="container is-max-desktop">
@@ -294,14 +271,15 @@
         <div class="content has-text-justified">
           <br>  
           <p>
-            The pipeline of the autonomous exploration task and the framework of <strong>AirDet</strong>. 
-          </p>
-          <p>
-            During exploration, a few prior raw images that potentially contain novel objects (helmet) are sent to a human user first. Provided with <em>online</em> annotated few-shot data, the robot explorer is able to detect those objects by observing its surrounding environment.
-          </p>
-          <p>
-            AirDet includes 4 modules, <em>i.e.</em>, the shared backbone, support-guided cross-scale (<em>SCS</em>) feature fusion module for region proposal, global-local relation (<em>GLR</em>) module for shots aggregation, and relation-based detection head, which are visualized by different colors.
-          </p>
+            <li> 
+              We propose a novel self-supervised VPR solution termed TF-VPR that gets rid of pose-dependent supervision by mining temporal and feature neighborhoods.
+            </li>
+            <li> 
+              We develop a new evaluation metric to assess the orientation diversity of VPR-retrieved data.
+            </li>
+            <li>
+              We conduct comprehensive experiments in both simulation and real world to verify the superiority of our solution compared to other baseline methods.
+            </li>
           </p>
         </div>
       </div>
@@ -318,7 +296,6 @@
     <p>
       &nbsp
     </p>
-    <h3 class="title is-4">Three datasets included</h3>
     <div class="column is-full_width">
       <img src="static\images\dataset_pc.png" width=260 border=2px class="center"/> &nbsp;&nbsp;
       <img src="static\images\dataset_goffs.png"  width=340 border=2px class="center"/> &nbsp;&nbsp;
@@ -328,58 +305,90 @@
         <p>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(a) <a href="https://github.com/ai4ce/PointCloudSimulator.git">Point Cloud Data</a> 
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (b) <a href="https://github.com/facebookresearch/habitat-sim.git">Habitat-sim Data</a>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (c) <a href="https://drive.google.com/drive/u/0/folders/1ErXzIx0je5aGSRFbo5jP7oR8gPrdersO">Real-world RGB Data</a>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (c) <a href="https://drive.google.com/drive/u/0/folders/1ErXzIx0je5aGSRFbo5jP7oR8gPrdersO">NYU-VPR-360 Data</a>
           <br>
           <br>
           We test TF-VPR on three different kinds of environments: simulated 2D point clouds, simulated RGB images, and self-collected real-world RGB images. The codebase uses PyTorch framework with network parameters optimized using Adam. The learning rate is set as 0.001.
         </p>
-        </p>
-      </div>
-    </div>
-    <p>
-      &nbsp
-    </p>
-    <p>
-      &nbsp
-    </p>
-    <!-- <h3 class="title is-4">VPR Result</h3> -->
-    <div class="column is-full_width">
-      <img src="static\images\NSF_1.gif" width=1000 height=90% overflow=hidden class="center"/>
-      <h3 class="title is-4">
-        Simulated Point cloud VPR result is shown above. The blue cross represents the query and green dots represent top 4 retrieved positive neighbors
-      </h3>
-      <img src="static\images\NSF_2.gif" width=1000 height=100px overflow=hidden class="center"/>
-      <h3 class="title is-4">
-        Habitat-Sim RGB VPR result is shown above. The black cross represents the query and green dots represent top 4 retrieved positive neighbors
-      </h3>
-      <img src="static\images\NSF_3.gif" width=1000 height=100px overflow=hidden class="center"/>
-      <h3 class="title is-4">
-        Real-world RGB VPR result is shown above. The blue stop represents the query and green fields represent top 4 retrieved positive neighbors
-      </h3>
-      <div class="content has-text-justified">
- 
-      </div>
-    </div>
-    <p>
-      &nbsp
-    </p>
-    <p>
-      &nbsp
-    </p>
-    <h3 class="title is-4">Qualitative Result</h3>
-    <div class="column is-full_width">
-      <img src="static\images\Qualitative_result.png" class="center"/>
-      <div class="content has-text-justified">
-        <br>  
+
         <p>
-          Qualitative visual place recognition results on three different datasets. The first row shows the results of SPTM and the second row shows the results of TF-VPR. The first column is the query point cloud and column from 2nd row are the top N retrievals. <span style="color:green;">green</span> indicates true positives and <span style="color:red;">red</span>  indicates false positives.}
+          <em><b>2D simulated point cloud dataset:</b></em> we simulate 2D point clouds captured by the mobile agents equipped with virtual Lidar sensors. Specifically, we first create the 2D environment, represented as a binary image with the resolution of 1024 x 1024. The white and blue pixels correspond to the free space and the obstacles, respectively. Given the 2D environment, we interactively sample the trajectory of the mobile agent. For each sampled pose, the points in the simulated point clouds are the intersection points between laser beams and the obstacle boundaries. In our experiments, the virtual Lidar sensor has the field-of-view of 360° with the angular resolution of 1° (equivalently, each point cloud has 256 points). We created 18 trajectories sampled from 10 environments. Each trajectory contains 2048 poses. On average, the rotational and translation perturbation between two consecutive poses are ± 10° and ± 
+          9.60 pixel, respectively.       
         </p>
+        <p>
+          <em><b>Habitat-Sim RGB dataset:</b></em> We collected the photo-realistic simulated images in the habitat-sim simulator using the Gibson dataset. The RGB images were captured by a virtual 360 camera mounted on a virtual robot in the environment. The robot moved according to the random exploration strategy. In total, we collected more than 10k images in 18 scenes. 
+        </p>
+        <p>
+          <em><b>NYU-VPR-360 dataset:</b></em> We collected the real RGB dataset called NYU-VPR-360 captured by Gopro MAX, a dual-lens 360 camera with GPS recording. The GoPro camera was mounted on the top of the driving vehicle. Our dataset collection area selected an urban zone containing eight townhouse blocks. In total, we collected two different trajectories from the same start points. All trajectories contain visits to the same intersections for the loop closure detection. We designed three different actions for the same intersection: turn left, turn right and go ahead, with two opposite driving directions. Except for a few intersections due to traffic reasons, most intersections contain at least two kinds of actions with different driving directions. 
         </p>
       </div>
     </div>
-   
-</div>
-</section>
+    <p>
+      &nbsp
+    </p>
+    <p>
+      &nbsp
+    </p>
+
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <!-- <br> -->
+        <!-- Abstract. -->
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">VPR Result</h2>
+            <div class="column is-full_width">
+              <img src="static\images\NSF_1.gif" width=1000 height=90% overflow=hidden class="center"/>
+              <h3 class="title is-4">
+                Simulated Point cloud VPR result is shown above. The blue cross represents the query and green dots represent top 4 retrieved positive neighbors
+              </h3>
+              <p>
+                &nbsp
+              </p>
+              <img src="static\images\NSF_2.gif" width=1000 height=100px overflow=hidden class="center"/>
+              <h3 class="title is-4">
+                Habitat-Sim RGB VPR result is shown above. The black cross represents the query and green dots represent top 4 retrieved positive neighbors
+              </h3>
+              <p>
+                &nbsp
+              </p>
+              <img src="static\images\NSF_3.gif" width=1000 height=100px overflow=hidden class="center"/>
+              <h3 class="title is-4">
+                Real-world RGB VPR result is shown above. The blue stop represents the query and green fields represent top 4 retrieved positive neighbors
+              </h3>
+              <div class="content has-text-justified">
+         
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--/ Abstract. -->
+      </div>
+    </section>
+
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <!-- <br> -->
+        <!-- Abstract. -->
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Qualitative Result</h2>
+            <div class="column is-full_width">
+              <img src="static\images\Qualitative_result.png" class="center"/>
+              <div class="content has-text-justified">
+                <br>  
+                <p>
+                  Qualitative visual place recognition results on three different datasets. The first row shows the results of SPTM and the second row shows the results of TF-VPR. The first column is the query point cloud and column from 2nd row are the top N retrievals. <span style="color:green;">green</span> indicates true positives and <span style="color:red;">red</span>  indicates false positives.}
+                </p>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </section>
 
 
 <!-- <section class="section" id="BibTeX">
