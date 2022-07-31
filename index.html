@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Self supervised VPR method to detect spatial Neighborhoods">
+  <meta name="keywords" content="VPR, Self-Supervised, SLAM">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TF-VPR</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script> -->
+  <link rel="icon" type="image/png" href="./static/images/ai4ce.png"> 
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/airlab.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://scholar.google.com/citations?hl=en&user=WOBQbwQAAAAJ">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+    </div>
+
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title"><img src="./static/images/logo.png" width="45">TF-VPR&nbsp;&nbsp;</h1>
+          <h1 class="title is-2 publication-title">Self-Supervised Visual Place Recognition by Mining Temporal and Feature Neighborhoods</h1>
+          <div class="column is-full_width">
+            <h2 class="title is-4">RAL 2022</h2>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?hl=en&user=WOBQbwQAAAAJ">Chao Chen</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://gaaaavin.github.io">Xinhao Liu</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://www.xuchuxu.com">Xuchu Xu</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.hajim.rochester.edu/ece/lding6/">Li Ding</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=i_aajNoAAAAJ">Yiming Li</a><sup>1</sup>
+            </span>
+            <span class="author-block">
+              <a href="https://github.com/ruoyuwangeel4930">Ruoyu Wang</a><sup>1</sup>
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=YeG8ZM0AAAAJ">Chen Feng</a><sup>1</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>New York University, Brooklyn, NY 11201, USA</span>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>2</sup>University of Rochester, Rochester, NY 14627, USA</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                 <!-- add here later. -->
+                <a href=""                    
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                 <!-- add here later. -->
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <!-- add here later. -->
+               <a href=""                    
+                  class="external-link button is-normal is-rounded is-dark">
+                 <span class="icon">
+                     <i class="fas fa-camera"></i>
+                 </span>
+                 <span>Appendix</span>
+               </a>
+             </span>
+              <!-- Video Link. -->
+              <!-- <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/Joechencc/TF-VPR"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <span class="link-block">
+                <a href="https://drive.google.com/drive/u/0/folders/1ErXzIx0je5aGSRFbo5jP7oR8gPrdersO"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <!-- <video id="teaser" autoplay muted loop height="100%">
+        <source src="./static/images/SUBT_video.mp4"
+                type="video/mp4">
+      </video> -->
+      <img src="https://s2.loli.net/2022/07/31/PSIvH3f6zbTl9ZN.png" height="300">
+      <!-- <img class="rounded" src="./media/nice-slam/teaser.png" > -->
+      <br><br><br>
+      <h2 class="subtitle has-text-centered">
+      Illustration of the idea based on the interconnection of <span style="color:green">spatial</span>, <span style="color:blue">spatial</span>, and <span style="color:red ">feature</span> neighborhoods
+    </h2>
+    <!-- <h2 class="subtitle has-text-centered">
+      (The <span style="color:#000000;">black</span> / <span style="color:#ff0000;">red</span> lines are the ground truth / predicted camera trajectory)
+    </h2> -->
+    <!-- <h2 class="is-size-6 has-text-centered">(The left are few-shot annotations online provided by user and right is the detection results)</h2> -->
+    
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+        <!-- Paper video. -->
+        <!-- <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Video</h2>
+            <div class="publication-video">
+              <iframe src="https://www.youtube.com/embed/V5hYTz5os0M?rel=0&amp;showinfo=0"
+                      frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </div>
+          </div>
+        </div> -->
+        <!--/ Paper video. -->
+      
+    <!-- <br> -->
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Visual place recognition (VPR) using deep networks has achieved state-of-the-art performance. However, most of the related approaches require a training set with ground truth sensor poses to obtain the positive and negative samples of each observation's spatial neighborhoods.
+          </p>
+          <p>
+            When such knowledge is unknown, the temporal neighborhoods from a sequentially collected data stream could be exploited for self-supervision, although with suboptimal performance. 
+          </p>
+          <p>
+            Inspired by noisy label learning, we propose a novel self-supervised VPR framework that uses both the temporal neighborhoods and the learnable feature neighborhoods to discover the unknown spatial neighborhoods. 
+          </p>
+          <p>
+            Our method follows an iterative training paradigm which alternates between: (1) representation learning with data augmentation, (2) positive set expansion to include the current feature space neighbors, and (3) positive set contraction via geometric verification. 
+          </p>
+          <p>
+            We conduct comprehensive experiments on both simulated and real datasets, with input of both images and point clouds. The results demonstrate that our method outperforms the baselines in both recall rate, robustness, and a novel metric we proposed for VPR, the orientation diversity.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- <br> -->
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Contribution</h2>
+        <div class="content has-text-justified">
+          <li> 
+            We propose a novel self-supervised VPR solution termed TF-VPR that gets rid of pose-dependent supervision by mining temporal and feature neighborhoods.
+          </li>
+          <li> 
+            We develop a new evaluation metric to assess the orientation diversity of VPR-retrieved data.
+          </li>
+          <li>
+            We conduct comprehensive experiments in both simulation and real world to verify the superiority of our solution compared to other baseline methods.
+          </li>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Method. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full_width">
+        <hr>
+        <h2 class="title is-3">Method</h2>
+        <br>
+        <img src="https://s2.loli.net/2022/07/31/hzA2aZfH9lJWpk1.png" class="center"/>
+        <div class="content has-text-justified">
+          <br>  
+          <p>
+            The pipeline of the autonomous exploration task and the framework of <strong>AirDet</strong>. 
+          </p>
+          <p>
+            During exploration, a few prior raw images that potentially contain novel objects (helmet) are sent to a human user first. Provided with <em>online</em> annotated few-shot data, the robot explorer is able to detect those objects by observing its surrounding environment.
+          </p>
+          <p>
+            AirDet includes 4 modules, <em>i.e.</em>, the shared backbone, support-guided cross-scale (<em>SCS</em>) feature fusion module for region proposal, global-local relation (<em>GLR</em>) module for shots aggregation, and relation-based detection head, which are visualized by different colors.
+          </p>
+          </p>
+        </div>
+      </div>
+    </div>
+    <hr>
+
+    
+    <!-- Applications.-->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full_width">
+        <h2 class="title is-3">Dataset</h2>
+      </div>
+    </div>
+    <p>
+      &nbsp
+    </p>
+    <h3 class="title is-4">Three datasets included</h3>
+    <div class="column is-full_width">
+      <img src="static\images\dataset_pc.png" width=260 class="center"/> &nbsp;&nbsp;
+      <img src="static\images\dataset_goffs.png"  width=340 class="center"/> &nbsp;&nbsp;
+      <img src="static\images\dataset_scene1.png" width=300 class="center"/> 
+      <div class="content has-text-justified">
+        <br>  
+        <p>
+          We test TF-VPR on three different kinds of environments: simulated 2D point clouds, simulated RGB images, and self-collected real-world RGB images. The codebase uses PyTorch framework with network parameters optimized using Adam. The learning rate is set as 0.001.
+        </p>
+        </p>
+      </div>
+    </div>
+    <p>
+      &nbsp
+    </p>
+    <p>
+      &nbsp
+    </p>
+    <!-- <h3 class="title is-4">VPR Result</h3> -->
+    <div class="column is-full_width">
+      <h3 class="title is-4">
+        Simulated Point cloud VPR result
+      </h3>
+      <img src="static\images\NSF_1.gif" width=1000 class="center"/>
+      <h3 class="title is-4">
+        Habitat-sim RGB VPR result
+      </h3>
+      <img src="static\images\NSF_2.gif" width=1000 class="center"/>
+      <h3 class="title is-4">
+        Real-world RGB VPR result
+      </h3>
+      <img src="static\images\NSF_2.gif" width=1000 class="center"/>
+
+      <div class="content has-text-justified">
+ 
+      </div>
+    </div>
+    <p>
+      &nbsp
+    </p>
+    <p>
+      &nbsp
+    </p>
+    <h3 class="title is-4">Qualitative Result</h3>
+    <div class="column is-full_width">
+      <img src="static\images\Qualitative_result.jpg" class="center"/>
+      <div class="content has-text-justified">
+        <br>  
+        <p>
+          Qualitative visual place recognition results on three different datasets. The first row shows the results of SPTM and the second row shows the results of TF-VPR. The first column is the query point cloud and column from 2nd row are the top N retrievals. <span style="color:green;">green</span> indicates true positives and <span style="color:red;">red</span>  indicates false positives.}
+        </p>
+        </p>
+      </div>
+    </div>
+   
+</div>
+</section>
+
+
+<!-- <section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{Li2022ECCV,
+      author    = {Li, Bowen and Wang, Chen and Reddy, Pranay and Kim, Seungchan and Scherer, Sebastian},
+      title     = {AirDet: Few-Shot Detection without Fine-tuning for Autonomous Exploration},
+      booktitle = {Proceedings of the European Conference on Computer Vision (ECCV)},
+      year      = {2022}
+  }</code></pre>
+  </div>
+</section> -->
+
+
+<section class="section" id="Acknowledgements">
+  <div class="container is-max-desktop content">
+    <h2 class="title">Acknowledgements</h2>
+    The work was done by AI4CE group from NYU. The authors would like to thank Bhargav Makwana for his effort in paper writing. Our code is built upon <a href="https://github.com/mikacuy/pointnetvlad">PointNetVLAD</a>, for which we sincerely express our gratitute to the authors.
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+            This webpage template is from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>. 
+            We sincerely thank <a href="https://keunhong.com/">Keunhong Park</a> for developing and open-sourcing this template.
+          </p>
+        </div>
+      </div>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
