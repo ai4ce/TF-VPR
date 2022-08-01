@@ -30,17 +30,27 @@ TF-VPR
 ├── loss # loss function
 ├── models # network model
 |   ├── PointNetVlad.py # PointNetVLAD network model
+|   ├── ImageNetVLAD.py # NetVLAD network model 
 |   ├── resnet_mod.py # ResNet network model 
+|   ├── Verification_PCL.py # Verification for PCL data
+|   ├── Verification_RGB.py # Verification for RGB data
+|   ├── Verification_RGB_real.py # Verification for RGB_real data
 |   ...
 ├── generating_queries # Preprocess the data, initial the label, and generate Pickle file 
-|   ├── generate_test_cc_sets.py # Generate the test pickle file
-|   ├── generate_training_tuples_cc_baseline_batch.py # Generate the train pickle file
+|   ├── generate_test_PCL_baseline_sets.py # Generate the test pickle file for PCL baseline
+|   ├── generate_test_PCL_ours_sets.py # Generate the test pickle file for PCL TF-VPR
+|   ├── generate_test_PCL_supervise_sets.py # Generate the test pickle file for PCL supervise
+|   ├── generate_training_tuples_PCL_baseline.py # Generate the train pickle file for PCL baseline
+|   ├── generate_training_tuples_PCL_ours.py # Generate the train pickle file for PCL TF-VPR
+|   ├── generate_training_tuples_PCL_supervise.py # Generate the train pickle file for PCL supervise
 |   ...
 ├── results # Results are saved here
 ├── config.py # Config file
 ├── evaluate.py # evaluate file
 ├── loading_pointcloud.py # file loading script
-├── train_pointnetvlad.py # Main file to train TF-VPR
+├── train_pointnetvlad_PCL_baseline.py # Main file to train PCL baseline
+├── train_pointnetvlad_PCL_ours.py # Main file to train PCL TF-VPR
+├── train_pointnetvlad_PCL_supervise.py # Main file to train PCL supervise
 |   ...
 ```
 Point cloud TF-VPR result:
