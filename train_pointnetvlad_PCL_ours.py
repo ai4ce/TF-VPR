@@ -350,8 +350,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, TRAINI
     # Shuffle train files
     train_file_idxs = np.arange(0, len(TRAINING_QUERIES.keys()))
     np.random.shuffle(train_file_idxs)
-    # for i in range(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES):
-    for i in range(1):
+    for i in range(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES):
         batch_keys = train_file_idxs[i *
                                      cfg.BATCH_NUM_QUERIES:(i+1)*cfg.BATCH_NUM_QUERIES]
         q_tuples = []

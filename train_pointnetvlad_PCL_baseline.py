@@ -14,7 +14,6 @@ import config as cfg
 import evaluate
 import loss.pointnetvlad_loss as PNV_loss
 import models.PointNetVlad as PNV
-import generating_queries.generate_training_tuples_cc_baseline as generate_dataset
 
 import torch
 import torch.nn as nn
@@ -269,7 +268,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch):
     # Shuffle train files
     train_file_idxs = np.arange(0, len(TRAINING_QUERIES.keys()))
     np.random.shuffle(train_file_idxs)
-    for i in range(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES):
+    for i in range(len(train_ficle_idxs)//cfg.BATCH_NUM_QUERIES):
         batch_keys = train_file_idxs[i *
                                      cfg.BATCH_NUM_QUERIES:(i+1)*cfg.BATCH_NUM_QUERIES]
         q_tuples = []
