@@ -291,7 +291,7 @@ def train():
         cfg.OUTPUT_FILE = cfg.RESULTS_FOLDER + 'results_' + str(epoch) + '.txt'
 
         #eval_recall, db_vec = evaluate.evaluate_model(model, True) #db_vec gives the evaluate nearest neighbours, folder* 2048* positves_dim
-        _, db_vec = evaluate.evaluate_model(model, optimizer, epoch, True, full_pickle=True)
+        _, db_vec = evaluate.evaluate_model_pcl_ours(model, optimizer, epoch, True, full_pickle=True)
         db_vec = np.array(db_vec)
         db_vec_all = db_vec.reshape(-1,db_vec.shape[-1])
         nbrs = NearestNeighbors(n_neighbors=cfg.EVAL_NEAREST, algorithm='ball_tree').fit(db_vec_all)
@@ -330,7 +330,7 @@ def train():
         log_string('EVALUATING...')
         cfg.OUTPUT_FILE = cfg.RESULTS_FOLDER + 'results_' + str(epoch) + '.txt'
 
-        eval_recall_1, eval_recall_5, eval_recall_10 = evaluate.evaluate_model(model,optimizer,epoch,True,False)
+        eval_recall_1, eval_recall_5, eval_recall_10 = evaluate.evaluate_model_pcl_ours(model,optimizer,epoch,True,False)
         log_string('EVAL RECALL_1: %s' % str(eval_recall_1))
         log_string('EVAL RECALL_5: %s' % str(eval_recall_5))
         log_string('EVAL RECALL_10: %s' % str(eval_recall_10))
@@ -366,7 +366,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, TRAINI
             # no cached feature vectors
             if (len(TRAINING_LATENT_VECTORS) == 0):
                 q_tuples.append(
-                    get_query_tuple(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
+                    get_query_tuple_ours(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
                                     DB_QUERIES, hard_neg=[], other_neg=True))
             
             elif (len(HARD_NEGATIVES.keys()) == 0):
@@ -378,7 +378,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, TRAINI
                 hard_negs = get_random_hard_negatives(
                     query, negatives, num_to_take)
                 q_tuples.append(
-                    get_query_tuple(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
+                    get_query_tuple_ours(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
                                     DB_QUERIES, hard_negs, other_neg=True))
             
             else:
@@ -392,7 +392,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, TRAINI
                 hard_negs = list(set().union(
                     HARD_NEGATIVES[batch_keys[j]], hard_negs))
                 q_tuples.append(
-                    get_query_tuple(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
+                    get_query_tuple_ours(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
                                     DB_QUERIES, hard_negs, other_neg=True))
             
             if (q_tuples[j][3].shape[0] != cfg.NUM_POINTS):

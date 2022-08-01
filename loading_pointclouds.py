@@ -4,6 +4,30 @@ import numpy as np
 import random
 import config as cfg
 from open3d import read_point_cloud
+import open3d as o3d
+
+def rotate_point_cloud_N3(batch_data):
+    """ Randomly rotate the point clouds to augument the dataset
+    rotation is per shape based along up direction
+    Input:
+    Nx3 array, original batch of point clouds
+    Return:
+    Nx3 array, rotated batch of point clouds
+    """
+    rotated_data = np.zeros(batch_data.shape, dtype=np.float32)
+    rotation_angle = (np.random.uniform()*2*np.pi) - np.pi
+    cosval = np.cos(rotation_angle)
+    sinval = np.sin(rotation_angle)
+    rotation_matrix = np.array([[cosval, -sinval,0],
+                               [sinval, cosval,0],
+                               [0, 0,1]])
+    for k in range(batch_data.shape[0]):
+        #rotation_angle = np.random.uniform() * 2 * np.pi
+        #-90 to 90
+        shape_pc = batch_data
+        rotated_data= np.dot(
+                shape_pc, rotation_matrix)
+    return rotated_data
 
 def get_queries_dict(filename):
     # key:{'query':file,'positives':[files],'negatives:[files], 'neighbors':[keys]}
@@ -47,6 +71,18 @@ def load_pc_files(filenames,full_path):
         if(pc.shape[0] != 256):
             continue
         pcs.append(pc)
+    pcs = np.array(pcs)
+    return pcs
+
+def load_pos_neg_pc_files(filenames,full_path):
+    pcs = []
+    for filename in filenames:
+        pc = load_pc_file(filename,full_path=full_path)
+        if(pc.shape[0] != 256):
+            continue
+        for i in range(30):
+            rotated_pcl = rotate_point_cloud_N3(pc)
+            pcs.append(rotated_pcl)
     pcs = np.array(pcs)
     return pcs
 
@@ -136,6 +172,75 @@ def get_query_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other
 
     negatives = load_pc_files(neg_files,full_path=True)
 
+    if other_neg is False:
+        return [query, positives, negatives]
+    # For Quadruplet Loss
+    else:
+        # get neighbors of negatives and query
+        neighbors = []
+        for pos in dict_value["positives"]:
+            neighbors.append(pos)
+        for neg in neg_indices:
+            for pos in QUERY_DICT[neg]["positives"]:
+                neighbors.append(pos)
+        possible_negs = list(set(QUERY_DICT.keys())-set(neighbors))
+        random.shuffle(possible_negs)
+
+        if(len(possible_negs) == 0):
+            return [query, positives, negatives, np.array([])]
+
+        neg2 = load_pc_file(QUERY_DICT[possible_negs[0]]["query"],full_path=True)
+        return [query, positives, negatives, neg2]
+
+def get_query_tuple_ours(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other_neg=False):
+        # get query tuple for dictionary entry
+        # return list [query,positives,negatives]
+
+    query = load_pc_file(dict_value["query"],True)  # Nx3
+    random.shuffle(dict_value["positives"])
+    pos_files = []
+
+    for i in range(num_pos):
+        #pos_files.append(dict_value["query"])
+        pos_files.append(QUERY_DICT[dict_value["positives"][i]]["query"])
+    #positives= load_pc_files(dict_value["positives"][0:num_pos])
+    positives = load_pos_neg_pc_files(pos_files,full_path=True)
+    '''
+    B, P, _ = positives.shape
+    new_positives = np.zeros((B*(cfg.ROT_NUM+1),P,3), dtype = positives.dtype)
+    for pb in range(positives.shape[0]):
+        positve_pcl = positives[pb][:,:2]
+        new_positives[pb*(cfg.ROT_NUM+1),:,:2] = positve_pcl
+        for r_n in range(cfg.ROT_NUM):
+            rotated_positve_pcl = rotate_point_cloud(positve_pcl)
+            #print("rotated_positve_pcl:"+str(rotated_positve_pcl))
+            new_positives[pb*(cfg.ROT_NUM+1)+r_n+1,:,:2] = rotated_positve_pcl
+    new_positives = np.asarray(new_positives)
+    positives = new_positives
+    '''
+    neg_files = []
+    neg_indices = []
+    if(len(hard_neg) == 0):
+        random.shuffle(dict_value["negatives"])
+        for i in range(num_neg):
+            neg_files.append(QUERY_DICT[dict_value["negatives"][i]]["query"])
+            neg_indices.append(dict_value["negatives"][i])
+        
+    else:
+        random.shuffle(dict_value["negatives"])
+        for count, i in enumerate(hard_neg):
+            neg_files.append(QUERY_DICT[i]["query"])
+            neg_indices.append(i)
+        j = 0
+        while(len(neg_files) < num_neg):
+
+            if not dict_value["negatives"][j] in hard_neg:
+                neg_files.append(
+                    QUERY_DICT[dict_value["negatives"][j]]["query"])
+                neg_indices.append(dict_value["negatives"][j])
+            j += 1
+
+    negatives = load_pc_files(neg_files,full_path=True)
     if other_neg is False:
         return [query, positives, negatives]
     # For Quadruplet Loss

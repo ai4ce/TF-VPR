@@ -158,6 +158,127 @@ def evaluate_model(model,optimizer,epoch,save=False):
     
     return ave_one_percent_recall, ave_five_percent_recall, ave_ten_percent_recall
 
+def evaluate_model_pcl_ours(model,optimizer,epoch,save=False,full_pickle=False):
+    if save:
+        torch.save({
+            'state_dict': model.state_dict(),
+            'optimizer': optimizer.state_dict(),
+            'epoch': epoch,
+            }, cfg.LOG_DIR + "checkpoint.pth.tar")
+    
+    print("epoch:"+str(epoch))
+    #checkpoint = torch.load(cfg.LOG_DIR + "checkpoint.pth.tar")
+    #saved_state_dict = checkpoint['state_dict']
+    #model.load_state_dict(saved_state_dict)
+    if full_pickle:
+        DATABASE_SETS = get_sets_dict('generating_queries/evaluation_database_full.pickle')
+        QUERY_SETS = get_sets_dict('generating_queries/evaluation_query_full.pickle')
+    else:
+        DATABASE_SETS = get_sets_dict(cfg.EVAL_DATABASE_FILE)
+        QUERY_SETS = get_sets_dict(cfg.EVAL_QUERY_FILE)
+
+    if not os.path.exists(cfg.RESULTS_FOLDER):
+        os.mkdir(cfg.RESULTS_FOLDER)
+
+    count = 0
+
+    similarity_1 = []
+    similarity_5 = []
+    similarity_10 = []
+
+    one_percent_recall = []
+    five_percent_recall = []
+    ten_percent_recall = []
+
+    DATABASE_VECTORS = []
+    QUERY_VECTORS = []
+
+    for i in range(len(DATABASE_SETS)):
+        DATABASE_VECTORS.append(get_latent_vectors(model, DATABASE_SETS[i]))
+    
+    for j in range(len(QUERY_SETS)):
+        QUERY_VECTORS.append(get_latent_vectors(model, QUERY_SETS[j]))
+
+    len_tr = np.array(DATABASE_VECTORS).shape[1]
+    recall_1 = np.zeros(int(round(len_tr/100)))
+    recall_5 = np.zeros(int(round(len_tr/20)))
+    recall_10 = np.zeros(int(round(len_tr/10)))
+    #############
+    for m in range(len(QUERY_SETS)):
+        for n in range(len(QUERY_SETS)):
+            if (m == n):
+                continue
+            pair_recall_1, pair_recall_5, pair_recall_10, pair_similarity_1, pair_similarity_5, pair_similarity_10, pair_opr_1, pair_opr_5, pair_opr_10 = get_recall(
+                m, n, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS)
+            recall_1 += np.array(pair_recall_1)
+            recall_5 += np.array(pair_recall_5)
+            recall_10 += np.array(pair_recall_10)
+
+            count += 1
+            one_percent_recall.append(pair_opr_1)
+            five_percent_recall.append(pair_opr_5)
+            ten_percent_recall.append(pair_opr_10)
+
+            for x in pair_similarity_1:
+                similarity_1.append(x)
+            for x in pair_similarity_5:
+                similarity_5.append(x)
+            for x in pair_similarity_10:
+                similarity_10.append(x)
+    #########
+    
+    
+    ### Save Evaluate vectors
+    if full_pickle:
+        return None, DATABASE_VECTORS
+        #file_name = os.path.join(cfg.RESULTS_FOLDER, "database"+str(epoch)+".npy")
+        #np.save(file_name, np.array(DATABASE_VECTORS))
+        #print("saving for DATABASE_VECTORS to "+str(file_name))
+    else:
+        file_name = os.path.join(cfg.RESULTS_FOLDER, "database"+str(epoch)+".npy")
+        np.save(file_name, np.array(DATABASE_VECTORS))
+        print("saving for DATABASE_VECTORS to "+str(file_name))
+    
+    ave_recall_1 = recall_1 / count
+    ave_recall_5 = recall_5 / count
+    ave_recall_10 = recall_10 / count
+    # print(ave_recall)
+
+    # print(similarity)
+    average_similarity_1 = np.mean(similarity_1)
+    average_similarity_5 = np.mean(similarity_5)
+    average_similarity_10 = np.mean(similarity_10)
+    # print(average_similarity)
+
+    ave_one_percent_recall = np.mean(one_percent_recall)
+    ave_five_percent_recall = np.mean(five_percent_recall)
+    ave_ten_percent_recall = np.mean(ten_percent_recall)
+    # print(ave_one_percent_recall)
+    
+    with open(os.path.join(cfg.OUTPUT_FILE), "w") as output:
+        output.write("Average Recall @1:\n")
+        output.write(str(ave_recall_1)+"\n")
+        output.write("Average Recall @5:\n")
+        output.write(str(ave_recall_5)+"\n")
+        output.write("Average Recall @10:\n")
+        output.write(str(ave_recall_10)+"\n")
+        output.write("\n\n")
+        output.write("Average Similarity_1:\n")
+        output.write(str(average_similarity_1)+"\n")
+        output.write("Average Similarity_5:\n")
+        output.write(str(average_similarity_5)+"\n")
+        output.write("Average Similarity_10:\n")
+        output.write(str(average_similarity_10)+"\n")
+        output.write("\n\n")
+        output.write("Average Top 1% Recall:\n")
+        output.write(str(ave_one_percent_recall)+"\n")
+        output.write("Average Top 5% Recall:\n")
+        output.write(str(ave_five_percent_recall)+"\n")
+        output.write("Average Top 10% Recall:\n")
+        output.write(str(ave_ten_percent_recall)+"\n")
+    
+    return ave_one_percent_recall, ave_five_percent_recall, ave_ten_percent_recall
+
 
 def get_latent_vectors(model, dict_to_process):
     model.eval()
