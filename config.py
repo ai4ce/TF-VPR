@@ -8,7 +8,7 @@ OUTPUT_FILE = "results/results.txt"
 LOG_DIR = 'log/'
 MODEL_FILENAME = "model.ckpt"
 
-DATASET_FOLDER = '../../benchmark_datasets/'
+DATASET_FOLDER = '/home/cc/dm_data'
 
 # TRAIN
 BATCH_NUM_QUERIES = 2
