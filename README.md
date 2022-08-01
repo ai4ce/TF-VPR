@@ -67,16 +67,11 @@ Real-world RGB TF-VPR result:
 
 # Note
 
-**"A Novel self-supervised VPR model capable of retrieving positives from various orientations."**
-
-![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?logo=PyTorch&logoColor=white)
-[![Linux](https://svgshare.com/i/Zhy.svg)](https://svgshare.com/i/Zhy.svg)
-[![GitLab issues total](https://badgen.net/github/issues/ai4ce/V2X-Sim)](https://github.com/Joechencc/TF-VPR)
-[![GitHub stars](https://img.shields.io/github/stars/ai4ce/V2X-Sim.svg?style=social&label=Star&maxAge=2592000)](https://github.com/Joechencc/TF-VPR/stargazers/)
-<div align="center">
-    <img src="https://s2.loli.net/2022/07/31/PSIvH3f6zbTl9ZN.png" height="300">
-</div>
-<br>
+I kept almost everything not related to tensorflow as the original implementation. You can check each method for each branch
+The main differences are:
+* Multi-GPU support
+* Configuration file (config.py)
+* Evaluation on the eval dataset after every epochs
 
 ### Pre-Requisites
 - Python 3.6
@@ -93,15 +88,30 @@ Real-world RGB TF-VPR result:
 ### Generate pickle files
 ```
 cd generating_queries/
+### For Pointcloud data
 
-# For training tuples in our Point cloud baseline network
-python generate_training_tuples_cc_baseline_batch.py
+# To create pickle file for PCL baseline method
+python generate_training_tuples_PCL_baseline.py
+
+# To create pickle file for PCL TF-VPR method
+python generate_training_tuples_PCL_ours.py
+
+# To create pickle file for PCL supervise method
+python generate_training_tuples_PCL_supervise.py
+
+# To create pickle file for PCL baseline evaluation pickle
+python generate_test_PCL_baseline_sets.py
+
+# To create pickle file for PCL TF-VPR evaluation pickle
+python generate_test_PCL_ours_sets.py
+
+# To create pickle file for PCL supervise evaluation pickle
+python generate_test_PCL_supervise_sets.py
+
+### For RGB data
 
 # For training tuples in our RGB baseline network 
 python generate_training_tuples_RGB_baseline_batch.py
-
-# For point cloud network evaluation
-python generate_test_cc_sets.py
 
 # For RGB network evaluation
 python generate_test_RGB_sets.py
