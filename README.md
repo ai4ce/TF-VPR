@@ -151,6 +151,9 @@ python generate_test_cc_sets.py
 python generate_test_RGB_sets.py
 ```
 
+### Get max and min threshold 
+python Verification.py
+
 ### Train
 ```
 python train_pointnetvlad.py
