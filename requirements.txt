@@ -1,0 +1,10 @@
+torch==1.5.0
+tensorboardX
+open3d-python==0.4
+scipy
+matplotlib
+numpy
+pandas
+scikit-learn
+pickle5
+opencv-python
