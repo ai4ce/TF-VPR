@@ -82,6 +82,9 @@ python generate_training_tuples_cc_baseline_batch.py
 # For network evaluation
 python generate_test_cc_sets.py
 ```
+### Get max and min threshold 
+python Verification.py
+
 
 ### Train
 ```
