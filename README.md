@@ -118,14 +118,20 @@ python generate_test_RGB_sets.py
 ```
 
 ### Get max and min threshold 
-python Verification.py
+```
+### For point cloud
+
+python Verification_PCL.py
+```
 
 ### Train
 ```
-python train_pointnetvlad.py
+### For point cloud
+
+python train_pointnetvlad_PCL_baseline.py
 ```
 
-### Evaluate
+### Evaluate (You don't need to run it separately. For every epoch, evaluation will be run automatically)
 ```
 python evaluate.py
 ```
