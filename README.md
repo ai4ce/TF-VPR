@@ -107,7 +107,10 @@ python generate_test_PCL_ours_sets.py
 
 # To create pickle file for PCL supervise evaluation pickle
 python generate_test_PCL_supervise_sets.py
+'''
 
+'''
+cd generating_queries/
 ### For RGB data
 
 # For training tuples in our RGB baseline network 
