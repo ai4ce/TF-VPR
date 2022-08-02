@@ -97,6 +97,7 @@ The main differences are:
 - scikit-learn
 - pickle5
 - torchvision
+- opencv-contrib-python
 
 ### Generate pickle files
 ```
