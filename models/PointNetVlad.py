@@ -334,13 +334,13 @@ class PointNetfeatCNN(nn.Module):
         self.conv1 = torch.nn.Conv2d(1, 64, kernel_size=(3,4), stride=1, padding=(1,1),
                                             bias=False, padding_mode='circular')
         
-        self.conv2 = torch.nn.Conv2d(64, 64, kernel_size=(3,2), stride=1, padding=(2,1),
+        self.conv2 = torch.nn.Conv2d(64, 64, kernel_size=(3,3), stride=1, padding=(1,1),
                                                             bias=False, padding_mode='circular')
-        self.conv3 = torch.nn.Conv2d(64, 64, kernel_size=(3,2), stride=1, padding=(2,1),
+        self.conv3 = torch.nn.Conv2d(64, 64, kernel_size=(3,3), stride=1, padding=(1,1),
                                                             bias=False, padding_mode='circular')
-        self.conv4 = torch.nn.Conv2d(64, 128, kernel_size=(3,2), stride=1, padding=(2,1),
+        self.conv4 = torch.nn.Conv2d(64, 128, kernel_size=(3,3), stride=1, padding=(1,1),
                                                             bias=False, padding_mode='circular')
-        self.conv5 = torch.nn.Conv2d(128, 1024, kernel_size=(3,2), stride=1, padding=(2,1),
+        self.conv5 = torch.nn.Conv2d(128, 1024, kernel_size=(3,3), stride=1, padding=(1,1),
                                                             bias=False, padding_mode='circular')
         self.bn1 = nn.BatchNorm2d(64)
         self.bn2 = nn.BatchNorm2d(64)
@@ -368,8 +368,9 @@ class PointNetfeatCNN(nn.Module):
         x = x.view(batchsize, 1, -1, 2)
         x = F.relu(self.bn1(self.conv1(x)))
         x = F.relu(self.bn2(self.conv2(x)))
+
         pointfeat = x
-        
+
         if self.apply_feature_trans:
             f_trans = self.feature_trans(x)
             x = torch.squeeze(x)
@@ -380,7 +381,6 @@ class PointNetfeatCNN(nn.Module):
             x = x.view(batchsize, 64, -1, 1)
         x = F.relu(self.bn3(self.conv3(x)))
         x = F.relu(self.bn4(self.conv4(x)))
-        
         x = self.bn5(self.conv5(x))
         if not self.max_pool:
             return x
