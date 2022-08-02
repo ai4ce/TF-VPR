@@ -620,3 +620,72 @@ def get_query_tuple_RGB_real_ours(dict_value, num_pos, num_neg, QUERY_DICT, hard
 
         neg2 = load_image_file(QUERY_DICT[possible_negs[0]]["query"],full_path=False)
         return [query, positives, negatives, neg2]
+
+
+def get_query_tuple_RGB_real_supervise(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other_neg=False):
+        # get query tuple for dictionary entry
+        # return list [query,positives,negatives]
+    #print("query:"+str(dict_value["query"]))
+    query = load_image_file(dict_value["query"], full_path=False)  # Nx3
+    #cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/query.jpg', query)
+    random.shuffle(dict_value["positives"])
+    pos_files = []
+    
+    for i in range(num_pos):
+        pos_files.append(QUERY_DICT[dict_value["positives"][i]]["query"])
+    
+    positives = load_image_files(pos_files,full_path=False)
+    '''
+    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/color_img1.jpg', positives[0])
+    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/color_img2.jpg', positives[1])
+    '''
+    neg_files = []
+    neg_indices = []
+    if(len(hard_neg) == 0):
+        random.shuffle(dict_value["negatives"])
+        #print("dict_value[negatives]:"+str(dict_value["negatives"]))
+        for i in range(num_neg):
+            neg_files.append(QUERY_DICT[dict_value["negatives"][i]]["query"])
+            neg_indices.append(dict_value["negatives"][i])
+
+    else:
+        random.shuffle(dict_value["negatives"])
+        for i in hard_neg:
+            neg_files.append(QUERY_DICT[i]["query"])
+            neg_indices.append(i)
+        j = 0
+        while(len(neg_files) < num_neg):
+            if not dict_value["negatives"][j] in hard_neg:
+                neg_files.append(
+                    QUERY_DICT[dict_value["negatives"][j]]["query"])
+                neg_indices.append(dict_value["negatives"][j])
+            j += 1
+    
+    negatives = load_image_files(neg_files,full_path=False)
+    '''
+    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img1.jpg', negatives[0])
+    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img2.jpg', negatives[1])
+    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img3.jpg', negatives[2])
+    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img4.jpg', negatives[3])
+    cv2.imwrite('/home/cc/Supervised-PointNetVlad_RGB/results/neg_img5.jpg', negatives[4])
+    assert(0)
+    '''
+    if other_neg is False:
+        return [query, positives, negatives]
+    # For Quadruplet Loss
+    else:
+        # get neighbors of negatives and query
+        neighbors = []
+        for pos in dict_value["positives"]:
+            neighbors.append(pos)
+        for neg in neg_indices:
+            for pos in QUERY_DICT[neg]["positives"]:
+                neighbors.append(pos)
+        possible_negs = list(set(QUERY_DICT.keys())-set(neighbors))
+        random.shuffle(possible_negs)
+
+        if(len(possible_negs) == 0):
+            return [query, positives, negatives, np.array([])]
+
+        neg2 = load_image_file(QUERY_DICT[possible_negs[0]]["query"],full_path=False)
+        return [query, positives, negatives, neg2]

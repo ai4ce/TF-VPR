@@ -203,4 +203,4 @@ def generate(evaluate_all = False, inside=True):
         else:
             construct_query_dict(df_train, df_train, len(fold_list), traj_len,"evaluation_database_full.pickle", "evaluation_query_full.pickle", nn_ind, r_mid, r_ind, True, evaluate_all)
 if __name__ == "__main__":
-    generate(evaluate_all=True)
+    generate(evaluate_all=False)
