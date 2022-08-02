@@ -158,9 +158,9 @@ def train(scene_index):
     if not os.path.isdir(cfg.RESULTS_FOLDER):
         os.mkdir(cfg.RESULTS_FOLDER)
     #loss = lazy_quadruplet_loss(q_vec, pos_vecs, neg_vecs, other_neg_vec, MARGIN1, MARGIN2)
-    if cfg.LOSS_FUNCTION == 'quadruplet':
+    if cfg.LOSS_FUNCTION_RGB == 'quadruplet':
         loss_function = PNV_loss.quadruplet_loss
-    elif cfg.LOSS_FUNCTION == 'triplet_RI':
+    elif cfg.LOSS_FUNCTION_RGB == 'triplet_RI':
         loss_function = PNV_loss.triplet_loss_RI
     else:
         loss_function = PNV_loss.triplet_loss
@@ -245,7 +245,7 @@ def train(scene_index):
         log_string('EVALUATING...')
         cfg.OUTPUT_FILE = os.path.join(cfg.RESULTS_FOLDER, 'results_' + str(epoch) + '.txt')
         
-        db_vec = evaluate.evaluate_model(model,optimizer,epoch,scene_index,True,True)
+        db_vec = evaluate.evaluate_model_RGB_real(model,optimizer,epoch,scene_index,True,True)
         
         db_vec = np.array(db_vec)
         print("db_vec:"+str(db_vec.shape))
@@ -285,11 +285,8 @@ def train(scene_index):
         
         train_end = datetime.datetime.now()
         eval_start = datetime.datetime.now()
-        eval_recall_1, eval_recall_5, eval_recall_10 = evaluate.evaluate_model(model,optimizer,epoch,scene_index,True)
+        eval_recall_1, eval_recall_5, eval_recall_10 = evaluate.evaluate_model_RGB_real(model,optimizer,epoch,scene_index,True)
         eval_end = datetime.datetime.now()
-        print("train_time:"+str(train_end-train_start))
-        print("eval_time:"+str(eval_end-eval_start))
-        assert(0)
 
         log_string('EVAL RECALL_1: %s' % str(eval_recall_1))
         log_string('EVAL RECALL_5: %s' % str(eval_recall_5))
@@ -311,7 +308,6 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, scene_
     np.random.shuffle(train_file_idxs)
     
     for i in range(len(train_file_idxs)//cfg.BATCH_NUM_QUERIES):
-    #for i in range(10):
         batch_keys = train_file_idxs[i *
                                      cfg.BATCH_NUM_QUERIES:(i+1)*cfg.BATCH_NUM_QUERIES]
         q_tuples = []
@@ -331,7 +327,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, scene_
             # no cached feature vectors
             if (len(TRAINING_LATENT_VECTORS) == 0):
                 q_tuples.append(
-                    get_query_tuple(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
+                    get_query_tuple_RGB_real_ours(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
                                     DB_QUERIES, hard_neg=[], other_neg=True))
                 #print("q_tuples:"+str(q_tuples))
                 # q_tuples.append(get_rotated_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_neg=[], other_neg=True))
@@ -346,7 +342,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, scene_
                 hard_negs = get_random_hard_negatives(
                     query, negatives, num_to_take)
                 q_tuples.append(
-                    get_query_tuple(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
+                    get_query_tuple_RGB_real_ours(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
                                     DB_QUERIES, hard_negs, other_neg=True))
                 # q_tuples.append(get_rotated_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
                 # q_tuples.append(get_jittered_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
@@ -361,7 +357,7 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, scene_
                 hard_negs = list(set().union(
                     HARD_NEGATIVES[batch_keys[j]], hard_negs))
                 q_tuples.append(
-                    get_query_tuple(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
+                    get_query_tuple_RGB_real_ours(TRAINING_QUERIES[batch_keys[j]], cfg.TRAIN_POSITIVES_PER_QUERY, cfg.TRAIN_NEGATIVES_PER_QUERY,
                                     DB_QUERIES, hard_negs, other_neg=True))
                 # q_tuples.append(get_rotated_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))
                 # q_tuples.append(get_jittered_tuple(TRAINING_QUERIES[batch_keys[j]],POSITIVES_PER_QUERY,NEGATIVES_PER_QUERY, TRAINING_QUERIES, hard_negs, other_neg=True))

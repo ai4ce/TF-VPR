@@ -587,8 +587,8 @@ def Compute_positive(flag, db_vec, potential_positives, potential_distributions,
                 pre_trusted_positive = np.array(indice[index2])[np.argsort(weight[index2])[::-1][:(cfg.INIT_TRUST+k_nearest)]]
             pre_trusted_positive = np.setdiff1d(pre_trusted_positive,ind_range)
             
-            folder_path = os.path.join(cfg.DATASET_FOLDER)
-            trusted_pos = Verify_image(index2,pre_trusted_positive, "/mnt/NAS/data/cc_data/2D_RGB_real_full3")
+            folder_path = os.path.join(cfg.DATASET_FOLDER_RGB_REAL)
+            trusted_pos = Verify_image(index2,pre_trusted_positive, cfg.DATASET_FOLDER_RGB_REAL)
             trusted_positive.append(trusted_pos)
         return potential_positives, potential_distributions, trusted_positive
     else:
@@ -596,7 +596,7 @@ def Compute_positive(flag, db_vec, potential_positives, potential_distributions,
         new_trusted_positive = []
         
         for index2 in range(db_vec.shape[0]*db_vec.shape[1]):
-            folder_path = os.path.join(cfg.DATASET_FOLDER)
+            folder_path = os.path.join(cfg.DATASET_FOLDER_RGB_REAL)
             
             trusted_positives = np.squeeze(trusted_positives)
             previous_trusted_positive = trusted_positives[index2]
@@ -623,7 +623,7 @@ def Compute_positive(flag, db_vec, potential_positives, potential_distributions,
             pre_trusted_positive = np.setdiff1d(pre_trusted_positive,ind_range)
             pre_trusted_positive = np.setdiff1d(pre_trusted_positive, previous_trusted_positive)
             
-            filtered_trusted_positive = Verify_image(index2, pre_trusted_positive, "/mnt/NAS/data/cc_data/2D_RGB_real_full3")
+            filtered_trusted_positive = Verify_image(index2, pre_trusted_positive, cfg.DATASET_FOLDER_RGB_REAL)
 
             if len(filtered_trusted_positive) == 0:
                 trusted_positive = previous_trusted_positive

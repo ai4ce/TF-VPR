@@ -15,6 +15,7 @@ MODEL_FILENAME = "model.ckpt"
 
 DATASET_FOLDER = '/home/cc/dm_data'
 DATASET_FOLDER_RGB = '/mnt/NAS/home/cc/data/habitat_4/train'
+DATASET_FOLDER_RGB_REAL = '/mnt/NAS/data/cc_data/2D_RGB_real_full3'
 
 # TRAIN
 BATCH_NUM_QUERIES = 2
