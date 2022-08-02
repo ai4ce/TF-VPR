@@ -96,6 +96,7 @@ The main differences are:
 - pandas
 - scikit-learn
 - pickle5
+- torchvision
 
 ### Generate pickle files
 ```
