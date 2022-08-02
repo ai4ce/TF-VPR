@@ -38,6 +38,7 @@ INIT_TRUST_SCALAR = 1
 
 TRAIN_FILE = 'generating_queries/training_queries_baseline.pickle'
 TEST_FILE = 'generating_queries/test_queries_baseline.pickle'
+scene_list = ['Goffs','Nimmons','Reyno','Spotswood','Springhill','Stilwell']
 
 # LOSS
 LOSS_FUNCTION = 'quadruplet'
