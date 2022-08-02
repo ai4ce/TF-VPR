@@ -126,10 +126,22 @@ cd generating_queries/
 ### For RGB data
 
 # For training tuples in our RGB baseline network 
-python generate_training_tuples_RGB_baseline_batch.py
+python generate_training_tuples_RGB_baseline.py
+
+# For training tuples in our RGB baseline network 
+python generate_training_tuples_RGB_ours.py
+
+# For training tuples in our RGB baseline network 
+python generate_training_tuples_RGB_supervise.py
 
 # For RGB network evaluation
-python generate_test_RGB_sets.py
+python generate_test_RGB_baseline_sets.py
+
+# For RGB network evaluation
+python generate_test_RGB_ours_sets.py
+
+# For RGB network evaluation
+python generate_test_RGB_supervise_sets.py
 ```
 
 ### Get max and min threshold 
