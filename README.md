@@ -146,6 +146,13 @@ python generate_test_RGB_ours_sets.py
 python generate_test_RGB_supervise_sets.py
 ```
 
+### Verification threshold
+```
+### For point cloud
+
+python Verification_PCL.py # you can create max and min threshold using this command. For RGB, we calculate the threshold on Verification stage, no need to precalculate
+```
+
 ### Train
 ```
 ### For point cloud
