@@ -20,7 +20,7 @@ Visual place recognition (VPR) using deep networks has achieved state-of-the-art
 
 Download links:
 -  For Pointcloud: Please refer to DeepMapping paper, https://github.com/ai4ce/PointCloudSimulator
--  For Real-world Panoramic RGB: https://drive.google.com/drive/u/0/folders/1ErXzIx0je5aGSRFbo5jP7oR8gPrdersO
+-  For NYU-VPR-360 dataset: https://drive.google.com/drive/u/0/folders/1ErXzIx0je5aGSRFbo5jP7oR8gPrdersO
 
 You could find more detailed documents on our [website](https://github.com/Joechencc/TF-VPR/edit/PCL_SPTM/README.md)!
 
@@ -147,6 +147,14 @@ python generate_test_RGB_supervise_sets.py
 ### Get max and min threshold 
 ```
 ### For point cloud
+
+python Verification_PCL.py
+
+### For Habitat-sim RGB
+
+python Verification_RGB.py
+
+### For NYU-VPR-360
 
 python Verification_PCL.py
 ```
