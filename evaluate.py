@@ -325,7 +325,7 @@ def evaluate_model_RGB(model,optimizer,epoch,scene_index,save=False,full_pickle=
 
     #############
 
-    pair_recall_1, pair_recall_5, pair_recall_10= get_recall(
+    pair_recall_1, pair_recall_5, pair_recall_10= get_recall_RGB(
         0, 0, DATABASE_VECTORS, QUERY_VECTORS, QUERY_SETS)
     recall_1 = np.array(pair_recall_1)
     recall_5 = np.array(pair_recall_5)
