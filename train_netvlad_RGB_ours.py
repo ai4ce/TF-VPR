@@ -394,7 +394,6 @@ def train_one_epoch(model, optimizer, train_writer, loss_function, epoch, scene_
         output_queries, output_positives, output_negatives, output_other_neg = run_model(
             model, queries, positives, negatives, other_neg)
 
-        
         loss = loss_function(output_queries, output_positives, output_negatives,  0.1,  use_min=cfg.TRIPLET_USE_BEST_POSITIVES, lazy=cfg.LOSS_LAZY, ignore_zero_loss=cfg.LOSS_IGNORE_ZERO_BATCH)
 
         loss.backward()
