@@ -87,7 +87,7 @@ The main differences are:
 
 ### Pre-Requisites
 - Python 3.6
-- PyTorch >=1.5.0
+- PyTorch >=1.10.0
 - tensorboardX
 - open3d-python 0.4
 - scipy
