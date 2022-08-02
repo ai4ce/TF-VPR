@@ -1,7 +1,6 @@
+import datetime
 import sys
-# sys.path.append('/usr/local/lib/python3.6/dist-packages/python_pcl-0.3-py3.6-linux-x86_64.egg/')
-# from pcl import IterativeClosestPoint
-# import pcl
+
 import torch
 import torch.nn as nn
 
@@ -22,6 +21,7 @@ from math import atan2
 sys.path.insert(0, '../')
 from numpy import linalg as LA
 import config as cfg
+from shutil import copyfile
 
 #import icp_new
 
@@ -124,9 +124,6 @@ def icp(src,dst,nv=None,n_iter=100,init_pose=[0,0,0],torlerance=1e-6,metrics='po
     if metrics == 'plane' and nv is None:
         nv = surface_normal(dst)
 
-    #src = np.matrix(src)
-    #dst = np.matrix(dst)
-    #Initialise with the initial pose estimation
     R_init = np.array([[np.cos(init_pose[2]),-np.sin(init_pose[2])],
                    [np.sin(init_pose[2]), np.cos(init_pose[2])] 
                       ])
@@ -134,7 +131,6 @@ def icp(src,dst,nv=None,n_iter=100,init_pose=[0,0,0],torlerance=1e-6,metrics='po
                    [init_pose[1]]
                       ])  
     
-    #src =  R_init*src.T + t_init
     src = np.matmul(R_init,src.T) + t_init
     src = src.T
     
@@ -163,8 +159,7 @@ def icp(src,dst,nv=None,n_iter=100,init_pose=[0,0,0],torlerance=1e-6,metrics='po
 
         R = np.matmul(R0,R)
         t = np.matmul(R0,t) + t0
-        #R = R0*R
-        #t = R0*t + t0
+
         current_err = np.sqrt((np.array(src-dst[indices[:,0]])**2).sum()/n_src)
 
         if verbose:
@@ -231,12 +226,7 @@ def cal_T_matrix(rotation_angle):
                       [sinval, cosval]])
     
     rotated_data[:2,:2] = rotation_matrix
-
-    #for k in range(batch_data.shape[0]):
-        #rotation_angle = np.random.uniform() * 2 * np.pi
-        #-90 to 90
-    #shape_pc = batch_data[k, ...]
-    #rotated_data = np.dot(batch_data, rotation_matrix)     
+   
     return rotated_data
 
 def rotate_point_cloud(batch_data, rotation_angle):
@@ -248,7 +238,6 @@ def rotate_point_cloud(batch_data, rotation_angle):
     BxNx2 array, rotated batch of point clouds
     """
     rotated_data = np.zeros(batch_data.shape, dtype=np.float32)
-    #rotation_angle = (np.random.uniform()*2*np.pi) - np.pi
     cosval = np.cos(rotation_angle)
     sinval = np.sin(rotation_angle)
     rotation_matrix = np.array([[cosval, -sinval], 
@@ -259,7 +248,6 @@ def rotate_point_cloud(batch_data, rotation_angle):
 
 def filter_trusted(folder_path, all_files, src_index, compared_index, threshold_ratio=0.1, cal_thresholds=None):
     compared_index = list(np.setdiff1d(compared_index,src_index))
-    #print("src_index:"+str(src_index))
     k_nearest = 6
     pos_index_range = np.arange(-k_nearest//2, (k_nearest//2)+1)
     pos_index = src_index + pos_index_range
@@ -311,7 +299,6 @@ def filter_trusted_pos(all_files, src_index, compared_index, threshold_ratio=1, 
     pos_index = src_index + pos_index_range
     folder_num = src_index // 2048
 
-
     pos_pc = []
     for pos_i in pos_index:
         if (pos_i>=folder_num*2048 and pos_i<=(folder_num+1)*2048-1):
@@ -325,7 +312,7 @@ def filter_trusted_pos(all_files, src_index, compared_index, threshold_ratio=1, 
 
         pc = o3d.read_point_cloud(os.path.join(all_files[src_index]))
         src_pc = np.asarray(pc.points, dtype=np.float32)
-
+        
         trusted_positive = []
         for c_ind in compared_index:
             pc = o3d.read_point_cloud(os.path.join(all_files[c_ind]))
@@ -350,6 +337,42 @@ def filter_trusted_pos(all_files, src_index, compared_index, threshold_ratio=1, 
                 trusted_positive.append(c_ind)
         trusted_positive = np.array(trusted_positive, dtype=np.int32)
     return cal_thresholds,trusted_positive
+
+def threshold_cal_RGB(in_index, k_nearest, pre_path):
+    fold_list = ["run_0", "run_1", "run_2", "run_3", "run_4", "run_5", "run_6"]
+    neigh_range = list(range(-int(k_nearest//2),int(k_nearest//2)+1))
+    max_compare_fitness = 0
+    overall_min_compare_fitness = np.Inf
+    for index in range(in_index):
+        fold_index = int(index // 2137)
+        file_index = int(index % 2137)
+        in_image = cv2.imread(os.path.join(pre_path,fold_list[fold_index],"panoimg_"+str(file_index)+".png"))
+        input_image = Image.fromarray(in_image)
+        if input_image.mode != 'RGB':
+            input_image = input_image.convert('RGB')
+        input_image_gray = cv2.cvtColor(np.array(input_image), cv2.COLOR_RGB2GRAY)
+        kp_left, des_left = SIFT(input_image_gray)
+
+        for neigh in neigh_range:
+            if (neigh + index >= 0) and (neigh + index <= in_index -1):
+                fold_index = int((neigh + index) // 2137)
+                file_index = int((neigh + index) % 2137)
+                comp_image = cv2.imread(os.path.join(pre_path,fold_list[fold_index],"panoimg_"+str(file_index)+".png"))
+                compare_image = Image.fromarray(comp_image)
+                if compare_image.mode != 'RGB':
+                    compare_image = compare_image.convert('RGB')
+                compare_image_gray = cv2.cvtColor(np.array(compare_image), cv2.COLOR_RGB2GRAY)
+                kp_right, des_right = SIFT(compare_image_gray)
+                matches = matcher(kp_left, des_left, input_image, kp_right, des_right, compare_image, threshold=0.5)
+
+                if max_compare_fitness < len(matches):
+                    max_compare_fitness = len(matches)
+                if overall_min_compare_fitness > len(matches):
+                    overall_min_compare_fitness = len(matches)
+            if neigh % 20 == 0:
+                print("max_compare_fitness:"+str(max_compare_fitness))
+                print("overall_min_compare_fitness:"+str(overall_min_compare_fitness))
+    return overall_min_compare_fitness, max_compare_fitness
 
 def threshold_cal(in_pcl, pos_pcs, threshold_ratio):
     src = in_pcl.astype(np.float32)[:,:2]
@@ -376,8 +399,6 @@ def threshold_cal(in_pcl, pos_pcs, threshold_ratio):
             current_err,_,R,t = icp(tgt,src,metrics='plane')
             R = np.linalg.inv(R)
             t = -t
-            if current_err is None:
-                assert(0)
 
         if (current_err is not None) and (current_err < min_compare_fitness):
             min_compare_fitness = current_err
@@ -390,6 +411,36 @@ def threshold_cal(in_pcl, pos_pcs, threshold_ratio):
             overall_min_compare_fitness = min_compare_fitness
 
     return overall_min_compare_fitness * threshold_ratio, max_compare_fitness * threshold_ratio, min_transf, min_R, min_t
+
+def Verify_image(query_index, pre_trusted_positive, pre_path):
+
+    trusted_index = []
+    fold_list = os.listdir(pre_path)
+    files_ = os.listdir(os.path.join(pre_path, "run_0"))
+    files_.remove("gt_pose.mat")
+    folder_size = len(files_)
+
+    fold_index = int(query_index // folder_size)
+    file_index = int(query_index % folder_size)
+    in_image = cv2.imread(os.path.join(pre_path,fold_list[fold_index],"panoimg_"+str(file_index)+".png"))
+    input_image = Image.fromarray(in_image)
+    if input_image.mode != 'RGB':
+        input_image = input_image.convert('RGB')
+    input_image_gray = cv2.cvtColor(np.array(input_image), cv2.COLOR_RGB2GRAY)
+    kp_left, des_left = SIFT(input_image_gray)
+    for pre_trust in pre_trusted_positive:
+        fold_index = int(pre_trust // folder_size)
+        file_index = int(pre_trust % folder_size)
+        comp_image = cv2.imread(os.path.join(pre_path,fold_list[fold_index],"panoimg_"+str(file_index)+".png"))
+        compare_image = Image.fromarray(comp_image)
+        if compare_image.mode != 'RGB':           
+            compare_image = compare_image.convert('RGB')
+        compare_image_gray = cv2.cvtColor(np.array(compare_image), cv2.COLOR_RGB2GRAY)
+        kp_right, des_right = SIFT(compare_image_gray)
+        matches = matcher(kp_left, des_left, input_image_gray, kp_right, des_right, compare_image_gray, threshold=0.5)
+        if len(matches)>=28:
+            trusted_index.append(pre_trust)
+    return trusted_index
 
 def similarity_filter(in_pcl, compare_pcl, pos_pcs, threshold_ratio, cal_thresholds=None):
     src = in_pcl.astype(np.float32)[:,:2]
@@ -430,7 +481,6 @@ def similarity_filter(in_pcl, compare_pcl, pos_pcs, threshold_ratio, cal_thresho
         if current_err < min_fitness:
             min_fitness = current_err
 
-
     if cal_thresholds is None:
         if threshold_ratio*max_compare_fitness > min_fitness:
             return threshold_ratio*max_compare_fitness,True
@@ -441,7 +491,6 @@ def similarity_filter(in_pcl, compare_pcl, pos_pcs, threshold_ratio, cal_thresho
             return cal_thresholds,True
         else:
             return cal_thresholds,False
-
 
 def matcher(kp1, des1, img1, kp2, des2, img2, threshold):
     # BFMatcher with default params
@@ -462,78 +511,83 @@ def matcher(kp1, des1, img1, kp2, des2, img2, threshold):
 
 def SIFT(img):
     siftDetector= cv2.xfeatures2d.SIFT_create() # limit 1000 points
-    # siftDetector= cv2.SIFT_create()  # depends on OpenCV version
     
     kp, des = siftDetector.detectAndCompute(img, None)
     return kp, des
 
-def Compute_positive(flag, db_vec, index, potential_positives, potential_distributions, trusted_positives, folders, thresholds, all_files_reshape, weight, indice, epoch):
-    print("index:"+str(index))
-    print("all_files_reshape:"+str(len(all_files_reshape)))
-    print("indice.shape:::"+str(np.array(indice).shape))
-    print("weight.shape:::"+str(np.array(weight).shape))
+def draw_plot(trusted_positive,input_path):
+    fold_list = ["run_0", "run_1", "run_2", "run_3", "run_4", "run_5", "run_6"]
+    output_path = os.path.join("results/images")
+    trusted_index = trusted_positive[0]
+    query_index = 0
+    query_image_path = os.path.join(input_path,"run_0","panoimg_0.png")
+    copyfile(query_image_path, os.path.join(output_path,"query_0.png"))
+    for trust_ind in trusted_index:
+        folder_ind = int(trust_ind//2137)
+        file_ind = int(trust_ind%2137)
+        trust_image_path = os.path.join(input_path,fold_list[folder_ind],"panoimg_"+str(file_ind)+".png")
+        copyfile(trust_image_path, os.path.join(output_path,"evaluate_"+str(trust_ind)+".png"))
 
+def Compute_positive(flag, db_vec, potential_positives, potential_distributions, trusted_positives, weight, sort_weight, indice, epoch, scene_index):
     if flag:
         trusted_positive = []
+        print("db_vec.shape[0]:"+str(db_vec.shape))
 
-        # for index2 in range(2):
-        for index2 in range(db_vec.shape[1]):
-            #print("indice[index][index2]:"+str(indice[index][index2]))
-            #print("weight[index][index2]:"+str(weight[index][index2]))
-            if (index == 1) and (index2 == 2034):
-                print("pre_trusted_positive:"+str(pre_trusted_positive))
-            pre_trusted_positive = np.array(indice[index][index2])[np.argsort(weight[index][index2])[::-1][:(cfg.INIT_TRUST)]]
+        for index2 in range(db_vec.shape[0]*db_vec.shape[1]):
+            index_range = list(range(-int(cfg.NEIGHBOR)//2, (int(cfg.NEIGHBOR)//2)+1))
+            threshold = 1
+            for ind in index_range:
+                if (ind + index2 >= 0) and (ind + index2 < db_vec.shape[0]*db_vec.shape[1]):
+                    if sort_weight[index2][ind + index2] < threshold:
+                        threshold = sort_weight[index2][ind + index2]
+
+            pre_trusted_positive = np.array(list(range(len(indice[index2]))))[np.array(sort_weight[index2])>=threshold]
+            if len(pre_trusted_positive)> cfg.INIT_TRUST:
+                pre_trusted_positive = np.array(indice[index2])[np.argsort(weight[index2])[::-1][:(cfg.INIT_TRUST)]]
             pre_trusted_positive = np.setdiff1d(pre_trusted_positive,index2)
 
-            folder_path = os.path.join(cfg.DATASET_FOLDER,folders[index])
-
-            #trusted_pos = pre_trusted_positive
-            _, trusted_pos = filter_trusted_pos(all_files_reshape, index*db_vec.shape[1]+index2, pre_trusted_positive, cal_thresholds=thresholds[index][index2])
-            trusted_positive.append(trusted_pos.tolist())
+            folder_path = os.path.join(os.path.join(cfg.DATASET_FOLDER, cfg.scene_list[scene_index]))
+            
+            trusted_pos = Verify_image(index2,pre_trusted_positive, folder_path)
+            
+            trusted_positive.append(trusted_pos)
+        
         return potential_positives, potential_distributions, trusted_positive
     else:
         new_potential_positive = []
         new_potential_distribution = []
         new_trusted_positive = []
         
-        print("db_vec:"+str(db_vec.shape[1]))
-        # assert(0)
-        for index2 in range(db_vec.shape[1]):
-            if np.array(potential_positives[index][index2]).ndim == 2:
-                pos_set = list(potential_positives[index][index2][0])
-                pos_dis = list(potential_distributions[index][index2][0])
-            else:
-                pos_set = list(potential_positives[index][index2])
-                pos_dis = list(potential_distributions[index][index2])
-            for count,inc in enumerate(indice[index][index2]):
-                if inc not in pos_set:
-                    pos_set.append(inc)
-                    pos_dis.append(weight[index][index2][count])
-                else:
-                    pos_dis[list(pos_set).index(inc)] = pos_dis[list(pos_set).index(inc)] + weight[index][index2][count] # if the element exists, distribution +1
-
-            new_potential_positive.append(pos_set)
-            new_potential_distribution.append(pos_dis)
-
-            folder_path = os.path.join(cfg.DATASET_FOLDER,folders[index])
-            all_files = list(sorted(os.listdir(folder_path)))
-            all_files.remove('gt_pose.mat')
-            all_files.remove('gt_pose.png')
+        potential_positives = np.squeeze(potential_positives)
+        potential_distributions = np.squeeze(potential_distributions)
+        
+        for index2 in range(db_vec.shape[0]*db_vec.shape[1]):
             
-            previous_trusted_positive = trusted_positives[index][index2]
+            folder_path = os.path.join(cfg.DATASET_FOLDER, cfg.scene_list[scene_index])
+            
+            trusted_positives = np.squeeze(trusted_positives)
+            previous_trusted_positive = trusted_positives[index2]
+            
             if ((np.array(previous_trusted_positive).ndim) == 2) and (np.array(previous_trusted_positive).shape[0]!=0):
-                    previous_trusted_positive = previous_trusted_positive[0]
+                previous_trusted_positive = previous_trusted_positive[0]
             else:
                 pass
-            pre_trusted_positive = np.array(pos_set)[np.argsort(pos_dis)[::-1][:(cfg.INIT_TRUST)]]
-
-            pre_trusted_positive = np.setdiff1d(pre_trusted_positive, previous_trusted_positive)
-
-            pre_trusted_positive = np.setdiff1d(pre_trusted_positive, index2)
+            index_range = list(range(-int(cfg.NEIGHBOR)//2, (int(cfg.NEIGHBOR)//2)+1))
+            threshold = 1
+            for ind in index_range:
+                if (ind + index2 >= 0) and (ind + index2 < db_vec.shape[0]*db_vec.shape[1]):
+                    if sort_weight[index2][ind + index2] < threshold:
+                        threshold = sort_weight[index2][ind + index2]
             
-            #filtered_trusted_positive = pre_trusted_positive
-            _, filtered_trusted_positive = filter_trusted_pos(all_files_reshape, index*db_vec.shape[1]+index2, pre_trusted_positive, cal_thresholds=thresholds[index][index2])
-
+            pre_trusted_positive = np.array(list(range(len(indice[index2]))))[np.array(sort_weight[index2])>=threshold]
+            if len(pre_trusted_positive)> cfg.INIT_TRUST:
+                pre_trusted_positive = np.array(indice[index2])[np.argsort(weight[index2])[::-1][:(cfg.INIT_TRUST)]]
+            pre_trusted_positive = np.setdiff1d(pre_trusted_positive, index2)
+            pre_trusted_positive = np.setdiff1d(pre_trusted_positive, previous_trusted_positive)
+            
+            pre_trusted_positive = np.setdiff1d(pre_trusted_positive, index2)
+            filtered_trusted_positive = Verify_image(index2, pre_trusted_positive, folder_path)
+            
             if len(filtered_trusted_positive) == 0:
                 trusted_positive = previous_trusted_positive
             else:
@@ -542,7 +596,7 @@ def Compute_positive(flag, db_vec, index, potential_positives, potential_distrib
                 trusted_positive = np.array(list(set(trusted_positive)),dtype=np.int32)
             
             new_trusted_positive.append(trusted_positive)
-
+        
         return new_potential_positive, new_potential_distribution, new_trusted_positive
 
 def similarity_check(in_pcl, compare_pcls, top_k, df_location):
@@ -573,6 +627,7 @@ def similarity_check(in_pcl, compare_pcls, top_k, df_location):
 
     return sim_index, max_sim
 
+
 def plot_image(compare_pcl, im_compare_pcl, x_range, y_range):
     for ind_p in range(len(compare_pcl)):
         for ind_x in range(len(x_range)-1):
@@ -587,12 +642,18 @@ def plot_image(compare_pcl, im_compare_pcl, x_range, y_range):
     return im_compare_pcl
 
 if __name__ == "__main__":
-    runs_folder = "dm_data/"
     k_nearest = 6
 
-    cc_dir = "/home/cc/"
-    pre_dir = os.path.join(cc_dir,runs_folder)
-    all_folders = sorted(os.listdir(os.path.join(cc_dir,runs_folder)))
+    cc_dir = "/mnt/NAS/data/cc_data/2D_RGB_real_edited3/"
+    pre_dir = os.path.join(cc_dir)
+    all_folders = sorted(os.listdir(pre_dir))
+    train_start = datetime.datetime.now()
+    Verify_image(0, [1,2,3], pre_dir)
+    train_end = datetime.datetime.now()
+    print("train_time:"+str(train_end-train_start))
+    assert(0)
+
+    
 
     folders = []
     # All runs are used for training (both full and partial)
@@ -611,7 +672,6 @@ if __name__ == "__main__":
     min_threshold = []
     all_files = list(sorted(os.listdir(os.path.join(cc_dir,runs_folder,folder))))
     all_files.remove('gt_pose.mat')
-    all_files.remove('gt_pose.png')
     folder_size = len(all_files)
     data_index = list(range(folder_size))
 
@@ -621,10 +681,8 @@ if __name__ == "__main__":
     df_locations = sio.loadmat(gt_mat)
     df_locations = df_locations['pose']
     df_locations = torch.tensor(df_locations, dtype = torch.float).cpu()
-        
+
     for index, all_file in enumerate(all_files):
-    # all_file = all_files[1605]
-    # index = 1605
 
         file_len = len(all_files) 
         neigh_range = np.arange(-k_nearest//2, (k_nearest//2)+1)
@@ -646,68 +704,9 @@ if __name__ == "__main__":
         comp_pcs = np.asarray(comp_pcs, dtype=np.float32)
 
         min_result, max_result, min_transform, min_R, min_t = threshold_cal(pc, comp_pcs, 1)
-        print("min_result:"+str(min_result))
-        print("max_result:"+str(max_result))
-        print("min_t:"+str(min_t))
-
-        # folder_num = 7
-        # folder = folders[7]
-        # # print("folder_num:"+str(folder_num))
-        # all_files = list(sorted(os.listdir(os.path.join(cc_dir,runs_folder,folder))))
-        # all_files.remove('gt_pose.mat')
-        # all_files.remove('gt_pose.png')
-        # folder_size = len(all_files)
-        # data_index = list(range(folder_size))
-        # test_comp_pcs = []
-        # test_comp_pc = o3d.read_point_cloud(os.path.join(pre_dir,folder,all_files[521]))
-        # test_comp_pc = np.asarray(test_comp_pc.points, dtype=np.float32)
-        # test_comp_pcs.append(test_comp_pc)
-        # test_comp_pcs = np.asarray(test_comp_pcs, dtype=np.float32)
-
-        # test_min_result, test_max_result, test_min_transform, test_min_R, test_min_t = threshold_cal(pc, test_comp_pcs, 1)
-        # folder_ = os.path.join(pre_dir,folder)
-        # gt_mat = os.path.join(folder_, 'gt_pose.mat')
-        # df_locations_ = sio.loadmat(gt_mat)
-        # df_locations_ = df_locations_['pose']
-        # df_locations_ = torch.tensor(df_locations_, dtype = torch.float).cpu()
-        # print("test_min_result:"+str(test_min_result))
-        # print("test_min_R:"+str(test_min_R))
-        # print("test_min_t:"+str(test_min_t))
-        # print("df_locations[2][77]:"+str(df_locations_[521]))
-
-
-        # test_comp_pcs_copy = pc.copy()
-        # x_min, x_max, y_min, y_max = min(test_comp_pcs_copy[:,0]), max(test_comp_pcs_copy[:,0]), min(test_comp_pcs_copy[:,1]), max(test_comp_pcs_copy[:,1])
-        # x_interval = (x_max - x_min)/128
-        # y_interval = (y_max - y_min)/128
-        # x_range = np.arange(x_min, x_max+0.5*x_interval, x_interval)
-        # y_range = np.arange(y_min, y_max+0.5*y_interval, y_interval)
-        # im_target_pcl = np.zeros((128,128),dtype=np.float32)
-        # im_target_pcl = plot_image(test_comp_pcs_copy, im_target_pcl, x_range, y_range)
-        # im_target_pcl = Image.fromarray(im_target_pcl)
-        # if im_target_pcl.mode != 'RGB':
-        #     im_target_pcl = im_target_pcl.convert('RGB')
-        # im_target_pcl = cv2.cvtColor(np.array(im_target_pcl), cv2.COLOR_RGB2GRAY)
-        # cv2.imwrite("/home/cc/netvlad_project/simulated_2D/Unsupervised-PointNetVlad_w_loop/models/im_source_pcl.jpg", im_target_pcl)
-        
-        # test_comp_pcs_copy = test_comp_pcs[0].copy()
-        # x_min, x_max, y_min, y_max = min(test_comp_pcs_copy[:,0]), max(test_comp_pcs_copy[:,0]), min(test_comp_pcs_copy[:,1]), max(test_comp_pcs_copy[:,1])
-        # x_interval = (x_max - x_min)/128
-        # y_interval = (y_max - y_min)/128
-        # x_range = np.arange(x_min, x_max+0.5*x_interval, x_interval)
-        # y_range = np.arange(y_min, y_max+0.5*y_interval, y_interval)
-        # im_target_pcl = np.zeros((128,128),dtype=np.float32)
-        # im_target_pcl = plot_image(test_comp_pcs_copy, im_target_pcl, x_range, y_range)
-        # im_target_pcl = Image.fromarray(im_target_pcl)
-        # if im_target_pcl.mode != 'RGB':
-        #     im_target_pcl = im_target_pcl.convert('RGB')
-        # im_target_pcl = cv2.cvtColor(np.array(im_target_pcl), cv2.COLOR_RGB2GRAY)
-        # cv2.imwrite("/home/cc/netvlad_project/simulated_2D/Unsupervised-PointNetVlad_w_loop/models/im_transformed_pcl.jpg", im_target_pcl)
-
+ 
         threshold.append(max_result)
         min_threshold.append(min_result)
-
-
 
         thresholds.append(threshold)
         min_thresholds.append(min_threshold)
@@ -718,74 +717,7 @@ if __name__ == "__main__":
     sio.savemat("max_thresholds.mat",{'data':thresholds})
     sio.savemat("min_thresholds.mat",{'data':min_thresholds})
         
-    # folder_sim = folder_similar_check(folder_, all_files, df_locations, top_k)
-    #     sim_array.append(folder_sim)
-
-    # sim_array = np.asarray(sim_array)
-    # save_name = '/home/cc/Unsupervised-PointNetVlad_ongoing_developping/results/pcl_validate/validate.npy'
-    # np.save(save_name, sim_array)
     print("Done")
-            #pc_xyz = pcd2xyz(pc)
-            # pc_xyz_copy = pc.copy()
-            # x_min, x_max, y_min, y_max = min(pc_xyz_copy[:,0]), max(pc_xyz_copy[:,0]), min(pc_xyz_copy[:,1]), max(pc_xyz_copy[:,1])
-            # x_interval = (x_max - x_min)/128
-            # y_interval = (y_max - y_min)/128
-            # x_range = np.arange(x_min, x_max+0.5*x_interval, x_interval)
-            # y_range = np.arange(y_min, y_max+0.5*y_interval, y_interval)
-            # im_source_pcl = np.zeros((128,128),dtype=np.float32)
-            # im_source_pcl = plot_image(pc_xyz_copy, im_source_pcl, x_range, y_range)
-            # im_source_pcl = Image.fromarray(im_source_pcl)
-            # if im_source_pcl.mode != 'RGB':
-            #     im_source_pcl = im_source_pcl.convert('RGB')
-            # im_source_pcl = cv2.cvtColor(np.array(im_source_pcl), cv2.COLOR_RGB2GRAY)
-            # cv2.imwrite("/home/cc/netvlad_project/simulated_2D/Unsupervised-PointNetVlad_w_loop/models/im_source_pcl.jpg", im_source_pcl)
-            
-            #comp_pc_xyz = pcd2xyz(comp_pc)
-            # pc_pcd = o3d.read_point_cloud(os.path.join(pre_dir,folder,all_file))
 
-            # # VOXEL_SIZE=0.001
-            # # pc_pcd_raw = pc_pcd.voxel_down_sample(voxel_size=VOXEL_SIZE)
-
-            
-
-            # # min_R = min_R_offset * min_R           
-            # min_transform = np.zeros((4,4),dtype=np.float32)
-            # min_transform[2,2] = 1
-            # min_transform[3,3] = 1
-            # min_transform[:2,:2] = min_R
-            # min_transform[0,3] = min_t[0]
-            # min_transform[1,3] = min_t[1]
-
-            # comp_pc2_copy = comp_pcs[0].copy()
-            # x_min, x_max, y_min, y_max = min(comp_pc2_copy[:,0]), max(comp_pc2_copy[:,0]), min(comp_pc2_copy[:,1]), max(comp_pc2_copy[:,1])
-            # x_interval = (x_max - x_min)/128
-            # y_interval = (y_max - y_min)/128
-            # x_range = np.arange(x_min, x_max+0.5*x_interval, x_interval)
-            # y_range = np.arange(y_min, y_max+0.5*y_interval, y_interval)
-            # im_target_pcl = np.zeros((128,128),dtype=np.float32)
-            # im_target_pcl = plot_image(comp_pc2_copy, im_target_pcl, x_range, y_range)
-            # im_target_pcl = Image.fromarray(im_target_pcl)
-            # if im_target_pcl.mode != 'RGB':
-            #     im_target_pcl = im_target_pcl.convert('RGB')
-            # im_target_pcl = cv2.cvtColor(np.array(im_target_pcl), cv2.COLOR_RGB2GRAY)
-            # cv2.imwrite("/home/cc/netvlad_project/simulated_2D/Unsupervised-PointNetVlad_w_loop/models/im_target_pcl.jpg", im_target_pcl)
-
-            
-            # comp_pc2 = copy.deepcopy(pc_pcd).transform(min_transform)
-            # comp_pc2 = pcd2xyz(comp_pc2)
-            # comp_pc2_copy = comp_pc2.T.copy()
-            # x_min, x_max, y_min, y_max = min(comp_pc2_copy[:,0]), max(comp_pc2_copy[:,0]), min(comp_pc2_copy[:,1]), max(comp_pc2_copy[:,1])
-            # x_interval = (x_max - x_min)/128
-            # y_interval = (y_max - y_min)/128
-            # x_range = np.arange(x_min, x_max+0.5*x_interval, x_interval)
-            # y_range = np.arange(y_min, y_max+0.5*y_interval, y_interval)
-            # im_transform_pcl = np.zeros((128,128),dtype=np.float32)
-            # im_transform_pcl = plot_image(comp_pc2_copy, im_transform_pcl, x_range, y_range)
-            # im_transform_pcl = Image.fromarray(im_transform_pcl)
-            # if im_transform_pcl.mode != 'RGB':
-            #     im_transform_pcl = im_transform_pcl.convert('RGB')
-            # im_transform_pcl = cv2.cvtColor(np.array(im_transform_pcl), cv2.COLOR_RGB2GRAY)
-            # cv2.imwrite("/home/cc/netvlad_project/simulated_2D/Unsupervised-PointNetVlad_w_loop/models/im_transform_pcl.jpg", im_transform_pcl)
-            # assert(0)
 
 

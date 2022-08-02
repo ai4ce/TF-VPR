@@ -16,7 +16,7 @@ import config as cfg
 import evaluate
 import loss.pointnetvlad_loss as PNV_loss
 import models.PointNetVlad as PNV
-import models.Verification as VFC
+import models.Verification_PCL as VFC
 import generating_queries.generate_training_tuples_PCL_ours as generate_dataset
 
 import torch
