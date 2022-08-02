@@ -145,21 +145,6 @@ python generate_test_RGB_ours_sets.py
 python generate_test_RGB_supervise_sets.py
 ```
 
-### Get max and min threshold 
-```
-### For point cloud
-
-python Verification_PCL.py
-
-### For Habitat-sim RGB
-
-python Verification_RGB.py
-
-### For NYU-VPR-360
-
-python Verification_PCL.py
-```
-
 ### Train
 ```
 ### For point cloud
