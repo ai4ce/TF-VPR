@@ -1,14 +1,20 @@
 # GLOBAL
 NUM_POINTS = 256
-FEATURE_OUTPUT_DIM = 3839
+FEATURE_OUTPUT_DIM = 512
 PICKLE_FOLDER = "train_pickle/"
 RESULTS_FOLDER = "results/"
 OUTPUT_FILE = "results/results.txt"
+SIZED_GRID_X = 64*4
+SIZED_GRID_Y = 64
+GRID_X = 1080
+GRID_Y = 1920
+file_name = "Goffs"
 
 LOG_DIR = 'log/'
 MODEL_FILENAME = "model.ckpt"
 
 DATASET_FOLDER = '/home/cc/dm_data'
+DATASET_FOLDER_RGB = '/mnt/NAS/home/cc/data/habitat/Goffs'
 
 # TRAIN
 BATCH_NUM_QUERIES = 2
@@ -42,6 +48,8 @@ scene_list = ['Goffs','Nimmons','Reyno','Spotswood','Springhill','Stilwell']
 
 # LOSS
 LOSS_FUNCTION = 'quadruplet'
+LOSS_FUNCTION_RGB = 'triplet'
+
 LOSS_LAZY = True
 TRIPLET_USE_BEST_POSITIVES = False
 LOSS_IGNORE_ZERO_BATCH = False

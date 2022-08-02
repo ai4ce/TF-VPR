@@ -5,6 +5,7 @@ import random
 import config as cfg
 from open3d import read_point_cloud
 import open3d as o3d
+import cv2
 
 def rotate_point_cloud_N3(batch_data):
     """ Randomly rotate the point clouds to augument the dataset
@@ -86,6 +87,31 @@ def load_pos_neg_pc_files(filenames,full_path):
     pcs = np.array(pcs)
     return pcs
 
+def load_image_file(filename, full_path=False):
+    if full_path:
+        image = cv2.imread(filename)
+        dim = (128,128)
+        image = cv2.resize(image, dim,interpolation = cv2.INTER_AREA)
+    else:
+        image = cv2.imread(os.path.join("/home/chao1804/Desktop/AVD/ActiveVisionDataset/", filename))
+        dim = (128,128)
+        image = cv2.resize(image, dim,interpolation = cv2.INTER_AREA)
+    image = np.asarray(image, dtype=np.float32)
+
+    if(image.shape[2] != 3):
+        print("Error in pointcloud shape")
+        return np.array([])
+    #pc = np.reshape(pc,(pc.shape[0]//3, 3))
+    return image
+
+
+def load_image_files(filenames,full_path):
+    images = []
+    for filename in filenames:
+        image = load_image_file(filename, full_path=full_path)
+        images.append(image)
+    images = np.asarray(images, dtype=np.float32)
+    return images
 
 def rotate_point_cloud(batch_data):
     """ Randomly rotate the point clouds to augument the dataset
@@ -261,6 +287,60 @@ def get_query_tuple_ours(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], 
         neg2 = load_pc_file(QUERY_DICT[possible_negs[0]]["query"],full_path=True)
         return [query, positives, negatives, neg2]
 
+def get_query_tuple_RGB(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other_neg=False):
+
+    query = load_image_file(dict_value["query"])  # Nx3
+
+    random.shuffle(dict_value["positives"])
+    pos_files = []
+    
+    for i in range(num_pos):
+        pos_files.append(QUERY_DICT[dict_value["positives"][i]]["query"])
+    
+    positives = load_image_files(pos_files,full_path=True)
+
+    neg_files = []
+    neg_indices = []
+    if(len(hard_neg) == 0):
+        random.shuffle(dict_value["negatives"])
+        for i in range(num_neg):
+            neg_files.append(QUERY_DICT[dict_value["negatives"][i]]["query"])
+            neg_indices.append(dict_value["negatives"][i])
+
+    else:
+        random.shuffle(dict_value["negatives"])
+        for i in hard_neg:
+            neg_files.append(QUERY_DICT[i]["query"])
+            neg_indices.append(i)
+        j = 0
+        while(len(neg_files) < num_neg):
+            if not dict_value["negatives"][j] in hard_neg:
+                neg_files.append(
+                    QUERY_DICT[dict_value["negatives"][j]]["query"])
+                neg_indices.append(dict_value["negatives"][j])
+            j += 1
+    
+    negatives = load_image_files(neg_files,full_path=True)
+
+    if other_neg is False:
+        return [query, positives, negatives]
+    # For Quadruplet Loss
+    else:
+        # get neighbors of negatives and query
+        neighbors = []
+        for pos in dict_value["positives"]:
+            neighbors.append(pos)
+        for neg in neg_indices:
+            for pos in QUERY_DICT[neg]["positives"]:
+                neighbors.append(pos)
+        possible_negs = list(set(QUERY_DICT.keys())-set(neighbors))
+        random.shuffle(possible_negs)
+
+        if(len(possible_negs) == 0):
+            return [query, positives, negatives, np.array([])]
+
+        neg2 = load_image_file(QUERY_DICT[possible_negs[0]]["query"],full_path=True)
+        return [query, positives, negatives, neg2]
 
 def get_rotated_tuple(dict_value, num_pos, num_neg, QUERY_DICT, hard_neg=[], other_neg=False):
     query = load_pc_file(dict_value["query"])  # Nx3
