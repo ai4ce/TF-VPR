@@ -24,6 +24,18 @@ Download links:
 
 You could find more detailed documents on our [website](https://github.com/Joechencc/TF-VPR/edit/PCL_SPTM/README.md)!
 
+# Data Structure
+
+Data_folder
+├── 000001.pcd or 000001.RGB # Dataset
+├── 000002.pcd or 000002.RGB # Dataset
+|   ...
+├── 00nnnn.pcd or 00nnnn.RGB # Dataset
+├── gt_pose.mat # ground truth mat file contains the geographical information for evaluation
+
+
+## Folder Structure
+
 TF-VPR follows the same file structure as the [PointNetVLAD](https://github.com/mikacuy/pointnetvlad):
 ```
 TF-VPR
