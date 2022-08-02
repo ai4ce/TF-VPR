@@ -71,7 +71,9 @@ def construct_query_dict(df_centroids, train_index, test_index,  filename_train,
     print("Done ", filename_train)
     print("Done ", filename_test)
 
-
+if not os.path.exists(cfg.PICKLE_FOLDER):
+    os.mkdir(cfg.PICKLE_FOLDER)
+    
 # Initialize pandas DataFrame
 df_train = pd.DataFrame(columns=['file','x','y'])
 df_test = pd.DataFrame(columns=['file','x','y'])
