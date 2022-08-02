@@ -14,7 +14,7 @@ LOG_DIR = 'log/'
 MODEL_FILENAME = "model.ckpt"
 
 DATASET_FOLDER = '/home/cc/dm_data'
-DATASET_FOLDER_RGB = '/mnt/NAS/home/cc/data/habitat/Goffs'
+DATASET_FOLDER_RGB = '/mnt/NAS/home/cc/data/habitat_4/train'
 
 # TRAIN
 BATCH_NUM_QUERIES = 2
@@ -41,6 +41,7 @@ ROT_NUM = 8
 EVAL_NEAREST = 16
 INIT_TRUST = 2
 INIT_TRUST_SCALAR = 1
+NEIGHBOR = 4
 
 TRAIN_FILE = 'generating_queries/training_queries_baseline.pickle'
 TEST_FILE = 'generating_queries/test_queries_baseline.pickle'

@@ -10,13 +10,13 @@ import sys
 
 import numpy as np
 from sklearn.neighbors import KDTree, NearestNeighbors
-import generating_queries.generate_training_tuples_RGB_baseline_batch as generate_dataset_tt
-import generating_queries.generate_test_RGB_sets as generate_dataset_eval
+import generating_queries.generate_training_tuples_RGB_real_baseline as generate_dataset_tt
+import generating_queries.generate_test_RGB_real_ours_sets as generate_dataset_eval
 
 import config as cfg
 import evaluate
 import loss.pointnetvlad_loss as PNV_loss
-import models.Verification as VFC
+import models.Verification_RGB_real as VFC
 import models.ImageNetVlad as INV
 import torch
 import torch.nn as nn
@@ -222,6 +222,8 @@ def train(scene_index):
         print(epoch)
         print()
         if trusted_positives is not None:
+            if not os.path.exists("results/trusted_positives_folder"):
+                os.mkdir("results/trusted_positives_folder")
             sio.savemat("results/trusted_positives_folder/trusted_positives_"+str(epoch)+".mat",{'data':trusted_positives})
             sio.savemat("results/trusted_positives_folder/potential_positives_"+str(epoch)+".mat",{'data':potential_positives})
             sio.savemat("results/trusted_positives_folder/potential_distributions_"+str(epoch)+".mat",{'data':potential_distributions})

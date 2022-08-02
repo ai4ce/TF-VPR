@@ -268,6 +268,8 @@ def train():
         '''
         
         if trusted_positives is not None:
+            if not os.path.exists("results/trusted_positives_folder"):
+                os.mkdir("results/trusted_positives_folder")
             sio.savemat("results/trusted_positives_folder/trusted_positives_"+str(epoch)+".mat",{'data':trusted_positives})
             sio.savemat("results/trusted_positives_folder/potential_positives_"+str(epoch)+".mat",{'data':potential_positives})
             sio.savemat("results/trusted_positives_folder/potential_distributions_"+str(epoch)+".mat",{'data':potential_distributions})

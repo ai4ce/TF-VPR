@@ -416,6 +416,7 @@ def Verify_image(query_index, pre_trusted_positive, pre_path):
 
     trusted_index = []
     fold_list = os.listdir(pre_path)
+    # print("path:::"+str(os.path.join(pre_path, "run_0")))
     files_ = os.listdir(os.path.join(pre_path, "run_0"))
     files_.remove("gt_pose.mat")
     folder_size = len(files_)
@@ -546,7 +547,7 @@ def Compute_positive(flag, db_vec, potential_positives, potential_distributions,
                 pre_trusted_positive = np.array(indice[index2])[np.argsort(weight[index2])[::-1][:(cfg.INIT_TRUST)]]
             pre_trusted_positive = np.setdiff1d(pre_trusted_positive,index2)
 
-            folder_path = os.path.join(os.path.join(cfg.DATASET_FOLDER, cfg.scene_list[scene_index]))
+            folder_path = os.path.join(os.path.join(cfg.DATASET_FOLDER_RGB, cfg.scene_list[scene_index]))
             
             trusted_pos = Verify_image(index2,pre_trusted_positive, folder_path)
             
@@ -563,7 +564,7 @@ def Compute_positive(flag, db_vec, potential_positives, potential_distributions,
         
         for index2 in range(db_vec.shape[0]*db_vec.shape[1]):
             
-            folder_path = os.path.join(cfg.DATASET_FOLDER, cfg.scene_list[scene_index])
+            folder_path = os.path.join(cfg.DATASET_FOLDER_RGB, cfg.scene_list[scene_index])
             
             trusted_positives = np.squeeze(trusted_positives)
             previous_trusted_positive = trusted_positives[index2]
@@ -647,13 +648,6 @@ if __name__ == "__main__":
     cc_dir = "/mnt/NAS/data/cc_data/2D_RGB_real_edited3/"
     pre_dir = os.path.join(cc_dir)
     all_folders = sorted(os.listdir(pre_dir))
-    train_start = datetime.datetime.now()
-    Verify_image(0, [1,2,3], pre_dir)
-    train_end = datetime.datetime.now()
-    print("train_time:"+str(train_end-train_start))
-    assert(0)
-
-    
 
     folders = []
     # All runs are used for training (both full and partial)
@@ -670,7 +664,7 @@ if __name__ == "__main__":
     folder = folders[0]
     threshold = []
     min_threshold = []
-    all_files = list(sorted(os.listdir(os.path.join(cc_dir,runs_folder,folder))))
+    all_files = list(sorted(os.listdir(os.path.join(cc_dir,folder))))
     all_files.remove('gt_pose.mat')
     folder_size = len(all_files)
     data_index = list(range(folder_size))
