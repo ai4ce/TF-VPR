@@ -52,9 +52,21 @@ TF-VPR
 |   ├── generate_test_PCL_baseline_sets.py # Generate the test pickle file for PCL baseline
 |   ├── generate_test_PCL_ours_sets.py # Generate the test pickle file for PCL TF-VPR
 |   ├── generate_test_PCL_supervise_sets.py # Generate the test pickle file for PCL supervise
+|   ├── generate_test_RGB_baseline_sets.py # Generate the test pickle file for Habitat-sim baseline
+|   ├── generate_test_RGB_ours_sets.py # Generate the test pickle file for Habitat-sim TF-VPR
+|   ├── generate_test_RGB_supervise_sets.py # Generate the test pickle file for Habitat-sim supervise
+|   ├── generate_test_RGB_real_baseline_sets.py # Generate the test pickle file for NYU-VPR-360 baseline
+|   ├── generate_test_RGB_real_ours_sets.py # Generate the test pickle file for NYU-VPR-360 TF-VPR
+|   ├── generate_test_RGB_real_supervise_sets.py # Generate the test pickle file for NYU-VPR-360 supervise
 |   ├── generate_training_tuples_PCL_baseline.py # Generate the train pickle file for PCL baseline
 |   ├── generate_training_tuples_PCL_ours.py # Generate the train pickle file for PCL TF-VPR
 |   ├── generate_training_tuples_PCL_supervise.py # Generate the train pickle file for PCL supervise
+|   ├── generate_training_tuples_RGB_baseline.py # Generate the train pickle file for Habitat-sim baseline
+|   ├── generate_training_tuples_RGB_ours.py # Generate the train pickle file for Habitat-sim TF-VPR
+|   ├── generate_training_tuples_RGB_supervise.py # Generate the train pickle file for Habitat-sim supervise
+|   ├── generate_training_tuples_RGB_supervise.py # Generate the train pickle file for NYU-VPR-360 baseline
+|   ├── generate_training_tuples_RGB_real_ours.py # Generate the train pickle file for NYU-VPR-360 TF-VPR
+|   ├── generate_training_tuples_RGB_real_supervise.py # Generate the train pickle file for NYU-VPR-360 supervise
 |   ...
 ├── results # Results are saved here
 ├── config.py # Config file
@@ -63,6 +75,12 @@ TF-VPR
 ├── train_pointnetvlad_PCL_baseline.py # Main file to train PCL baseline
 ├── train_pointnetvlad_PCL_ours.py # Main file to train PCL TF-VPR
 ├── train_pointnetvlad_PCL_supervise.py # Main file to train PCL supervise
+├── train_netvlad_RGB_baseline.py # Main file to train Hatbitat-sim baseline
+├── train_netvlad_RGB_ours.py # Main file to train Hatbitat-sim TF-VPR
+├── train_netvlad_RGB_supervise.py # Main file to train Hatbitat-sim supervise
+├── train_netvlad_RGB_real_baseline.py # Main file to train NYU-VPR-360 baseline
+├── train_netvlad_RGB_real_ours.py # Main file to train NYU-VPR-360 TF-VPR
+├── train_netvlad_RGB_real_supervise.py # Main file to train NYU-VPR-360 supervise
 |   ...
 ```
 Point cloud TF-VPR result:
@@ -125,7 +143,7 @@ python generate_test_PCL_supervise_sets.py
 
 ```
 cd generating_queries/
-### For RGB data
+### For Habitat-sim data
 
 # For training tuples in our RGB baseline network 
 python generate_training_tuples_RGB_baseline.py
@@ -146,6 +164,29 @@ python generate_test_RGB_ours_sets.py
 python generate_test_RGB_supervise_sets.py
 ```
 
+```
+cd generating_queries/
+### For NYU-VPR-360 data
+
+# For training tuples in our RGB baseline network 
+python generate_training_tuples_RGB_real_baseline.py
+
+# For training tuples in our RGB baseline network 
+python generate_training_tuples_RGB_real_ours.py
+
+# For training tuples in our RGB baseline network 
+python generate_training_tuples_RGB_real_supervise.py
+
+# For RGB network evaluation
+python generate_test_RGB_baseline_real_sets.py
+
+# For RGB network evaluation
+python generate_test_RGB_real_ours_sets.py
+
+# For RGB network evaluation
+python generate_test_RGB_real_supervise_sets.py
+```
+
 ### Verification threshold
 ```
 ### For point cloud
@@ -157,7 +198,21 @@ python Verification_PCL.py # you can create max and min threshold using this com
 ```
 ### For point cloud
 
-python train_pointnetvlad_PCL_baseline.py
+python train_pointnetvlad_PCL_baseline.py       # Train baseline for PCL data
+python train_pointnetvlad_PCL_ours.py           # Train ours for PCL data       
+python train_pointnetvlad_PCL_supervise.py      # Train supervise for PCL data
+
+### For Habitat-sim
+
+python train_pointnetvlad_RGBL_baseline.py      # Train baseline for Habitat-sim data
+python train_pointnetvlad_RGB_ours.py           # Train ours for Habitat-sim data    
+python train_pointnetvlad_RGB_supervise.py      # Train supervise for Habitat-sim data
+
+### For point cloud
+
+python train_pointnetvlad_RGB_real_baseline.py  # Train baseline for NYU-VPR-360 data
+python train_pointnetvlad_RGB_real_ours.py      # Train baseline for NYU-VPR-360 data
+python train_pointnetvlad_RGB_real_supervise.py # Train baseline for NYU-VPR-360 data
 ```
 
 ### Evaluate (You don't need to run it separately. For every epoch, evaluation will be run automatically)
