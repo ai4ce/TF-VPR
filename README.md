@@ -97,8 +97,7 @@ Real-world RGB TF-VPR result:
 
 # Note
 
-I kept almost everything not related to tensorflow as the original implementation. You can check each method for each branch!!!!!!!!!!!
-The main differences are:
+I kept almost everything not related to tensorflow as the original implementation. The main differences are:
 * Multi-GPU support
 * Configuration file (config.py)
 * Evaluation on the eval dataset after every epochs
