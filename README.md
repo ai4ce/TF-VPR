@@ -230,7 +230,7 @@ We implement SPTM, TF-VPR, and supervise version, please check the other branche
 If you find TF-VPR useful in your research, please cite:
 
 ```bibtex
-@article{Chen2022,
+@article{Chen2022arxiv,
       author    = {Chen, Chao and Liu, Xinhao and Xu, Xuchu and Li, Yiming and Ding, Li and Wang, Ruoyu and Feng, Chen},
       title     = {Self-Supervised Visual Place Recognition by Mining Temporal and Feature Neighborhoods},
       journal = {arxiv},
