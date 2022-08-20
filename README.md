@@ -89,7 +89,7 @@ Point cloud TF-VPR result:
 
 RGB TF-VPR result:
 
-![](NSF_2.gif)
+![](NSF_2_slow.gif)
 
 Real-world RGB TF-VPR result:
 
