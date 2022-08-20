@@ -237,3 +237,7 @@ If you find TF-VPR useful in your research, please cite:
     year = {2022} 
 }
 ``` -->
+
+## Acknowledgements
+
+This work is supported by NSF grants under CMMI-1932187, CNS-2121391, and EEC-2036870.
