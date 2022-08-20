@@ -93,7 +93,7 @@ RGB TF-VPR result:
 
 Real-world RGB TF-VPR result:
 
-![](NSF_3.gif)
+![](NSF_3_slow.gif)
 
 # Note
 
