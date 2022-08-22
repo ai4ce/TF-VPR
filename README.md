@@ -91,7 +91,7 @@ RGB TF-VPR result:
 
 ![](NSF_2.gif)
 
-Real-world RGB TF-VPR result:
+NYU-VPR-360 TF-VPR result:
 
 ![](NSF_3.gif)
 
