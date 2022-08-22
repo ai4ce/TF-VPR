@@ -241,4 +241,4 @@ If you find TF-VPR useful in your research, please cite:
 
 ## Acknowledgements
 
-This work is supported by NSF grants under CMMI-1932187, CNS-2121391, and EEC-2036870.
+Chen Feng is the corresponding author. The research is supported by NSF Future Manufacturing program under CMMI-1932187, CNS-2121391, and EEC-2036870. Chao Chen gratefully thanks the help from Bhargav Makwana.
