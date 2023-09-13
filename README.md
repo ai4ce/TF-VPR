@@ -22,7 +22,7 @@ Download links:
 -  For Pointcloud: Please refer to DeepMapping paper, https://github.com/ai4ce/PointCloudSimulator
 -  For NYU-VPR-360 dataset: https://drive.google.com/drive/u/0/folders/1ErXzIx0je5aGSRFbo5jP7oR8gPrdersO
 
-You could find more detailed documents on our [website](https://github.com/Joechencc/TF-VPR/edit/PCL_SPTM/README.md)!
+You could find more detailed documents on our [website](https://ai4ce.github.io/TF-VPR/)!
 
 # Data Structure
 ```
